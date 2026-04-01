@@ -167,10 +167,7 @@ export default function V2App() {
   // Video gen
   const [videoGenProgress, setVideoGenProgress] = useState(0)
   const [videoGenDone,     setVideoGenDone]     = useState(false)
-  const [recentVideos,     setRecentVideos]     = useState([
-    { id: 1, gradient: 'linear-gradient(160deg,#3A3835,#1A1916)' },
-    { id: 2, gradient: 'linear-gradient(160deg,#2A3842,#1A2830)' },
-  ])
+  const [recentVideos, setRecentVideos] = useState([])
 
   // ── Scan ──────────────────────────────────────────────────────────────────
 
@@ -314,22 +311,26 @@ export default function V2App() {
 
             {/* Prompt card */}
             <div onClick={() => goSheet('sh-prompt')} style={{
-              background: '#fff', borderRadius: 20, overflow: 'hidden', marginBottom: 12, cursor: 'pointer',
-              border: prompt ? '1.5px solid var(--border)' : '1.5px solid var(--blue)',
+              borderRadius: 20, overflow: 'visible', marginBottom: 12, cursor: 'pointer',
+              background: prompt ? '#fff' : 'linear-gradient(135deg, #285BB0 0%, #3B7DD8 100%)',
+              border: prompt ? '1.5px solid var(--border)' : 'none',
               position: 'relative',
+              boxShadow: prompt ? 'none' : '0 4px 20px rgba(40,91,176,.45)',
               animation: prompt ? 'none' : 'promptPulse 2s ease-in-out infinite',
             }}>
               {/* Pulse rings */}
               {!prompt && <>
-                <div style={{ position: 'absolute', inset: -4, borderRadius: 24, border: '2px solid var(--blue)', opacity: 0, animation: 'ringOut 2s ease-out infinite', pointerEvents: 'none' }} />
-                <div style={{ position: 'absolute', inset: -4, borderRadius: 24, border: '2px solid var(--blue)', opacity: 0, animation: 'ringOut 2s ease-out .6s infinite', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', inset: -5, borderRadius: 25, border: '2px solid rgba(40,91,176,.5)', opacity: 0, animation: 'ringOut 2s ease-out infinite', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', inset: -5, borderRadius: 25, border: '2px solid rgba(40,91,176,.5)', opacity: 0, animation: 'ringOut 2s ease-out .7s infinite', pointerEvents: 'none' }} />
               </>}
-              <div style={{ padding: '16px 18px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: prompt ? 'var(--text-secondary)' : 'var(--blue)', textTransform: 'uppercase', letterSpacing: '.07em' }}>Your idea</div>
-                  {!prompt && <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--blue)', display: 'flex', alignItems: 'center', gap: 4 }}>Tap here <span style={{ animation: 'nudge .8s ease-in-out infinite' }}>→</span></div>}
+              <div style={{ padding: '18px 20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: prompt ? 'var(--text-secondary)' : 'rgba(255,255,255,.7)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Your idea</div>
+                  {!prompt && <div style={{ fontSize: 12, fontWeight: 600, color: '#fff', display: 'flex', alignItems: 'center', gap: 4 }}>Tap here <span style={{ display: 'inline-block', animation: 'nudge .8s ease-in-out infinite' }}>→</span></div>}
                 </div>
-                <div style={{ fontSize: 15, color: prompt ? 'var(--text)' : 'var(--text-secondary)', lineHeight: 1.55 }}>{prompt || 'Describe your video…'}</div>
+                <div style={{ fontSize: 16, fontWeight: prompt ? 400 : 600, color: prompt ? 'var(--text)' : '#fff', lineHeight: 1.5 }}>
+                  {prompt || 'What's your video about?'}
+                </div>
               </div>
             </div>
             <button onClick={() => prompt ? handleGenerate() : goSheet('sh-prompt')} style={{
