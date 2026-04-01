@@ -309,40 +309,52 @@ export default function V2App() {
               </div>
             </div>
 
-            {/* Prompt card */}
-            <div onClick={() => goSheet('sh-prompt')} style={{
-              borderRadius: 20, overflow: 'visible', marginBottom: 12, cursor: 'pointer',
-              background: prompt ? '#fff' : 'linear-gradient(135deg, #285BB0 0%, #3B7DD8 100%)',
-              border: prompt ? '1.5px solid var(--border)' : 'none',
-              position: 'relative',
-              boxShadow: prompt ? 'none' : '0 4px 20px rgba(40,91,176,.45)',
-              animation: prompt ? 'none' : 'promptPulse 2s ease-in-out infinite',
-            }}>
+            {/* Unified prompt + generate card */}
+            <div style={{ position: 'relative', marginBottom: 18 }}>
               {/* Pulse rings */}
               {!prompt && <>
-                <div style={{ position: 'absolute', inset: -5, borderRadius: 25, border: '2px solid rgba(40,91,176,.5)', opacity: 0, animation: 'ringOut 2s ease-out infinite', pointerEvents: 'none' }} />
-                <div style={{ position: 'absolute', inset: -5, borderRadius: 25, border: '2px solid rgba(40,91,176,.5)', opacity: 0, animation: 'ringOut 2s ease-out .7s infinite', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', inset: -5, borderRadius: 28, border: '2px solid rgba(40,91,176,.45)', opacity: 0, animation: 'ringOut 2s ease-out infinite', pointerEvents: 'none', zIndex: 0 }} />
+                <div style={{ position: 'absolute', inset: -5, borderRadius: 28, border: '2px solid rgba(40,91,176,.45)', opacity: 0, animation: 'ringOut 2s ease-out .7s infinite', pointerEvents: 'none', zIndex: 0 }} />
               </>}
-              <div style={{ padding: '18px 20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: prompt ? 'var(--text-secondary)' : 'rgba(255,255,255,.7)', textTransform: 'uppercase', letterSpacing: '.08em' }}>Your idea</div>
-                  {!prompt && <div style={{ fontSize: 12, fontWeight: 600, color: '#fff', display: 'flex', alignItems: 'center', gap: 4 }}>Tap here <span style={{ display: 'inline-block', animation: 'nudge .8s ease-in-out infinite' }}>→</span></div>}
-                </div>
-                <div style={{ fontSize: 16, fontWeight: prompt ? 400 : 600, color: prompt ? 'var(--text)' : '#fff', lineHeight: 1.5 }}>
-                  {prompt || "What's your video about?"}
+              <div onClick={() => goSheet('sh-prompt')} style={{
+                borderRadius: 24, cursor: 'pointer', position: 'relative', overflow: 'hidden',
+                background: prompt ? 'var(--text)' : 'linear-gradient(135deg,#1A3A6B 0%,#285BB0 60%,#3B7DD8 100%)',
+                boxShadow: prompt ? '0 2px 12px rgba(0,0,0,.18)' : '0 6px 24px rgba(40,91,176,.5)',
+                animation: prompt ? 'none' : 'promptPulse 2s ease-in-out infinite',
+              }}>
+                {/* Shimmer */}
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(110deg,transparent 30%,rgba(255,255,255,.06) 50%,transparent 70%)', backgroundSize: '200% 100%', animation: 'shimmer 2.5s linear infinite', pointerEvents: 'none' }} />
+
+                <div style={{ padding: '22px 22px 18px' }}>
+                  {/* Label row */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,.6)', textTransform: 'uppercase', letterSpacing: '.09em' }}>Your idea</div>
+                    {!prompt && <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,.7)', display: 'flex', alignItems: 'center', gap: 3 }}>Tap to add <span style={{ display: 'inline-block', animation: 'nudge .8s ease-in-out infinite' }}>→</span></div>}
+                  </div>
+
+                  {/* Idea text */}
+                  <div style={{ fontSize: 16, fontWeight: 600, color: prompt ? '#fff' : 'rgba(255,255,255,.45)', lineHeight: 1.5, marginBottom: 20, minHeight: 48 }}>
+                    {prompt || "What's your video about?"}
+                  </div>
+
+                  {/* CTA button inside card */}
+                  <div
+                    onClick={e => { e.stopPropagation(); prompt ? handleGenerate() : goSheet('sh-prompt') }}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 8,
+                      padding: '12px 20px', borderRadius: 14,
+                      background: prompt ? '#fff' : 'rgba(255,255,255,.15)',
+                      color: prompt ? 'var(--text)' : 'rgba(255,255,255,.6)',
+                      fontSize: 14, fontWeight: 700, cursor: 'pointer',
+                      border: prompt ? 'none' : '1px solid rgba(255,255,255,.2)',
+                    }}
+                  >
+                    <svg width="13" height="13" viewBox="0 0 16 16"><polygon points="3,2 14,8 3,14" fill={prompt ? '#1A1916' : 'rgba(255,255,255,.6)'} /></svg>
+                    Generate video
+                  </div>
                 </div>
               </div>
             </div>
-            <button onClick={() => prompt ? handleGenerate() : goSheet('sh-prompt')} style={{
-              width: '100%', padding: 16, borderRadius: 16, border: 'none', cursor: 'pointer',
-              background: prompt ? 'var(--text)' : 'var(--border)',
-              color: prompt ? '#FAFAF8' : 'var(--text-secondary)',
-              fontSize: 15, fontWeight: 600,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            }}>
-              <svg width="14" height="14" viewBox="0 0 16 16"><polygon points="3,2 14,8 3,14" fill={prompt ? '#fff' : '#9B9894'} /></svg>
-              Generate video
-            </button>
 
             {recentVideos.length > 0 && <>
               <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '.06em', margin: '20px 0 12px' }}>Recent</div>
