@@ -329,7 +329,7 @@ export default function V2App() {
                   {!prompt && <div style={{ fontSize: 12, fontWeight: 600, color: '#fff', display: 'flex', alignItems: 'center', gap: 4 }}>Tap here <span style={{ display: 'inline-block', animation: 'nudge .8s ease-in-out infinite' }}>→</span></div>}
                 </div>
                 <div style={{ fontSize: 16, fontWeight: prompt ? 400 : 600, color: prompt ? 'var(--text)' : '#fff', lineHeight: 1.5 }}>
-                  {prompt || 'What's your video about?'}
+                  {prompt || "What's your video about?"}
                 </div>
               </div>
             </div>
