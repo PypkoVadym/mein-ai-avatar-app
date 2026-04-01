@@ -37,11 +37,9 @@ const GEN_STEPS_VIDEO  = ['Content moderation', 'Writing script', 'Generating vi
 
 // Feed templates — each is a pre-built style the user can adopt
 const TEMPLATES = [
-  { id: 1, label: 'Expert take',   tone: 'Expert',     mood: 'Formal',   gradient: 'linear-gradient(160deg,#0f0c29,#302b63,#24243e)', avatar: '🧑‍💼', caption: 'The one thing nobody tells you about AI content 👇', tag: '#business',    likes: '48.2K', comments: '312' },
-  { id: 2, label: 'Hype drop',     tone: 'Energetic',  mood: 'Hype',     gradient: 'linear-gradient(160deg,#f953c6,#b91d73)',           avatar: '🧑‍🎤', caption: 'POV: Your AI twin just went viral 🔥🔥🔥',            tag: '#creator',     likes: '92.1K', comments: '1.4K' },
-  { id: 3, label: 'Calm explainer',tone: 'Calm',        mood: 'Chill',    gradient: 'linear-gradient(160deg,#1a1a2e,#16213e,#0f3460)',   avatar: '👩‍💻', caption: 'Let me explain this in under 60 seconds 🧠',           tag: '#education',   likes: '21.8K', comments: '204' },
-  { id: 4, label: 'Lifestyle',     tone: 'Soft',        mood: 'Warm',     gradient: 'linear-gradient(160deg,#fc5c7d,#6a3093)',           avatar: '👩‍🌾', caption: 'My morning routine that changed everything ✨',         tag: '#lifestyle',   likes: '67.4K', comments: '891' },
-  { id: 5, label: 'Tech breakdown',tone: 'Neutral',     mood: 'Sharp',    gradient: 'linear-gradient(160deg,#141e30,#243b55)',           avatar: '🧑‍🔬', caption: 'Why everyone is sleeping on this tool 🛠️',             tag: '#tech',        likes: '33.5K', comments: '447' },
+  { id: 1, label: 'Expert take',    video: '/video1.mp4', caption: 'The one thing nobody tells you about AI content 👇', tag: '#business' },
+  { id: 2, label: 'Hype drop',      video: '/video2.mp4', caption: 'POV: Your AI twin just went viral 🔥🔥🔥',            tag: '#creator'  },
+  { id: 3, label: 'Calm explainer', video: '/video3.mp4', caption: 'Let me explain this in under 60 seconds 🧠',           tag: '#education'},
 ]
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -630,13 +628,39 @@ export default function V3App() {
 // ── Feed Card ─────────────────────────────────────────────────────────────────
 
 function FeedCard({ item, onUseTemplate }) {
-  const [liked, setLiked] = useState(false)
+  const videoRef = useRef(null)
+
+  // Auto-play when card scrolls into view, pause when out
+  useEffect(() => {
+    const el = videoRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { el.currentTime = 0; el.play().catch(() => {}) }
+      else el.pause()
+    }, { threshold: 0.6 })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
 
   return (
-    <div style={{ flex: '0 0 100%', scrollSnapAlign: 'start', position: 'relative', background: item.gradient, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+    <div style={{ flex: '0 0 100%', scrollSnapAlign: 'start', position: 'relative', background: '#000', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+
+      {/* Video */}
+      {item.video ? (
+        <video
+          ref={videoRef}
+          src={item.video}
+          muted
+          loop
+          playsInline
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      ) : (
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: item.gradient || '#111' }} />
+      )}
 
       {/* Gradient overlay */}
-      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 50%)' }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 55%)' }} />
 
       {/* Bottom info — padded above the floating tab bar */}
       <div style={{ position: 'relative', zIndex: 1, padding: '0 16px 88px' }}>
@@ -651,23 +675,9 @@ function FeedCard({ item, onUseTemplate }) {
         </div>
       </div>
 
-      {/* Play icon overlay */}
-      <div style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%,-50%)', width: 56, height: 56, borderRadius: '50%', background: 'rgba(0,0,0,.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 0, height: 0, borderStyle: 'solid', borderWidth: '12px 0 12px 20px', borderColor: 'transparent transparent transparent rgba(255,255,255,.85)', marginLeft: 4 }} />
-      </div>
-
-      {/* AI badge */}
-      {!item.isMine && <div style={{ position: 'absolute', top: 60, left: 12, background: 'rgba(0,0,0,.5)', borderRadius: 8, padding: '3px 8px', fontSize: 10, fontWeight: 700, color: '#fff', letterSpacing: '.04em' }}>AI TEMPLATE</div>}
-      {item.isMine && <div style={{ position: 'absolute', top: 60, left: 12, background: 'rgba(238,29,82,.8)', borderRadius: 8, padding: '3px 8px', fontSize: 10, fontWeight: 700, color: '#fff' }}>MY VIDEO</div>}
-    </div>
-  )
-}
-
-function ActionBtn({ icon, count, onPress }) {
-  return (
-    <div onClick={onPress} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, cursor: 'pointer' }}>
-      <div style={{ fontSize: 28 }}>{icon}</div>
-      <div style={{ fontSize: 11, color: '#fff', fontWeight: 600 }}>{count}</div>
+      {/* Badge */}
+      {!item.isMine && <div style={{ position: 'absolute', top: 60, left: 12, background: 'rgba(0,0,0,.5)', borderRadius: 8, padding: '3px 8px', fontSize: 10, fontWeight: 700, color: '#fff', letterSpacing: '.04em', zIndex: 2 }}>AI TEMPLATE</div>}
+      {item.isMine && <div style={{ position: 'absolute', top: 60, left: 12, background: 'rgba(238,29,82,.8)', borderRadius: 8, padding: '3px 8px', fontSize: 10, fontWeight: 700, color: '#fff', zIndex: 2 }}>MY VIDEO</div>}
     </div>
   )
 }
