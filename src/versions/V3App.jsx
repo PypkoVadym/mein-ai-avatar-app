@@ -261,23 +261,15 @@ export default function V3App() {
         ))}
       </div>
 
-      {/* ── FOR YOU / FOLLOWING tabs — floats at top ── */}
+      {/* ── FOR YOU label — floats at top ── */}
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20,
-        display: 'flex', justifyContent: 'center', gap: 24,
+        display: 'flex', justifyContent: 'center',
         padding: '14px 0 10px',
         background: 'linear-gradient(to bottom, rgba(0,0,0,.55) 0%, transparent 100%)',
         pointerEvents: 'none',
       }}>
-        {['Following', 'For You'].map((t, i) => (
-          <div key={t} style={{
-            fontSize: 16, fontWeight: i === 1 ? 700 : 500,
-            color: i === 1 ? '#fff' : 'rgba(255,255,255,.55)',
-            pointerEvents: 'all', cursor: 'pointer',
-            borderBottom: i === 1 ? '2px solid #fff' : '2px solid transparent',
-            paddingBottom: 4,
-          }}>{t}</div>
-        ))}
+        <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', borderBottom: '2px solid #fff', paddingBottom: 4 }}>For You</div>
       </div>
 
       {/* ── Tab bar — floats at bottom over the feed ── */}
@@ -290,9 +282,7 @@ export default function V3App() {
       }}>
         {[
           { id: 'home',    icon: HomeIcon,    label: 'Home' },
-          { id: 'search',  icon: SearchIcon,  label: 'Search' },
           { id: 'plus',    icon: null,         label: '' },
-          { id: 'inbox',   icon: InboxIcon,   label: 'Inbox' },
           { id: 'profile', icon: ProfileIcon, label: 'Profile' },
         ].map(t => {
           if (t.id === 'plus') return (
@@ -648,38 +638,15 @@ function FeedCard({ item, onUseTemplate }) {
       {/* Gradient overlay */}
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 50%)' }} />
 
-      {/* Right action bar */}
-      <div style={{ position: 'absolute', right: 12, bottom: 160, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
-        {/* Avatar */}
-        <div style={{ position: 'relative', marginBottom: 4 }}>
-          <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,.2)', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{item.avatar || '✦'}</div>
-          <div style={{ position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)', width: 20, height: 20, borderRadius: '50%', background: '#EE1D52', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, color: '#fff', fontWeight: 700 }}>+</div>
-        </div>
-
-        {/* Like */}
-        <ActionBtn icon={liked ? '❤️' : '🤍'} count={item.likes} onPress={() => setLiked(l => !l)} />
-        {/* Comment */}
-        <ActionBtn icon="💬" count={item.comments} />
-        {/* Share */}
-        <ActionBtn icon="↗️" count="Share" />
-
-        {/* Music disc */}
-        <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(255,255,255,.4)', background: 'rgba(0,0,0,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, animation: 'spinDisc 4s linear infinite' }}>🎵</div>
-      </div>
-
       {/* Bottom info — padded above the floating tab bar */}
-      <div style={{ position: 'relative', zIndex: 1, padding: '0 60px 88px 16px' }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 6 }}>@twin_ai_{item.id}</div>
-        <div style={{ fontSize: 14, color: 'rgba(255,255,255,.9)', lineHeight: 1.45, marginBottom: 8 }}>{item.caption || item.label}</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
-          <div style={{ width: 16, height: 16, borderRadius: '50%', background: 'rgba(255,255,255,.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8 }}>🎵</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,255,255,.75)' }}>Original sound · TWIN AI</div>
-        </div>
+      <div style={{ position: 'relative', zIndex: 1, padding: '0 16px 88px' }}>
+        <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 4 }}>@twin_ai_{item.id}</div>
+        <div style={{ fontSize: 14, color: 'rgba(255,255,255,.9)', lineHeight: 1.45, marginBottom: 14 }}>{item.caption || item.label}</div>
 
-        {/* Use template CTA */}
-        <div onClick={onUseTemplate} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', borderRadius: 20, background: 'rgba(255,255,255,.15)', border: '1px solid rgba(255,255,255,.3)', cursor: 'pointer' }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: '#fff' }}>
-            {item.isMine ? '🔁 Make similar' : `✦ Use this style`}
+        {/* Use this style — full-width prominent CTA */}
+        <div onClick={onUseTemplate} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', borderRadius: 14, background: 'rgba(255,255,255,.18)', border: '1.5px solid rgba(255,255,255,.45)', cursor: 'pointer', backdropFilter: 'blur(8px)' }}>
+          <span style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}>
+            {item.isMine ? '🔁 Make similar' : '✦ Use this style'}
           </span>
         </div>
       </div>
