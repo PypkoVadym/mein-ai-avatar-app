@@ -250,47 +250,43 @@ export default function V3App() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', isolation: 'isolate', background: '#000' }}>
 
-      {/* ── Feed area (contains feed + overlaid tabs) ── */}
-      <div style={{ flex: 1, position: 'relative', minHeight: 0, overflow: 'hidden' }}>
-
-        {/* FOR YOU / FOLLOWING tabs */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20,
-          display: 'flex', justifyContent: 'center', gap: 24,
-          padding: '14px 0 10px',
-          background: 'linear-gradient(to bottom, rgba(0,0,0,.55) 0%, transparent 100%)',
-          pointerEvents: 'none',
-        }}>
-          {['Following', 'For You'].map((t, i) => (
-            <div key={t} style={{
-              fontSize: 16, fontWeight: i === 1 ? 700 : 500,
-              color: i === 1 ? '#fff' : 'rgba(255,255,255,.55)',
-              pointerEvents: 'all', cursor: 'pointer',
-              borderBottom: i === 1 ? '2px solid #fff' : '2px solid transparent',
-              paddingBottom: 4,
-            }}>{t}</div>
-          ))}
-        </div>
-
-        {/* Video feed — fills content area exactly so height:100% on cards works */}
-        <div style={{ position: 'absolute', inset: 0, overflowY: 'scroll', scrollSnapType: 'y mandatory', scrollbarWidth: 'none' }}>
-          {feedItems.map((item) => (
-            <FeedCard
-              key={item.id}
-              item={item}
-              onUseTemplate={() => { setActiveTemplate(item.isMine ? activeTemplate : item); goSheet('sh-prompt') }}
-            />
-          ))}
-        </div>
+      {/* ── Video feed — fills entire screen ── */}
+      <div style={{ position: 'absolute', inset: 0, overflowY: 'scroll', scrollSnapType: 'y mandatory', scrollbarWidth: 'none', zIndex: 1 }}>
+        {feedItems.map((item) => (
+          <FeedCard
+            key={item.id}
+            item={item}
+            onUseTemplate={() => { setActiveTemplate(item.isMine ? activeTemplate : item); goSheet('sh-prompt') }}
+          />
+        ))}
       </div>
 
-      {/* ── Tab bar ── */}
+      {/* ── FOR YOU / FOLLOWING tabs — floats at top ── */}
       <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20,
+        display: 'flex', justifyContent: 'center', gap: 24,
+        padding: '14px 0 10px',
+        background: 'linear-gradient(to bottom, rgba(0,0,0,.55) 0%, transparent 100%)',
+        pointerEvents: 'none',
+      }}>
+        {['Following', 'For You'].map((t, i) => (
+          <div key={t} style={{
+            fontSize: 16, fontWeight: i === 1 ? 700 : 500,
+            color: i === 1 ? '#fff' : 'rgba(255,255,255,.55)',
+            pointerEvents: 'all', cursor: 'pointer',
+            borderBottom: i === 1 ? '2px solid #fff' : '2px solid transparent',
+            paddingBottom: 4,
+          }}>{t}</div>
+        ))}
+      </div>
+
+      {/* ── Tab bar — floats at bottom over the feed ── */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 30,
         display: 'flex', alignItems: 'center',
-        background: '#000',
+        background: 'rgba(0,0,0,.85)',
         borderTop: '0.5px solid rgba(255,255,255,.1)',
         padding: '8px 0 20px',
-        flexShrink: 0,
       }}>
         {[
           { id: 'home',    icon: HomeIcon,    label: 'Home' },
@@ -653,7 +649,7 @@ function FeedCard({ item, onUseTemplate }) {
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 50%)' }} />
 
       {/* Right action bar */}
-      <div style={{ position: 'absolute', right: 12, bottom: 100, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
+      <div style={{ position: 'absolute', right: 12, bottom: 160, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
         {/* Avatar */}
         <div style={{ position: 'relative', marginBottom: 4 }}>
           <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,.2)', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{item.avatar || '✦'}</div>
@@ -671,8 +667,8 @@ function FeedCard({ item, onUseTemplate }) {
         <div style={{ width: 40, height: 40, borderRadius: '50%', border: '3px solid rgba(255,255,255,.4)', background: 'rgba(0,0,0,.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, animation: 'spinDisc 4s linear infinite' }}>🎵</div>
       </div>
 
-      {/* Bottom info */}
-      <div style={{ position: 'relative', zIndex: 1, padding: '0 60px 16px 16px' }}>
+      {/* Bottom info — padded above the floating tab bar */}
+      <div style={{ position: 'relative', zIndex: 1, padding: '0 60px 88px 16px' }}>
         <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 6 }}>@twin_ai_{item.id}</div>
         <div style={{ fontSize: 14, color: 'rgba(255,255,255,.9)', lineHeight: 1.45, marginBottom: 8 }}>{item.caption || item.label}</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
