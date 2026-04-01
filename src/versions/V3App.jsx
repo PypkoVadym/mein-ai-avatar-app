@@ -248,10 +248,10 @@ export default function V3App() {
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', isolation: 'isolate', background: '#000' }}>
+    <div style={{ flex: 1, position: 'relative', overflow: 'hidden', isolation: 'isolate', background: '#000' }}>
 
       {/* ── Video feed — fills entire screen ── */}
-      <div style={{ position: 'absolute', inset: 0, overflowY: 'scroll', scrollSnapType: 'y mandatory', scrollbarWidth: 'none', zIndex: 1 }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflowY: 'scroll', scrollSnapType: 'y mandatory', scrollbarWidth: 'none', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
         {feedItems.map((item) => (
           <FeedCard
             key={item.id}
@@ -322,7 +322,7 @@ export default function V3App() {
       </div>
 
       {/* Overlay */}
-      {activeSheet && <div onClick={closeSheet} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,.6)', zIndex: 200 }} />}
+      {activeSheet && <div onClick={closeSheet} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,.6)', zIndex: 200 }} />}
 
       {/* ══════════════════════════════════════
           SH-PATH
@@ -643,7 +643,7 @@ function FeedCard({ item, onUseTemplate }) {
   const [liked, setLiked] = useState(false)
 
   return (
-    <div style={{ height: '100%', minHeight: '100%', scrollSnapAlign: 'start', position: 'relative', background: item.gradient, flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+    <div style={{ flex: '0 0 100%', scrollSnapAlign: 'start', position: 'relative', background: item.gradient, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
 
       {/* Gradient overlay */}
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 50%)' }} />
