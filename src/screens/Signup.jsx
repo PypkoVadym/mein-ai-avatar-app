@@ -11,10 +11,10 @@ function calculateAge(dob) {
 }
 
 export default function Signup({ goTo, showCookie, setShowCookie }) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [dob, setDob] = useState('')
-  const [tosChecked, setTosChecked] = useState(false)
+  const [email, setEmail] = useState('demo@example.com')
+  const [password, setPassword] = useState('password123')
+  const [dob, setDob] = useState('1990-06-15')
+  const [tosChecked, setTosChecked] = useState(true)
   const [submitted, setSubmitted] = useState(false)
 
   const age = calculateAge(dob)

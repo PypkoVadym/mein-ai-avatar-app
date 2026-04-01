@@ -32,20 +32,46 @@ export default function CharacterChoice({ answers, path, setPath, goTo, onBack }
         )}
 
         <div className="character-cards">
-          {/* Card A */}
+          {/* Card A — That's me */}
           <div
-            className={`character-card ${path === 'A' ? 'selected' : ''}`}
+            className={`character-card character-card-hero ${path === 'A' ? 'selected' : ''}`}
             onClick={() => setPath('A')}
           >
-            <div className="character-card-icon">🤳</div>
-            <div className="character-card-body">
+            {/* Hero photo */}
+            <div className="card-hero-preview">
+              <img
+                src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&h=320&fit=crop&crop=face"
+                alt="Happy person smiling"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+              {/* Subtle gradient so text below feels connected */}
+              <div style={{
+                position: 'absolute', bottom: 0, left: 0, right: 0, height: 48,
+                background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.35))',
+              }} />
+            </div>
+
+            {/* Card body */}
+            <div className="character-card-body" style={{ padding: '14px 16px 16px' }}>
               <div className="character-card-header">
                 <span className="character-card-title">That's me</span>
                 <span className="character-badge badge-personal">Personal</span>
               </div>
               <p className="character-card-sub">
-                Record a short video to create your personal AI avatar
+                Take 3 quick photos — left, forward, right — to create your exact AI twin
               </p>
+
+              {/* Step pills */}
+              <div style={{ display: 'flex', gap: 6, marginTop: 10, flexWrap: 'wrap' }}>
+                {['👈 Turn left', '😐 Forward', '👉 Turn right'].map((s, i) => (
+                  <span key={i} style={{
+                    fontSize: 11, fontWeight: 600,
+                    background: path === 'A' ? 'rgba(40,91,176,0.12)' : 'var(--bg-deep)',
+                    color: 'var(--text-secondary)',
+                    borderRadius: 20, padding: '3px 10px',
+                  }}>{s}</span>
+                ))}
+              </div>
             </div>
           </div>
 
