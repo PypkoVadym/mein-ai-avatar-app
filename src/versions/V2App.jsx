@@ -313,10 +313,23 @@ export default function V2App() {
             </div>
 
             {/* Prompt card */}
-            <div onClick={() => goSheet('sh-prompt')} style={{ background: '#fff', borderRadius: 20, border: '1.5px solid var(--border)', overflow: 'hidden', marginBottom: 12, cursor: 'pointer' }}>
+            <div onClick={() => goSheet('sh-prompt')} style={{
+              background: '#fff', borderRadius: 20, overflow: 'hidden', marginBottom: 12, cursor: 'pointer',
+              border: prompt ? '1.5px solid var(--border)' : '1.5px solid var(--blue)',
+              position: 'relative',
+              animation: prompt ? 'none' : 'promptPulse 2s ease-in-out infinite',
+            }}>
+              {/* Pulse rings */}
+              {!prompt && <>
+                <div style={{ position: 'absolute', inset: -4, borderRadius: 24, border: '2px solid var(--blue)', opacity: 0, animation: 'ringOut 2s ease-out infinite', pointerEvents: 'none' }} />
+                <div style={{ position: 'absolute', inset: -4, borderRadius: 24, border: '2px solid var(--blue)', opacity: 0, animation: 'ringOut 2s ease-out .6s infinite', pointerEvents: 'none' }} />
+              </>}
               <div style={{ padding: '16px 18px' }}>
-                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '.07em', marginBottom: 7 }}>Your idea</div>
-                <div style={{ fontSize: 15, color: prompt ? 'var(--text)' : 'var(--text-secondary)', lineHeight: 1.55 }}>{prompt || 'Tap to describe your video…'}</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: prompt ? 'var(--text-secondary)' : 'var(--blue)', textTransform: 'uppercase', letterSpacing: '.07em' }}>Your idea</div>
+                  {!prompt && <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--blue)', display: 'flex', alignItems: 'center', gap: 4 }}>Tap here <span style={{ animation: 'nudge .8s ease-in-out infinite' }}>→</span></div>}
+                </div>
+                <div style={{ fontSize: 15, color: prompt ? 'var(--text)' : 'var(--text-secondary)', lineHeight: 1.55 }}>{prompt || 'Describe your video…'}</div>
               </div>
             </div>
             <button onClick={() => prompt ? handleGenerate() : goSheet('sh-prompt')} style={{
@@ -795,11 +808,14 @@ export default function V2App() {
       </Sheet>
 
       <style>{`
-        @keyframes shimmer  { from{background-position:200% 0} to{background-position:-200% 0} }
-        @keyframes camFlash { from{opacity:.9} to{opacity:0} }
-        @keyframes gpa      { 0%,100%{opacity:1} 50%{opacity:.25} }
-        @keyframes vpa      { from{transform:scaleY(1)} to{transform:scaleY(2.1)} }
-        @keyframes recPulse { 0%,100%{box-shadow:0 0 0 0 rgba(229,57,53,.4)} 50%{box-shadow:0 0 0 10px rgba(229,57,53,0)} }
+        @keyframes shimmer    { from{background-position:200% 0} to{background-position:-200% 0} }
+        @keyframes camFlash   { from{opacity:.9} to{opacity:0} }
+        @keyframes gpa        { 0%,100%{opacity:1} 50%{opacity:.25} }
+        @keyframes vpa        { from{transform:scaleY(1)} to{transform:scaleY(2.1)} }
+        @keyframes recPulse   { 0%,100%{box-shadow:0 0 0 0 rgba(229,57,53,.4)} 50%{box-shadow:0 0 0 10px rgba(229,57,53,0)} }
+        @keyframes promptPulse{ 0%,100%{box-shadow:0 0 0 0 rgba(40,91,176,.25)} 50%{box-shadow:0 0 0 8px rgba(40,91,176,0)} }
+        @keyframes ringOut    { 0%{opacity:.5;transform:scale(1)} 100%{opacity:0;transform:scale(1.07)} }
+        @keyframes nudge      { 0%,100%{transform:translateX(0)} 50%{transform:translateX(4px)} }
       `}</style>
     </div>
   )
