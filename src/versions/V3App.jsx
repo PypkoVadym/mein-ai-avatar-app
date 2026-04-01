@@ -248,7 +248,7 @@ export default function V3App() {
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', background: '#000' }}>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', isolation: 'isolate', background: '#000' }}>
 
       {/* ── Feed area (contains feed + overlaid tabs) ── */}
       <div style={{ flex: 1, position: 'relative', minHeight: 0, overflow: 'hidden' }}>
@@ -284,14 +284,13 @@ export default function V3App() {
         </div>
       </div>
 
-      {/* ── Tab bar — flex sibling, never affected by absolute sheets ── */}
+      {/* ── Tab bar ── */}
       <div style={{
         display: 'flex', alignItems: 'center',
         background: '#000',
         borderTop: '0.5px solid rgba(255,255,255,.1)',
         padding: '8px 0 20px',
         flexShrink: 0,
-        position: 'relative', zIndex: 5,
       }}>
         {[
           { id: 'home',    icon: HomeIcon,    label: 'Home' },
