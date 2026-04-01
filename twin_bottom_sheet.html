@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TWIN — Bottom Sheet Flow</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Phone shell ─────────────────────── */
+.phone {
+  width: 390px;
+  height: 844px;
+  background: #F7F5F0;
+  border-radius: 50px;
+  border: 2px solid #2A2826;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 0 8px #0D0D0D, 0 40px 100px rgba(0,0,0,.85);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Dynamic island ──────────────────── */
+.di {
+  width: 126px; height: 36px;
+  background: #0D0D0D; border-radius: 20px;
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  z-index: 100;
+}
+
+/* ─── Status bar ──────────────────────── */
+.status {
+  height: 58px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 28px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1A1916;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+/* ─── Main screen ─────────────────────── */
+.main {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ─── Phases ──────────────────────────── */
+/* Phase 1: onboarding (full screen question) */
+.phase {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+}
+.phase.active { display: flex; }
+
+/* ─── ONBOARDING PHASE ────────────────── */
+#ph-onb {
+  background: #F7F5F0;
+  padding: 0 26px 32px;
+  justify-content: space-between;
+}
+.onb-top {
+  padding-top: 20px;
+}
+.onb-prog-wrap {
+  height: 3px;
+  background: #E8E5E0;
+  border-radius: 2px;
+  margin-bottom: 36px;
+  overflow: hidden;
+}
+.onb-prog {
+  height: 100%;
+  background: #1A1916;
+  border-radius: 2px;
+  transition: width .5s ease;
+}
+.onb-step-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9B9894;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 10px;
+}
+.onb-q {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1A1916;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.onb-sub {
+  font-size: 14px;
+  color: #9B9894;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+.onb-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+  overflow-y: auto;
+}
+.onb-opt {
+  padding: 15px 18px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1.5px solid #E8E5E0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1A1916;
+  cursor: pointer;
+  transition: all .14s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+.onb-opt:active { transform: scale(.98); }
+.onb-opt.sel { border-color: #1A1916; background: #1A1916; color: #FAFAF8; }
+.onb-opt.sel::after {
+  content: '';
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.5);
+  background: rgba(255,255,255,.25);
+  flex-shrink: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='1,4 3.5,6.5 9,1' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.onb-opt-multi {
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1.5px solid #E8E5E0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1A1916;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all .14s;
+  user-select: none;
+}
+.onb-opt-multi.sel { border-color: #1A1916; }
+.mchk {
+  width: 22px; height: 22px;
+  border-radius: 7px;
+  border: 1.5px solid #D4D1CB;
+  background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all .14s;
+}
+.onb-opt-multi.sel .mchk {
+  background: #1A1916; border-color: #1A1916;
+}
+.mchk-icon { display: none; }
+.onb-opt-multi.sel .mchk-icon { display: block; }
+
+.onb-btn-wrap { padding-top: 20px; }
+.btn-primary {
+  width: 100%; padding: 16px; border-radius: 16px;
+  background: #1A1916; color: #FAFAF8;
+  font-size: 15px; font-weight: 600;
+  border: none; cursor: pointer;
+  font-family: inherit;
+  transition: opacity .15s, transform .1s;
+}
+.btn-primary:active { transform: scale(.98); opacity: .9; }
+.btn-primary.dim { background: #D4D1CB; color: #9B9894; cursor: default; }
+
+/* ─── MAIN APP PHASE ──────────────────── */
+#ph-app {
+  background: #F7F5F0;
+  flex-direction: column;
+}
+
+/* Top bar */
+.app-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 22px 12px;
+  flex-shrink: 0;
+}
+.app-logo { font-size: 17px; font-weight: 700; color: #1A1916; letter-spacing: -.01em; }
+.app-bar-right { display: flex; gap: 10px; align-items: center; }
+.icon-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #EDEAE4; display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+
+/* Avatar creation area (main content) */
+.create-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 22px 20px;
+  scrollbar-width: none;
+}
+.create-area::-webkit-scrollbar { display: none; }
+
+/* State: no avatar yet */
+.no-avatar-card {
+  background: #1A1916;
+  border-radius: 24px;
+  padding: 28px 24px;
+  text-align: center;
+  margin-bottom: 18px;
+  cursor: pointer;
+  transition: transform .15s;
+  position: relative;
+  overflow: hidden;
+}
+.no-avatar-card:active { transform: scale(.99); }
+.na-shimmer {
+  position: absolute; inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.04) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+}
+@keyframes shimmer { from{background-position:200% 0;} to{background-position:-200% 0;} }
+.na-orb {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  border: 2px dashed rgba(255,255,255,.2);
+  margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+}
+.na-title { font-size: 20px; font-weight: 700; color: #FAFAF8; margin-bottom: 8px; }
+.na-sub { font-size: 13px; color: rgba(255,255,255,.55); line-height: 1.6; }
+.na-cta {
+  margin-top: 22px;
+  padding: 13px 24px;
+  border-radius: 12px;
+  background: #FAFAF8;
+  color: #1A1916;
+  font-size: 14px; font-weight: 600;
+  display: inline-block;
+}
+
+/* State: avatar exists */
+.avatar-card {
+  display: none;
+  background: #1A1916;
+  border-radius: 24px;
+  padding: 0;
+  margin-bottom: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: transform .15s;
+}
+.avatar-card:active { transform: scale(.99); }
+.avatar-card.show { display: block; }
+.avatar-bg {
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.avatar-bg-gradient { position: absolute; inset: 0; }
+.avatar-symbol {
+  font-size: 64px;
+  position: relative;
+  z-index: 1;
+}
+.avatar-info {
+  padding: 16px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.avatar-name { font-size: 16px; font-weight: 700; color: #FAFAF8; }
+.avatar-meta { font-size: 12px; color: rgba(255,255,255,.5); margin-top: 3px; }
+.avatar-change {
+  font-size: 12px; color: rgba(255,255,255,.5);
+  padding: 6px 12px; border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.15);
+}
+
+/* Generate section */
+.gen-section {
+  display: none;
+}
+.gen-section.show { display: block; }
+.gen-prompt-card {
+  background: #fff;
+  border-radius: 20px;
+  border: 1.5px solid #E8E5E0;
+  overflow: hidden;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: border-color .14s;
+}
+.gen-prompt-card:hover { border-color: #C8C5BF; }
+.gen-prompt-inner { padding: 16px 18px; }
+.gen-prompt-lbl { font-size: 11px; font-weight: 600; color: #9B9894; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 7px; }
+.gen-prompt-text { font-size: 15px; color: #9B9894; line-height: 1.55; }
+.gen-prompt-text.filled { color: #1A1916; }
+.gen-go-btn {
+  width: 100%; padding: 16px; border-radius: 16px;
+  background: #1A1916; color: #FAFAF8;
+  font-size: 15px; font-weight: 600;
+  border: none; cursor: pointer;
+  font-family: inherit;
+  transition: opacity .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.gen-go-btn:active { opacity: .85; }
+.gen-go-btn.dim { background: #D4D1CB; color: #9B9894; cursor: default; }
+
+/* Recent videos */
+.section-title { font-size: 13px; font-weight: 600; color: #9B9894; text-transform: uppercase; letter-spacing: .06em; margin: 20px 0 12px; }
+.videos-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.videos-row::-webkit-scrollbar { display: none; }
+.video-thumb {
+  flex-shrink: 0;
+  width: 100px;
+  aspect-ratio: 9/16;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+}
+.video-thumb-bg { position: absolute; inset: 0; }
+.video-ai-badge {
+  position: absolute; top: 6px; left: 6px;
+  background: rgba(0,0,0,.5); border-radius: 8px;
+  padding: 2px 6px; font-size: 8px; font-weight: 700; color: #fff; letter-spacing: .04em;
+}
+.video-thumb-play {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.video-thumb-pending {
+  background: #F0EEE9;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+}
+.pending-spin {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid #E0DDD6; border-top-color: #1A1916;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to{transform:rotate(360deg);} }
+
+/* Tab bar */
+.tab-bar {
+  display: flex;
+  border-top: 0.5px solid #E8E5E0;
+  padding: 10px 0 28px;
+  flex-shrink: 0;
+  background: rgba(247,245,240,.95);
+  backdrop-filter: blur(20px);
+}
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.tab-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+}
+.tab.active .tab-icon { background: #1A1916; }
+.tab-lbl { font-size: 10px; color: #9B9894; font-weight: 500; }
+.tab.active .tab-lbl { color: #1A1916; font-weight: 600; }
+
+/* ─── BOTTOM SHEETS ───────────────────── */
+.sheet-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  z-index: 200;
+  pointer-events: none;
+  transition: background .3s;
+}
+.sheet-overlay.dim {
+  background: rgba(0,0,0,.45);
+  pointer-events: all;
+}
+
+.sheet {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: #F7F5F0;
+  border-radius: 24px 24px 0 0;
+  z-index: 210;
+  transform: translateY(100%);
+  transition: transform .38s cubic-bezier(.32,0,.15,1);
+  max-height: 92%;
+  display: flex;
+  flex-direction: column;
+}
+.sheet.open { transform: translateY(0); }
+.sheet.stacked { transform: translateY(-18px) scale(.96); border-radius: 28px 28px 0 0; }
+
+.sheet-handle {
+  width: 36px; height: 4px;
+  background: #D4D1CB; border-radius: 2px;
+  margin: 12px auto 0;
+  flex-shrink: 0;
+}
+.sheet-scroll {
+  overflow-y: auto;
+  padding: 0 22px 36px;
+  flex: 1;
+  scrollbar-width: none;
+}
+.sheet-scroll::-webkit-scrollbar { display: none; }
+.sheet-title {
+  font-size: 20px; font-weight: 700; color: #1A1916;
+  padding: 18px 0 4px;
+  line-height: 1.25;
+}
+.sheet-sub {
+  font-size: 14px; color: #9B9894; line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* ─── Path choice in sheet ────────────── */
+.path-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.path-card {
+  background: #fff; border-radius: 18px; border: 1.5px solid #E8E5E0;
+  padding: 16px; cursor: pointer;
+  display: flex; gap: 14px; align-items: flex-start;
+  transition: border-color .14s, box-shadow .14s;
+  user-select: none;
+}
+.path-card:active { transform: scale(.99); }
+.path-card.sel { border-color: #1A1916; box-shadow: 0 0 0 3px rgba(26,25,22,.07); }
+.pc-icon {
+  width: 48px; height: 48px; border-radius: 13px;
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 22px;
+}
+.pc-title { font-size: 15px; font-weight: 600; color: #1A1916; margin-bottom: 3px; }
+.pc-desc { font-size: 13px; color: #9B9894; line-height: 1.5; }
+.pc-tag {
+  display: inline-block; margin-top: 7px;
+  font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 7px;
+}
+
+/* ─── Seed grid in sheet ──────────────── */
+.seed-info-banner {
+  background: #1A1916; border-radius: 14px; padding: 12px 14px;
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-bottom: 16px;
+}
+.sib-text { font-size: 12px; color: rgba(255,255,255,.8); line-height: 1.6; }
+.sib-text strong { color: #fff; }
+.seed-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 9px;
+  margin-bottom: 14px;
+}
+.sc {
+  border-radius: 14px; overflow: hidden; position: relative;
+  aspect-ratio: 3/4; cursor: pointer;
+  transition: box-shadow .15s, transform .15s;
+}
+.sc:active { transform: scale(.97); }
+.sc.sel { box-shadow: 0 0 0 2.5px #1A1916; }
+.sc-ov { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 55%); }
+.sc-tag {
+  position: absolute; top: 6px; left: 6px;
+  background: rgba(0,0,0,.4); border-radius: 20px;
+  padding: 2px 7px; font-size: 9px; font-weight: 600; color: #fff;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.sc-chk {
+  position: absolute; top: 6px; right: 6px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #1A1916;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(.4);
+  transition: opacity .15s, transform .15s;
+}
+.sc.sel .sc-chk { opacity: 1; transform: scale(1); }
+.sc-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 7px 8px 9px; }
+.sc-nm { font-size: 11px; font-weight: 700; color: #fff; }
+.sc-ds { font-size: 9px; color: rgba(255,255,255,.7); margin-top: 1px; }
+
+/* ─── Face scan in sheet ──────────────── */
+.scan-area {
+  border-radius: 20px; overflow: hidden;
+  aspect-ratio: 3/4; background: #1A1916;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px; max-height: 280px;
+}
+.face-oval {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-54%);
+  width: 110px; height: 148px;
+  border: 2px dashed rgba(255,255,255,.4); border-radius: 55px;
+}
+.scan-instr {
+  position: absolute; bottom: 12px; left: 12px; right: 12px;
+  display: flex; gap: 6px;
+}
+.si-item {
+  flex: 1; background: rgba(255,255,255,.12); border-radius: 10px;
+  padding: 7px; text-align: center;
+}
+.si-item.mid { background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.25); }
+.si-icon { font-size: 18px; }
+.si-lbl { font-size: 9px; color: rgba(255,255,255,.7); margin-top: 2px; }
+.rec-btn {
+  position: absolute; bottom: 70px;
+  width: 58px; height: 58px; border-radius: 50%;
+  background: #FF3B30; border: 4px solid rgba(255,255,255,.4);
+  cursor: pointer; transition: transform .12s;
+}
+.rec-btn:active { transform: scale(.94); }
+.rec-ind {
+  position: absolute; top: 12px; left: 12px;
+  background: rgba(216,64,64,.9); color: #fff;
+  font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 7px;
+  display: none;
+}
+.scan-ok {
+  display: none; flex-direction: column; align-items: center; gap: 8px;
+}
+.scan-ok-icon {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: rgba(13,102,80,.9);
+  display: flex; align-items: center; justify-content: center;
+}
+.scan-ok-lbl { font-size: 14px; font-weight: 600; color: #fff; }
+
+/* consent */
+.consent-area { display: none; margin-bottom: 16px; }
+.ck-row {
+  display: flex; gap: 11px; align-items: flex-start;
+  padding: 11px 14px; background: #fff;
+  border-radius: 13px; border: 1.5px solid #E8E5E0;
+  cursor: pointer; margin-bottom: 8px;
+  transition: border-color .14s;
+}
+.ck-row:hover { border-color: #C8C5BF; }
+.ckbox {
+  width: 20px; height: 20px; border-radius: 5px;
+  border: 1.5px solid #D4D1CB; background: #fff;
+  flex-shrink: 0; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .12s;
+}
+.ckbox.on { background: #1A1916; border-color: #1A1916; }
+.ck-txt { font-size: 12px; color: #1A1916; line-height: 1.55; }
+.ck-lnk { color: #2E6FD8; }
+
+/* ─── Voice in sheet ──────────────────── */
+.gsw-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.gsw-label { font-size: 13px; font-weight: 500; color: #1A1916; }
+.gsw-sublabel { font-size: 11px; color: #9B9894; margin-top: 2px; }
+.gsw {
+  display: flex; background: #F0EEE9; border-radius: 10px; padding: 3px;
+}
+.gsw-opt {
+  padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 500;
+  color: #9B9894; cursor: pointer; user-select: none; transition: all .13s;
+}
+.gsw-opt.on { background: #1A1916; color: #F7F5F0; }
+.vgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 14px; }
+.vc {
+  background: #fff; border-radius: 14px; border: 1.5px solid #E8E5E0;
+  padding: 12px 12px 10px; cursor: pointer; position: relative; user-select: none;
+  transition: border-color .14s, box-shadow .14s;
+}
+.vc:active { transform: scale(.98); }
+.vc:hover { border-color: #B8B5AF; }
+.vc.on { border-color: #1A1916; box-shadow: 0 0 0 3px rgba(26,25,22,.07); }
+.vc.foryou::before {
+  content:'For you'; position:absolute; top:-1px; right:10px;
+  background:#1A1916; color:#F7F5F0;
+  font-size:8px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+  padding:2px 7px; border-radius:0 0 6px 6px;
+}
+.vc-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px; }
+.vc-nm { font-size:13px; font-weight:600; color:#1A1916; }
+.vc-ds { font-size:11px; color:#9B9894; margin-bottom:8px; }
+.vplay {
+  width:24px; height:24px; border-radius:50%;
+  border:1.5px solid #E0DDD6; background:#F7F5F0;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; cursor:pointer; transition:background .12s;
+}
+.vplay:hover { background:#EEEBE6; }
+.vplay.on { background:#1A1916; border-color:#1A1916; }
+.vtri { width:0; height:0; border-style:solid; border-width:3.5px 0 3.5px 6px; border-color:transparent transparent transparent #9B9894; margin-left:1px; }
+.vplay.on .vtri { border-left-color:#fff; }
+.vwave { display:flex; align-items:center; gap:2px; height:14px; }
+.vb { width:3px; border-radius:2px; background:#D4D1CB; transition:background .14s; }
+.vc.on .vb { background:#1A1916; }
+.vc.playing .vb { background:#1A1916; animation:vpa .55s ease-in-out infinite alternate; }
+.vb:nth-child(2n){animation-delay:.1s!important;} .vb:nth-child(3n){animation-delay:.22s!important;}
+@keyframes vpa{from{transform:scaleY(1);}to{transform:scaleY(2.1);}}
+
+/* voice record row */
+.voice-divider { display:flex;align-items:center;gap:8px;margin:4px 0 12px; }
+.vdiv-line { flex:1;height:1px;background:#E8E5E0; }
+.vdiv-txt { font-size:11px;color:#9B9894;white-space:nowrap; }
+.voice-rec-box {
+  background:#fff; border-radius:14px; border:1.5px solid #E8E5E0;
+  padding:12px 14px;
+}
+.vrec-prompt {
+  background:#F0EEE9; border-radius:9px; padding:8px 11px;
+  font-size:12px; color:#1A1916; font-style:italic; line-height:1.55;
+  margin-bottom:12px;
+}
+.vrec-row { display:flex; align-items:center; gap:10px; }
+.vrec-btn {
+  width:44px; height:44px; border-radius:50%;
+  background:#1A1916; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:background .15s;
+}
+.vrec-wave {
+  flex:1; height:28px; display:flex; align-items:center; gap:2px;
+}
+.vrec-b { width:3px;border-radius:2px;background:#D4D1CB;transition:height .1s,background .15s; }
+.vrec-lbl { font-size:11px; color:#9B9894; flex-shrink:0; min-width:64px; text-align:right; }
+
+/* ─── Prompt input in sheet ───────────── */
+.prompt-textarea {
+  width:100%; min-height:100px; padding:14px;
+  border-radius:14px; border:1.5px solid #E0DDD6;
+  background:#fff; font-size:15px; color:#1A1916;
+  font-family:inherit; resize:none; outline:none;
+  line-height:1.55; margin-bottom:14px;
+  transition:border-color .14s;
+}
+.prompt-textarea:focus { border-color:#9B9894; }
+.prompt-label { font-size:11px;font-weight:600;color:#9B9894;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px; }
+.opt-fields { margin-bottom:16px; }
+.opt-field-label { font-size:12px;color:#9B9894;margin-bottom:6px; }
+.opt-field-input {
+  width:100%;padding:11px 14px;border-radius:12px;border:1.5px solid #E0DDD6;
+  background:#fff;font-size:13px;color:#1A1916;font-family:inherit;outline:none;
+  transition:border-color .14s;
+}
+.opt-field-input:focus { border-color:#9B9894; }
+
+/* format pills */
+.fmt-pills { display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px; }
+.fmt-pill {
+  padding:8px 14px; border-radius:20px;
+  border:1.5px solid #E0DDD6; background:#fff;
+  font-size:13px; font-weight:500; color:#1A1916;
+  cursor:pointer; user-select:none; white-space:nowrap;
+  transition:all .13s;
+}
+.fmt-pill:hover { border-color:#9B9894; }
+.fmt-pill.on { background:#1A1916;color:#FAFAF8;border-color:#1A1916; }
+
+/* variations */
+.var-row { display:flex;gap:8px;margin-bottom:20px; }
+.var-opt {
+  flex:1; padding:11px; border-radius:12px;
+  border:1.5px solid #E0DDD6; background:#fff;
+  font-size:13px; font-weight:500; color:#1A1916;
+  cursor:pointer; text-align:center; user-select:none;
+  transition:all .13s;
+}
+.var-opt.on { background:#1A1916;color:#FAFAF8;border-color:#1A1916; }
+
+/* gen progress in sheet */
+.gen-card {
+  background:#fff; border-radius:16px; border:1px solid #E8E5E0;
+  padding:16px; margin-bottom:16px;
+}
+.gen-bar-track { height:4px;background:#E8E5E0;border-radius:2px;overflow:hidden;margin-bottom:14px; }
+.gen-bar-fill { height:100%;background:#1A1916;border-radius:2px;transition:width 1.2s ease; }
+.gs { display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid #F0EEE9;font-size:13px;color:#9B9894; }
+.gs:last-child{border-bottom:none;} .gs.done{color:#1A1916;} .gs.act{color:#1A1916;font-weight:600;}
+.gd{width:7px;height:7px;border-radius:50%;background:#D4D1CB;flex-shrink:0;}
+.gd.done{background:#0D6650;} .gd.act{background:#1A1916;animation:gpa 1s ease-in-out infinite;}
+@keyframes gpa{0%,100%{opacity:1;}50%{opacity:.25;}}
+.push-card {
+  background:#fff; border-radius:16px; border:1px solid #E8E5E0;
+  padding:14px;
+}
+.push-title { font-size:13px;font-weight:600;color:#1A1916;margin-bottom:4px; }
+.push-sub { font-size:12px;color:#9B9894;margin-bottom:12px; }
+.push-btns { display:flex;gap:8px; }
+.push-yes { flex:1;text-align:center;padding:9px;border-radius:10px;background:#1A1916;color:#FAFAF8;font-size:13px;font-weight:600;cursor:pointer; }
+.push-no { flex:1;text-align:center;padding:9px;border-radius:10px;border:1.5px solid #E0DDD6;font-size:13px;color:#6B6966;cursor:pointer; }
+
+/* sheet sticky bottom */
+.sheet-sticky {
+  padding: 12px 22px 36px;
+  background: linear-gradient(to top, #F7F5F0 70%, transparent);
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone">
+  <div class="di"></div>
+  <div class="status">
+    <span>9:41</span>
+    <span style="font-size:11px;">▮▮▮ 🔋</span>
+  </div>
+
+  <!-- ── ONBOARDING PHASE ─────────────── -->
+  <div class="phase active" id="ph-onb">
+    <div class="onb-top">
+      <div class="onb-prog-wrap">
+        <div class="onb-prog" id="onbProg" style="width:20%"></div>
+      </div>
+      <div class="onb-step-lbl" id="onbLbl">Step 1 of 5</div>
+      <div class="onb-q" id="onbQ">What will you create?</div>
+      <div class="onb-sub" id="onbSub">We'll personalise your experience.</div>
+    </div>
+    <div class="onb-opts" id="onbOpts"></div>
+    <div class="onb-btn-wrap">
+      <button class="btn-primary dim" id="onbNext" onclick="onbAdvance()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ── APP PHASE ────────────────────── -->
+  <div class="phase" id="ph-app">
+    <div class="app-bar">
+      <div class="app-logo">TWIN</div>
+      <div class="app-bar-right">
+        <div class="icon-btn" style="font-size:16px;">☰</div>
+      </div>
+    </div>
+
+    <div class="create-area" id="createArea">
+      <!-- No avatar state -->
+      <div class="no-avatar-card" id="noAvatarCard" onclick="openSheet('sh-path')">
+        <div class="na-shimmer"></div>
+        <div class="na-orb">✦</div>
+        <div class="na-title">Create your character</div>
+        <div class="na-sub">Tap to set up your AI avatar.<br>You only do this once.</div>
+        <div class="na-cta">Get started →</div>
+      </div>
+
+      <!-- Avatar exists state -->
+      <div class="avatar-card" id="avatarCard">
+        <div class="avatar-bg" id="avatarBg">
+          <div class="avatar-bg-gradient" id="avatarBgGrad"></div>
+          <div class="avatar-symbol" id="avatarSymbol">✦</div>
+        </div>
+        <div class="avatar-info">
+          <div>
+            <div class="avatar-name" id="avatarName">Your Avatar</div>
+            <div class="avatar-meta" id="avatarMeta">Ready · Male · Neutral voice</div>
+          </div>
+          <div class="avatar-change" onclick="openSheet('sh-path')">Change</div>
+        </div>
+      </div>
+
+      <!-- Generate section -->
+      <div class="gen-section" id="genSection">
+        <div class="gen-prompt-card" onclick="openSheet('sh-prompt')">
+          <div class="gen-prompt-inner">
+            <div class="gen-prompt-lbl">Your idea</div>
+            <div class="gen-prompt-text" id="promptPreview">Tap to describe your video…</div>
+          </div>
+        </div>
+        <button class="gen-go-btn dim" id="genGoBtn" onclick="startGen()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polygon points="3,2 14,8 3,14" fill="#9B9894"/></svg>
+          Generate video
+        </button>
+
+        <div class="section-title">Recent</div>
+        <div class="videos-row">
+          <div class="video-thumb video-thumb-pending">
+            <div class="pending-spin"></div>
+            <div style="font-size:10px;color:#9B9894;margin-top:6px;">Creating…</div>
+          </div>
+          <div class="video-thumb">
+            <div class="video-thumb-bg" style="background:linear-gradient(160deg,#3A3835,#1A1916);position:absolute;inset:0;"></div>
+            <div class="video-ai-badge">AI</div>
+            <div class="video-thumb-play">
+              <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;">
+                <div style="width:0;height:0;border-style:solid;border-width:6px 0 6px 10px;border-color:transparent transparent transparent rgba(255,255,255,.9);margin-left:2px;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="video-thumb">
+            <div class="video-thumb-bg" style="background:linear-gradient(160deg,#2A3842,#1A2830);position:absolute;inset:0;"></div>
+            <div class="video-ai-badge">AI</div>
+            <div class="video-thumb-play">
+              <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;">
+                <div style="width:0;height:0;border-style:solid;border-width:6px 0 6px 10px;border-color:transparent transparent transparent rgba(255,255,255,.9);margin-left:2px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab active">
+        <div class="tab-icon" style="font-size:15px;">✦</div>
+        <div class="tab-lbl">Generate</div>
+      </div>
+      <div class="tab">
+        <div class="tab-icon" style="background:#EDEAE4;font-size:15px;">▶</div>
+        <div class="tab-lbl">Inspiration</div>
+      </div>
+      <div class="tab">
+        <div class="tab-icon" style="background:#EDEAE4;font-size:14px;">☰</div>
+        <div class="tab-lbl">Library</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════
+       BOTTOM SHEETS
+  ════════════════════════════════════ -->
+
+  <!-- Overlay -->
+  <div class="sheet-overlay" id="overlay" onclick="closeTopSheet()"></div>
+
+  <!-- SH-1: Path choice -->
+  <div class="sheet" id="sh-path">
+    <div class="sheet-handle"></div>
+    <div class="sheet-scroll">
+      <div class="sheet-title">Create your character</div>
+      <div class="sheet-sub">You only do this once — after this, just type and your video is ready.</div>
+      <div class="path-cards" id="pathCards">
+        <div class="path-card sel" id="pcA" onclick="selectPath('A')">
+          <div class="pc-icon" style="background:#EAF1FC;">🤳</div>
+          <div>
+            <div class="pc-title">That's me</div>
+            <div class="pc-desc">Record a short face scan. We'll build your personal avatar.</div>
+            <span class="pc-tag" style="background:#EAF1FC;color:#285BB0;">Personal avatar</span>
+          </div>
+        </div>
+        <div class="path-card" id="pcB" onclick="selectPath('B')">
+          <div class="pc-icon" style="background:#E0F4EE;">✦</div>
+          <div>
+            <div class="pc-title">Choose a look</div>
+            <div class="pc-desc">Pick a seed image — we generate a unique character similar to it.</div>
+            <span class="pc-tag" style="background:#E0F4EE;color:#0D6650;">Seed-based</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sheet-sticky">
+      <button class="btn-primary" id="pathNextBtn" onclick="pathNext()">Continue with face scan →</button>
+    </div>
+  </div>
+
+  <!-- SH-2A: Face scan -->
+  <div class="sheet" id="sh-scan">
+    <div class="sheet-handle"></div>
+    <div class="sheet-scroll">
+      <div class="sheet-title">Record your face</div>
+      <div class="sheet-sub">15 sec · slowly turn head left then right.</div>
+      <div class="scan-area" id="scanArea">
+        <div class="face-oval"></div>
+        <div class="rec-ind" id="recInd">● REC 0:00</div>
+        <div class="scan-ok" id="scanOk">
+          <div class="scan-ok-icon">
+            <svg width="24" height="20" viewBox="0 0 24 20"><polyline points="2,10 8,17 22,3" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="scan-ok-lbl">Looks great!</div>
+        </div>
+        <div class="scan-instr" id="scanInstr">
+          <div class="si-item"><div class="si-icon">↙</div><div class="si-lbl">Turn left</div></div>
+          <div class="si-item mid"><div class="si-icon">😐</div><div class="si-lbl">Forward</div></div>
+          <div class="si-item"><div class="si-icon">↗</div><div class="si-lbl">Turn right</div></div>
+        </div>
+        <div class="rec-btn" id="recBtn" onclick="toggleScan()"></div>
+      </div>
+      <!-- consent -->
+      <div class="consent-area" id="consentArea">
+        <div class="ck-row" onclick="toggleCk('ck1')">
+          <div class="ckbox" id="ck1"></div>
+          <div class="ck-txt">I consent to processing my biometric data (video) to create an AI avatar — <span class="ck-lnk">Privacy Policy</span></div>
+        </div>
+        <div class="ck-row" onclick="toggleCk('ck2')">
+          <div class="ckbox" id="ck2"></div>
+          <div class="ck-txt">This avatar is for my personal use only</div>
+        </div>
+      </div>
+    </div>
+    <div class="sheet-sticky">
+      <button class="btn-primary dim" id="scanSubmit">Record your face first</button>
+    </div>
+  </div>
+
+  <!-- SH-2B: Seed selection -->
+  <div class="sheet" id="sh-seed">
+    <div class="sheet-handle"></div>
+    <div class="sheet-scroll">
+      <div class="sheet-title">Choose a look</div>
+      <div class="seed-info-banner">
+        <div style="font-size:15px;flex-shrink:0;">✦</div>
+        <div class="sib-text"><strong>Generated just for you.</strong> These looks are shown to no one else.</div>
+      </div>
+      <div class="seed-grid" id="seedGrid">
+        <div class="sc" onclick="pickSeed(this,'Alex','Young, neutral','linear-gradient(160deg,#C4D8EC,#5A88B8)')">
+          <div class="sc-ov"></div><div class="sc-tag">For you</div>
+          <div class="sc-chk"><svg width="9" height="7" viewBox="0 0 9 7"><polyline points="1,3.5 3,5.5 8,1" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="sc-info"><div class="sc-nm">Alex</div><div class="sc-ds">Young, neutral</div></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(160deg,#C4D8EC,#5A88B8);z-index:-1;"></div>
+        </div>
+        <div class="sc" onclick="pickSeed(this,'Sofia','Professional','linear-gradient(160deg,#ECC4C4,#C85858)')">
+          <div class="sc-ov"></div><div class="sc-tag">For you</div>
+          <div class="sc-chk"><svg width="9" height="7" viewBox="0 0 9 7"><polyline points="1,3.5 3,5.5 8,1" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="sc-info"><div class="sc-nm">Sofia</div><div class="sc-ds">Professional</div></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(160deg,#ECC4C4,#C85858);z-index:-1;"></div>
+        </div>
+        <div class="sc" onclick="pickSeed(this,'Mei','Energetic','linear-gradient(160deg,#C4ECC8,#5AAA68)')">
+          <div class="sc-ov"></div><div class="sc-tag">For you</div>
+          <div class="sc-chk"><svg width="9" height="7" viewBox="0 0 9 7"><polyline points="1,3.5 3,5.5 8,1" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="sc-info"><div class="sc-nm">Mei</div><div class="sc-ds">Energetic</div></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(160deg,#C4ECC8,#5AAA68);z-index:-1;"></div>
+        </div>
+        <div class="sc" onclick="pickSeed(this,'Marcus','Mature, serious','linear-gradient(160deg,#E8D8C4,#B89070)')">
+          <div class="sc-ov"></div><div class="sc-tag">For you</div>
+          <div class="sc-chk"><svg width="9" height="7" viewBox="0 0 9 7"><polyline points="1,3.5 3,5.5 8,1" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="sc-info"><div class="sc-nm">Marcus</div><div class="sc-ds">Mature, serious</div></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(160deg,#E8D8C4,#B89070);z-index:-1;"></div>
+        </div>
+        <div class="sc" onclick="pickSeed(this,'Rina','Young, bright','linear-gradient(160deg,#D8C4EC,#9058B8)')">
+          <div class="sc-ov"></div><div class="sc-tag">For you</div>
+          <div class="sc-chk"><svg width="9" height="7" viewBox="0 0 9 7"><polyline points="1,3.5 3,5.5 8,1" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="sc-info"><div class="sc-nm">Rina</div><div class="sc-ds">Young, bright</div></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(160deg,#D8C4EC,#9058B8);z-index:-1;"></div>
+        </div>
+        <div class="sc" onclick="pickSeed(this,'Daniel','Charismatic','linear-gradient(160deg,#C4E8EC,#5098A8)')">
+          <div class="sc-ov"></div><div class="sc-tag">For you</div>
+          <div class="sc-chk"><svg width="9" height="7" viewBox="0 0 9 7"><polyline points="1,3.5 3,5.5 8,1" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="sc-info"><div class="sc-nm">Daniel</div><div class="sc-ds">Charismatic</div></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(160deg,#C4E8EC,#5098A8);z-index:-1;"></div>
+        </div>
+      </div>
+      <div style="background:#fff;border-radius:12px;border:1px solid #E8E5E0;padding:10px 13px;display:flex;gap:9px;align-items:flex-start;">
+        <div style="font-size:13px;flex-shrink:0;">🔒</div>
+        <div style="font-size:12px;color:#9B9894;line-height:1.6;">We'll create a character <strong style="color:#1A1916;">similar to this look, but unique</strong> — yours only.</div>
+      </div>
+    </div>
+    <div class="sheet-sticky">
+      <button class="btn-primary dim" id="seedNextBtn">Select a look first</button>
+    </div>
+  </div>
+
+  <!-- SH-3: Voice selection -->
+  <div class="sheet" id="sh-voice">
+    <div class="sheet-handle"></div>
+    <div class="sheet-scroll">
+      <div class="sheet-title">Choose a voice</div>
+      <div class="sheet-sub">It'll narrate your videos. Listen to each — or record your own.</div>
+
+      <div class="gsw-row">
+        <div>
+          <div class="gsw-label">Voice type</div>
+          <div class="gsw-sublabel" id="gswLbl">Showing male voices</div>
+        </div>
+        <div class="gsw">
+          <div class="gsw-opt" id="swF" onclick="setGender('f')">Female</div>
+          <div class="gsw-opt on" id="swM" onclick="setGender('m')">Male</div>
+        </div>
+      </div>
+
+      <!-- male grid -->
+      <div class="vgrid" id="vgM">
+        <div class="vc on foryou" onclick="vPick(this,'Neutral')">
+          <div class="vc-top"><div class="vc-nm">Neutral</div><div class="vplay" onclick="vPlay(event,this)"><div class="vtri"></div></div></div>
+          <div class="vc-ds">Clear, universal</div>
+          <div class="vwave"><div class="vb" style="height:6px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:14px"></div><div class="vb" style="height:9px"></div><div class="vb" style="height:12px"></div><div class="vb" style="height:7px"></div><div class="vb" style="height:11px"></div><div class="vb" style="height:8px"></div><div class="vb" style="height:13px"></div><div class="vb" style="height:6px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:14px"></div></div>
+        </div>
+        <div class="vc" onclick="vPick(this,'Energetic')">
+          <div class="vc-top"><div class="vc-nm">Energetic</div><div class="vplay" onclick="vPlay(event,this)"><div class="vtri"></div></div></div>
+          <div class="vc-ds">Lively, dynamic</div>
+          <div class="vwave"><div class="vb" style="height:10px"></div><div class="vb" style="height:16px"></div><div class="vb" style="height:8px"></div><div class="vb" style="height:14px"></div><div class="vb" style="height:18px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:15px"></div><div class="vb" style="height:12px"></div><div class="vb" style="height:16px"></div><div class="vb" style="height:9px"></div><div class="vb" style="height:14px"></div><div class="vb" style="height:18px"></div></div>
+        </div>
+        <div class="vc" onclick="vPick(this,'Calm')">
+          <div class="vc-top"><div class="vc-nm">Calm</div><div class="vplay" onclick="vPlay(event,this)"><div class="vtri"></div></div></div>
+          <div class="vc-ds">Gentle, thoughtful</div>
+          <div class="vwave"><div class="vb" style="height:5px"></div><div class="vb" style="height:8px"></div><div class="vb" style="height:6px"></div><div class="vb" style="height:9px"></div><div class="vb" style="height:7px"></div><div class="vb" style="height:6px"></div><div class="vb" style="height:8px"></div><div class="vb" style="height:5px"></div><div class="vb" style="height:9px"></div><div class="vb" style="height:7px"></div><div class="vb" style="height:6px"></div><div class="vb" style="height:8px"></div></div>
+        </div>
+        <div class="vc" onclick="vPick(this,'Expert')">
+          <div class="vc-top"><div class="vc-nm">Expert</div><div class="vplay" onclick="vPlay(event,this)"><div class="vtri"></div></div></div>
+          <div class="vc-ds">Authoritative</div>
+          <div class="vwave"><div class="vb" style="height:8px"></div><div class="vb" style="height:12px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:14px"></div><div class="vb" style="height:11px"></div><div class="vb" style="height:13px"></div><div class="vb" style="height:9px"></div><div class="vb" style="height:12px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:14px"></div><div class="vb" style="height:11px"></div><div class="vb" style="height:13px"></div></div>
+        </div>
+      </div>
+
+      <!-- female grid -->
+      <div class="vgrid" id="vgF" style="display:none;">
+        <div class="vc on foryou" onclick="vPick(this,'Soft')">
+          <div class="vc-top"><div class="vc-nm">Soft</div><div class="vplay" onclick="vPlay(event,this)"><div class="vtri"></div></div></div>
+          <div class="vc-ds">Warm, trustworthy</div>
+          <div class="vwave"><div class="vb" style="height:5px"></div><div class="vb" style="height:8px"></div><div class="vb" style="height:6px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:7px"></div><div class="vb" style="height:9px"></div><div class="vb" style="height:5px"></div><div class="vb" style="height:8px"></div><div class="vb" style="height:6px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:7px"></div><div class="vb" style="height:9px"></div></div>
+        </div>
+        <div class="vc" onclick="vPick(this,'Clear')">
+          <div class="vc-top"><div class="vc-nm">Clear</div><div class="vplay" onclick="vPlay(event,this)"><div class="vtri"></div></div></div>
+          <div class="vc-ds">Articulate, pro</div>
+          <div class="vwave"><div class="vb" style="height:8px"></div><div class="vb" style="height:12px"></div><div class="vb" style="height:9px"></div><div class="vb" style="height:13px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:12px"></div><div class="vb" style="height:8px"></div><div class="vb" style="height:11px"></div><div class="vb" style="height:9px"></div><div class="vb" style="height:13px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:12px"></div></div>
+        </div>
+        <div class="vc" onclick="vPick(this,'Vibrant')">
+          <div class="vc-top"><div class="vc-nm">Vibrant</div><div class="vplay" onclick="vPlay(event,this)"><div class="vtri"></div></div></div>
+          <div class="vc-ds">Energetic, engaging</div>
+          <div class="vwave"><div class="vb" style="height:10px"></div><div class="vb" style="height:16px"></div><div class="vb" style="height:8px"></div><div class="vb" style="height:15px"></div><div class="vb" style="height:18px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:14px"></div><div class="vb" style="height:11px"></div><div class="vb" style="height:16px"></div><div class="vb" style="height:9px"></div><div class="vb" style="height:15px"></div><div class="vb" style="height:18px"></div></div>
+        </div>
+        <div class="vc" onclick="vPick(this,'Firm')">
+          <div class="vc-top"><div class="vc-nm">Firm</div><div class="vplay" onclick="vPlay(event,this)"><div class="vtri"></div></div></div>
+          <div class="vc-ds">Confident, pro</div>
+          <div class="vwave"><div class="vb" style="height:9px"></div><div class="vb" style="height:13px"></div><div class="vb" style="height:11px"></div><div class="vb" style="height:14px"></div><div class="vb" style="height:12px"></div><div class="vb" style="height:13px"></div><div class="vb" style="height:10px"></div><div class="vb" style="height:12px"></div><div class="vb" style="height:11px"></div><div class="vb" style="height:14px"></div><div class="vb" style="height:12px"></div><div class="vb" style="height:13px"></div></div>
+        </div>
+      </div>
+
+      <div class="voice-divider">
+        <div class="vdiv-line"></div>
+        <div class="vdiv-txt">or record your own</div>
+        <div class="vdiv-line"></div>
+      </div>
+
+      <div class="voice-rec-box">
+        <div class="vrec-prompt" id="vrecPrompt">"Today we'll look at how neural networks work — simply and clearly."</div>
+        <div class="vrec-row">
+          <div class="vrec-btn" id="vrecBtn" onclick="toggleVRec()">
+            <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
+              <rect x="4" y="0" width="6" height="12" rx="3" fill="#F7F5F0"/>
+              <path d="M1 9c0 3.31 2.69 6 6 6s6-2.69 6-6" stroke="#F7F5F0" stroke-width="1.6" stroke-linecap="round"/>
+              <line x1="7" y1="15" x2="7" y2="18" stroke="#F7F5F0" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="vrec-wave" id="vrecWave"></div>
+          <div class="vrec-lbl" id="vrecLbl">Tap to record</div>
+        </div>
+      </div>
+    </div>
+    <div class="sheet-sticky">
+      <button class="btn-primary" id="voiceNextBtn" onclick="voiceNext()">Use Neutral voice →</button>
+    </div>
+  </div>
+
+  <!-- SH-4: Avatar generation progress -->
+  <div class="sheet" id="sh-gen">
+    <div class="sheet-handle"></div>
+    <div class="sheet-scroll">
+      <div class="sheet-title">Creating your avatar</div>
+      <div class="sheet-sub">You can close the app — we'll notify you when ready.</div>
+      <div class="gen-card">
+        <div class="gen-bar-track"><div class="gen-bar-fill" id="genBarFill" style="width:0%"></div></div>
+        <div class="gs" id="gst0"><div class="gd"></div>Processing input</div>
+        <div class="gs" id="gst1"><div class="gd"></div>Analysing features</div>
+        <div class="gs" id="gst2"><div class="gd"></div>Generating avatar</div>
+        <div class="gs" id="gst3"><div class="gd"></div>Final rendering</div>
+        <div class="gs" id="gst4"><div class="gd"></div>Deleting source files</div>
+      </div>
+      <div class="push-card">
+        <div class="push-title">🔔 Notify when ready?</div>
+        <div class="push-sub">We'll send a push as soon as your avatar is created</div>
+        <div class="push-btns">
+          <div class="push-yes">Enable</div>
+          <div class="push-no">Not now</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SH-5: Prompt input -->
+  <div class="sheet" id="sh-prompt">
+    <div class="sheet-handle"></div>
+    <div class="sheet-scroll">
+      <div class="sheet-title">What's your video about?</div>
+      <div class="sheet-sub">Any idea, topic or angle — we'll write the script.</div>
+      <div class="prompt-label">Your idea</div>
+      <textarea class="prompt-textarea" id="promptTA" placeholder="e.g. 3 mistakes creators make when using AI for content…" oninput="onPromptInput()"></textarea>
+      <div class="opt-fields">
+        <div class="opt-field-label">Reference link <span style="color:#C8C5BF;">(optional)</span></div>
+        <input class="opt-field-input" type="text" placeholder="https://…" style="margin-bottom:10px;">
+        <div class="opt-field-label">Hashtag or trend <span style="color:#C8C5BF;">(optional)</span></div>
+        <input class="opt-field-input" type="text" placeholder="#topic">
+      </div>
+    </div>
+    <div class="sheet-sticky">
+      <button class="btn-primary dim" id="promptNextBtn" onclick="promptNext()">Choose format →</button>
+    </div>
+  </div>
+
+  <!-- SH-6: Format + variations -->
+  <div class="sheet" id="sh-format">
+    <div class="sheet-handle"></div>
+    <div class="sheet-scroll">
+      <div class="sheet-title">Format & variations</div>
+      <div class="sheet-sub">Pick your format and how many versions to generate.</div>
+      <div class="prompt-label">Format</div>
+      <div class="fmt-pills" id="fmtPills">
+        <div class="fmt-pill on" onclick="fmtPick(this)">TikTok · 15s</div>
+        <div class="fmt-pill" onclick="fmtPick(this)">Reel · 30s</div>
+        <div class="fmt-pill" onclick="fmtPick(this)">YouTube Short</div>
+        <div class="fmt-pill" onclick="fmtPick(this)">TED Talk · 3min</div>
+        <div class="fmt-pill" onclick="fmtPick(this)">Infographic</div>
+      </div>
+      <div class="prompt-label">Variations</div>
+      <div class="var-row" id="varRow">
+        <div class="var-opt on" onclick="varPick(this)">1 video</div>
+        <div class="var-opt" onclick="varPick(this)">2–3 (A/B)</div>
+      </div>
+    </div>
+    <div class="sheet-sticky">
+      <button class="btn-primary" onclick="submitGen()">Generate →</button>
+    </div>
+  </div>
+
+  <!-- SH-7: Video gen progress -->
+  <div class="sheet" id="sh-vgen">
+    <div class="sheet-handle"></div>
+    <div class="sheet-scroll">
+      <div class="sheet-title">Generating your video</div>
+      <div class="sheet-sub">Sit back — this usually takes a few minutes.</div>
+      <div class="gen-card">
+        <div class="gen-bar-track"><div class="gen-bar-fill" id="vgenBarFill" style="width:0%"></div></div>
+        <div class="gs" id="vgst0"><div class="gd"></div>Content moderation</div>
+        <div class="gs" id="vgst1"><div class="gd"></div>Writing script</div>
+        <div class="gs" id="vgst2"><div class="gd"></div>Generating video</div>
+        <div class="gs" id="vgst3"><div class="gd"></div>Adding AI watermark</div>
+      </div>
+      <div class="push-card">
+        <div class="push-title">🔔 Notify when done?</div>
+        <div class="push-sub">We'll send a push as soon as your video is ready in Library</div>
+        <div class="push-btns">
+          <div class="push-yes">Enable</div>
+          <div class="push-no" onclick="closeAllSheets()">Not now</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+// ── State ──────────────────────────────
+var pathSel = 'A';
+var seedSel = null;
+var voiceSel = 'Neutral';
+var vrecState = 'idle', vrecSec = 0, vrecTimer = null;
+var ck1On = false, ck2On = false;
+var scanDone = false, scanRecording = false, scanTimer = null, scanSec = 0;
+var sheetStack = [];
+var _vPlayT = null;
+
+// ── Onboarding ─────────────────────────
+var ONB = [
+  {
+    prog:20, lbl:'Step 1 of 5', q:'What will you create?', sub:"We'll personalise your experience.",
+    multi:false,
+    opts:[{l:'📱 Social media content'},{l:'🎓 Education'},{l:'💼 Business comms'},{l:'✍️ Personal blog'},{l:'✦ Other'}]
+  },
+  {
+    prog:40, lbl:'Step 2 of 5', q:'How often will you post?', sub:'Helps us suggest the right workflow.',
+    multi:false,
+    opts:[{l:'🔥 Every day'},{l:'📅 A few times a week'},{l:'🌙 Occasionally'}]
+  },
+  {
+    prog:60, lbl:'Step 3 of 5', q:'AI content experience?', sub:"We'll adjust tips to match your level.",
+    multi:false,
+    opts:[{l:'⚡ Yes, actively'},{l:'🔍 Tried before'},{l:'👋 Totally new'}]
+  },
+  {
+    prog:80, lbl:'Step 4 of 5', q:'Where do you post?', sub:'Select all that apply.',
+    multi:true,
+    opts:[{l:'🎵 TikTok'},{l:'📸 Instagram'},{l:'▶️ YouTube'},{l:'💼 LinkedIn'},{l:'✦ Other'}]
+  },
+  {
+    prog:100, lbl:'Step 5 of 5', q:"What's your niche?", sub:'Personalises your script examples.',
+    multi:true,
+    opts:[{l:'📈 Business & Finance'},{l:'🎓 Education'},{l:'✨ Lifestyle'},{l:'💻 Technology'},{l:'✦ Other'}]
+  }
+];
+var onbIdx = 0;
+var onbSingleSel = null;
+var onbMultiSel = [];
+
+function onbRender() {
+  var s = ONB[onbIdx];
+  document.getElementById('onbProg').style.width = s.prog + '%';
+  document.getElementById('onbLbl').textContent = s.lbl;
+  document.getElementById('onbQ').textContent = s.q;
+  document.getElementById('onbSub').textContent = s.sub;
+  var container = document.getElementById('onbOpts');
+  container.innerHTML = '';
+  onbSingleSel = null; onbMultiSel = [];
+  document.getElementById('onbNext').className = 'btn-primary dim';
+
+  if (!s.multi) {
+    s.opts.forEach(function(o) {
+      var el = document.createElement('div');
+      el.className = 'onb-opt';
+      el.textContent = o.l;
+      el.onclick = function() {
+        container.querySelectorAll('.onb-opt').forEach(function(x){ x.classList.remove('sel'); });
+        el.classList.add('sel');
+        onbSingleSel = o.l;
+        document.getElementById('onbNext').className = 'btn-primary';
+      };
+      container.appendChild(el);
+    });
+  } else {
+    s.opts.forEach(function(o) {
+      var el = document.createElement('div');
+      el.className = 'onb-opt-multi';
+      el.innerHTML = '<span>'+o.l+'</span><div class="mchk"><svg class="mchk-icon" width="10" height="8" viewBox="0 0 10 8" fill="none"><polyline points="1,4 3.5,6.5 9,1" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
+      el.onclick = function() {
+        var idx = onbMultiSel.indexOf(o.l);
+        if (idx >= 0) { onbMultiSel.splice(idx,1); el.classList.remove('sel'); }
+        else { onbMultiSel.push(o.l); el.classList.add('sel'); }
+        document.getElementById('onbNext').className = onbMultiSel.length ? 'btn-primary' : 'btn-primary dim';
+      };
+      container.appendChild(el);
+    });
+  }
+}
+
+function onbAdvance() {
+  var s = ONB[onbIdx];
+  if (s.multi && !onbMultiSel.length) return;
+  if (!s.multi && !onbSingleSel) return;
+  onbIdx++;
+  if (onbIdx >= ONB.length) {
+    // enter app
+    document.getElementById('ph-onb').classList.remove('active');
+    document.getElementById('ph-app').classList.add('active');
+    return;
+  }
+  onbRender();
+}
+
+onbRender();
+
+// ── Sheet management ───────────────────
+function openSheet(id) {
+  var overlay = document.getElementById('overlay');
+  // stack current top
+  if (sheetStack.length > 0) {
+    var top = document.getElementById(sheetStack[sheetStack.length-1]);
+    top.classList.remove('open');
+    top.classList.add('stacked');
+  }
+  sheetStack.push(id);
+  document.getElementById(id).classList.add('open');
+  overlay.classList.add('dim');
+}
+
+function closeTopSheet() {
+  if (!sheetStack.length) return;
+  var topId = sheetStack.pop();
+  document.getElementById(topId).classList.remove('open');
+  // restore previous
+  if (sheetStack.length > 0) {
+    var prevId = sheetStack[sheetStack.length-1];
+    var prev = document.getElementById(prevId);
+    prev.classList.remove('stacked');
+    prev.classList.add('open');
+  } else {
+    document.getElementById('overlay').classList.remove('dim');
+  }
+}
+
+function closeAllSheets() {
+  sheetStack.forEach(function(id){
+    var el = document.getElementById(id);
+    el.classList.remove('open'); el.classList.remove('stacked');
+  });
+  sheetStack = [];
+  document.getElementById('overlay').classList.remove('dim');
+}
+
+// ── Path A/B ───────────────────────────
+function selectPath(p) {
+  pathSel = p;
+  document.getElementById('pcA').classList.toggle('sel', p==='A');
+  document.getElementById('pcB').classList.toggle('sel', p==='B');
+  document.getElementById('pathNextBtn').textContent = p==='A' ? 'Continue with face scan →' : 'Continue with seed image →';
+}
+
+function pathNext() {
+  closeTopSheet();
+  setTimeout(function(){
+    openSheet(pathSel === 'A' ? 'sh-scan' : 'sh-seed');
+  }, 340);
+}
+
+// ── Seed selection ─────────────────────
+function pickSeed(el, name, desc, grad) {
+  document.querySelectorAll('#seedGrid .sc').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  seedSel = {name:name, desc:desc, grad:grad};
+  var btn = document.getElementById('seedNextBtn');
+  btn.textContent = 'Create based on '+name+' →';
+  btn.className = 'btn-primary';
+  btn.onclick = function() {
+    closeTopSheet();
+    setTimeout(function(){ openSheet('sh-voice'); }, 340);
+  };
+}
+
+// ── Face scan ──────────────────────────
+function toggleScan() {
+  if (scanDone) return;
+  if (!scanRecording) {
+    scanRecording = true; scanSec = 0;
+    document.getElementById('recInd').style.display = 'block';
+    document.getElementById('recBtn').style.background = '#fff';
+    scanTimer = setInterval(function(){
+      scanSec++;
+      document.getElementById('recInd').textContent = '● REC 0:'+String(scanSec).padStart(2,'0');
+      if (scanSec >= 5) finishScan();
+    }, 1000);
+  } else { finishScan(); }
+}
+
+function finishScan() {
+  clearInterval(scanTimer); scanRecording = false; scanDone = true;
+  document.getElementById('recInd').style.display = 'none';
+  document.getElementById('recBtn').style.display = 'none';
+  document.getElementById('scanInstr').style.display = 'none';
+  document.getElementById('scanArea').style.border = '2px solid #0D6650';
+  document.getElementById('scanOk').style.display = 'flex';
+  setTimeout(function(){
+    document.getElementById('consentArea').style.display = 'block';
+    updateScanBtn();
+  }, 600);
+}
+
+function toggleCk(id) {
+  var el = document.getElementById(id);
+  var box = el.parentElement ? el : el;
+  if (id === 'ck1') ck1On = !ck1On;
+  else ck2On = !ck2On;
+  var on = id==='ck1' ? ck1On : ck2On;
+  el.classList.toggle('on', on);
+  el.innerHTML = on ? '<svg width="11" height="9" viewBox="0 0 11 9"><polyline points="1,4.5 4,7.5 10,1.5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '';
+  updateScanBtn();
+}
+
+function updateScanBtn() {
+  var btn = document.getElementById('scanSubmit');
+  if (scanDone && ck1On && ck2On) {
+    btn.className = 'btn-primary';
+    btn.textContent = 'Create my avatar →';
+    btn.onclick = function() {
+      closeTopSheet();
+      setTimeout(function(){ openSheet('sh-voice'); }, 340);
+    };
+  } else if (scanDone) {
+    btn.className = 'btn-primary dim';
+    btn.textContent = 'Confirm both checkboxes';
+  }
+}
+
+// ── Voice ──────────────────────────────
+var _vRecGrid = 'm';
+
+function setGender(g) {
+  _vRecGrid = g;
+  document.getElementById('swF').classList.toggle('on', g==='f');
+  document.getElementById('swM').classList.toggle('on', g==='m');
+  document.getElementById('gswLbl').textContent = 'Showing '+(g==='m'?'male':'female')+' voices';
+  document.getElementById('vgM').style.display = g==='m' ? 'grid' : 'none';
+  document.getElementById('vgF').style.display = g==='f' ? 'grid' : 'none';
+  // reset selection to first in new grid
+  var grid = document.getElementById(g==='m'?'vgM':'vgF');
+  grid.querySelectorAll('.vc').forEach(function(c,i){ c.classList.toggle('on', i===0); });
+  voiceSel = grid.querySelector('.vc .vc-nm').textContent;
+  updateVoiceBtn();
+}
+
+function vPick(el, name) {
+  var grid = el.closest('.vgrid');
+  if (!grid) return;
+  grid.querySelectorAll('.vc').forEach(function(c){ c.classList.remove('on'); });
+  el.classList.add('on');
+  voiceSel = name;
+  vrecState = 'idle'; // deselect recording
+  updateVoiceBtn();
+}
+
+function vPlay(e, btn) {
+  e.stopPropagation();
+  var card = btn.closest('.vc');
+  var wasOn = btn.classList.contains('on');
+  document.querySelectorAll('.vplay').forEach(function(b){ b.classList.remove('on'); });
+  document.querySelectorAll('.vc').forEach(function(c){ c.classList.remove('playing'); });
+  clearTimeout(_vPlayT);
+  if (!wasOn) {
+    btn.classList.add('on'); card && card.classList.add('playing');
+    _vPlayT = setTimeout(function(){ btn.classList.remove('on'); card && card.classList.remove('playing'); }, 2800);
+  }
+}
+
+// Voice recording
+var vrecBaseH = [5,8,4,11,6,9,4,7,10,5,8,12,6,9,4,7,11,5];
+(function buildWave(){
+  var w = document.getElementById('vrecWave'); if(!w) return;
+  vrecBaseH.forEach(function(h){
+    var b=document.createElement('div'); b.className='vrec-b'; b.style.height=h+'px'; w.appendChild(b);
+  });
+})();
+
+function toggleVRec() {
+  if (vrecState === 'idle') startVRec();
+  else if (vrecState === 'recording') stopVRec();
+}
+function startVRec() {
+  vrecState='recording'; vrecSec=0;
+  // deselect preset
+  document.querySelectorAll('.vc').forEach(function(c){ c.classList.remove('on'); });
+  document.getElementById('vrecBtn').style.background = '#D84040';
+  document.getElementById('vrecLbl').style.color = '#D84040';
+  document.getElementById('vrecLbl').textContent = 'Rec 0:00';
+  var bars = document.querySelectorAll('.vrec-b');
+  vrecTimer = setInterval(function(){
+    vrecSec++;
+    document.getElementById('vrecLbl').textContent = 'Rec 0:'+String(vrecSec).padStart(2,'0');
+    bars.forEach(function(b){ b.style.background='#D84040'; b.style.height=(Math.random()*22+4)+'px'; });
+    if (vrecSec >= 10) stopVRec();
+  }, 1000);
+  voiceSel = null;
+  updateVoiceBtn();
+}
+function stopVRec() {
+  clearInterval(vrecTimer); vrecState = 'done';
+  document.getElementById('vrecBtn').style.background = '#0D6650';
+  document.getElementById('vrecLbl').style.color = '#0D6650';
+  document.getElementById('vrecLbl').textContent = vrecSec+'s ✓';
+  document.querySelectorAll('.vrec-b').forEach(function(b){ b.style.background='#0D6650'; });
+  voiceSel = 'Your voice';
+  updateVoiceBtn();
+}
+function updateVoiceBtn() {
+  var btn = document.getElementById('voiceNextBtn');
+  if (voiceSel) {
+    btn.className = 'btn-primary';
+    btn.textContent = 'Use '+voiceSel+' →';
+  } else {
+    btn.className = 'btn-primary dim';
+    btn.textContent = 'Select or record a voice';
+  }
+}
+
+function voiceNext() {
+  if (!voiceSel) return;
+  closeTopSheet();
+  setTimeout(function(){
+    openSheet('sh-gen');
+    runAvatarGen();
+  }, 340);
+}
+
+// ── Avatar generation ──────────────────
+function runAvatarGen() {
+  var steps = ['gst0','gst1','gst2','gst3','gst4'];
+  var fill = document.getElementById('genBarFill');
+  var cur = 0;
+  function tick() {
+    if (cur > 0) {
+      var prev = document.getElementById(steps[cur-1]);
+      prev.className = 'gs done';
+      prev.querySelector('.gd').className = 'gd done';
+    }
+    if (cur < steps.length) {
+      var el = document.getElementById(steps[cur]);
+      el.className = 'gs act';
+      el.querySelector('.gd').className = 'gd act';
+      fill.style.width = Math.round((cur/(steps.length-1))*100)+'%';
+      cur++; setTimeout(tick, 1000);
+    } else {
+      fill.style.width = '100%';
+      setTimeout(function(){ avatarReady(); }, 600);
+    }
+  }
+  setTimeout(tick, 300);
+}
+
+function avatarReady() {
+  closeAllSheets();
+  // show avatar
+  var seed = seedSel || {name:'Your Avatar', grad:'linear-gradient(140deg,#C4D8EC,#7EA8CC)'};
+  document.getElementById('noAvatarCard').style.display = 'none';
+  var ac = document.getElementById('avatarCard');
+  ac.classList.add('show');
+  document.getElementById('avatarBgGrad').style.cssText = 'position:absolute;inset:0;background:'+seed.grad+';';
+  document.getElementById('avatarName').textContent = pathSel==='A' ? 'Your avatar' : seed.name;
+  document.getElementById('avatarMeta').textContent = 'Ready · '+(_vRecGrid==='m'?'Male':'Female')+' · '+voiceSel+' voice';
+  document.getElementById('genSection').classList.add('show');
+}
+
+// ── Prompt ─────────────────────────────
+function onPromptInput() {
+  var val = document.getElementById('promptTA').value.trim();
+  var btn = document.getElementById('promptNextBtn');
+  btn.className = val ? 'btn-primary' : 'btn-primary dim';
+  document.getElementById('promptPreview').textContent = val || 'Tap to describe your video…';
+  document.getElementById('promptPreview').className = 'gen-prompt-text'+(val?' filled':'');
+  // unlock gen button
+  var gBtn = document.getElementById('genGoBtn');
+  gBtn.className = val ? 'gen-go-btn' : 'gen-go-btn dim';
+}
+
+function promptNext() {
+  var val = document.getElementById('promptTA').value.trim();
+  if (!val) return;
+  openSheet('sh-format');
+}
+
+function startGen() {
+  var val = document.getElementById('promptTA').value.trim();
+  if (!val) { openSheet('sh-prompt'); return; }
+  openSheet('sh-format');
+}
+
+// ── Format ─────────────────────────────
+function fmtPick(el) {
+  document.querySelectorAll('.fmt-pill').forEach(function(p){ p.classList.remove('on'); });
+  el.classList.add('on');
+}
+function varPick(el) {
+  document.querySelectorAll('.var-opt').forEach(function(p){ p.classList.remove('on'); });
+  el.classList.add('on');
+}
+
+function submitGen() {
+  closeTopSheet();
+  setTimeout(function(){
+    closeTopSheet(); // close sh-prompt too
+    setTimeout(function(){
+      openSheet('sh-vgen');
+      runVideoGen();
+    }, 340);
+  }, 100);
+}
+
+// ── Video gen ──────────────────────────
+function runVideoGen() {
+  var steps = ['vgst0','vgst1','vgst2','vgst3'];
+  var fill = document.getElementById('vgenBarFill');
+  var cur = 0;
+  function tick() {
+    if (cur > 0) {
+      var prev = document.getElementById(steps[cur-1]);
+      prev.className = 'gs done'; prev.querySelector('.gd').className = 'gd done';
+    }
+    if (cur < steps.length) {
+      var el = document.getElementById(steps[cur]);
+      el.className = 'gs act'; el.querySelector('.gd').className = 'gd act';
+      fill.style.width = Math.round((cur/(steps.length-1))*100)+'%';
+      cur++; setTimeout(tick, 900);
+    } else {
+      fill.style.width = '100%';
+    }
+  }
+  setTimeout(tick, 400);
+}
+</script>
+</body>
+</html>
