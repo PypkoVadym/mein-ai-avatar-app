@@ -280,7 +280,7 @@ export default function V2App() {
       </div>
 
       {/* Scrollable content */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '0 22px 20px', scrollbarWidth: 'none' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '0 22px 20px', scrollbarWidth: 'none', display: 'flex', flexDirection: 'column', justifyContent: !avatar ? 'center' : 'flex-start' }}>
 
         {!avatar ? (
           <div onClick={() => goSheet('sh-path')} style={{
