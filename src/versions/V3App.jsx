@@ -248,45 +248,50 @@ export default function V3App() {
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative', background: '#000' }}>
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', background: '#000' }}>
 
-      {/* ── FOR YOU / FOLLOWING tabs ── */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20,
-        display: 'flex', justifyContent: 'center', gap: 24,
-        padding: '14px 0 10px',
-        background: 'linear-gradient(to bottom, rgba(0,0,0,.55) 0%, transparent 100%)',
-        pointerEvents: 'none',
-      }}>
-        {['Following', 'For You'].map((t, i) => (
-          <div key={t} style={{
-            fontSize: 16, fontWeight: i === 1 ? 700 : 500,
-            color: i === 1 ? '#fff' : 'rgba(255,255,255,.55)',
-            pointerEvents: 'all', cursor: 'pointer',
-            borderBottom: i === 1 ? '2px solid #fff' : '2px solid transparent',
-            paddingBottom: 4,
-          }}>{t}</div>
-        ))}
+      {/* ── Feed area (contains feed + overlaid tabs) ── */}
+      <div style={{ flex: 1, position: 'relative', minHeight: 0, overflow: 'hidden' }}>
+
+        {/* FOR YOU / FOLLOWING tabs */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20,
+          display: 'flex', justifyContent: 'center', gap: 24,
+          padding: '14px 0 10px',
+          background: 'linear-gradient(to bottom, rgba(0,0,0,.55) 0%, transparent 100%)',
+          pointerEvents: 'none',
+        }}>
+          {['Following', 'For You'].map((t, i) => (
+            <div key={t} style={{
+              fontSize: 16, fontWeight: i === 1 ? 700 : 500,
+              color: i === 1 ? '#fff' : 'rgba(255,255,255,.55)',
+              pointerEvents: 'all', cursor: 'pointer',
+              borderBottom: i === 1 ? '2px solid #fff' : '2px solid transparent',
+              paddingBottom: 4,
+            }}>{t}</div>
+          ))}
+        </div>
+
+        {/* Video feed — fills content area exactly so height:100% on cards works */}
+        <div style={{ position: 'absolute', inset: 0, overflowY: 'scroll', scrollSnapType: 'y mandatory', scrollbarWidth: 'none' }}>
+          {feedItems.map((item) => (
+            <FeedCard
+              key={item.id}
+              item={item}
+              onUseTemplate={() => { setActiveTemplate(item.isMine ? activeTemplate : item); goSheet('sh-prompt') }}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* ── Video feed ── */}
-      <div style={{ flex: 1, overflowY: 'scroll', scrollSnapType: 'y mandatory', scrollbarWidth: 'none' }}>
-        {feedItems.map((item, idx) => (
-          <FeedCard
-            key={item.id}
-            item={item}
-            onUseTemplate={() => { setActiveTemplate(item.isMine ? activeTemplate : item); goSheet('sh-prompt') }}
-          />
-        ))}
-      </div>
-
-      {/* ── Tab bar ── */}
+      {/* ── Tab bar — flex sibling, never affected by absolute sheets ── */}
       <div style={{
         display: 'flex', alignItems: 'center',
         background: '#000',
         borderTop: '0.5px solid rgba(255,255,255,.1)',
         padding: '8px 0 20px',
         flexShrink: 0,
+        position: 'relative', zIndex: 5,
       }}>
         {[
           { id: 'home',    icon: HomeIcon,    label: 'Home' },
@@ -643,7 +648,7 @@ function FeedCard({ item, onUseTemplate }) {
   const [liked, setLiked] = useState(false)
 
   return (
-    <div style={{ height: '100%', minHeight: 580, scrollSnapAlign: 'start', position: 'relative', background: item.gradient, flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+    <div style={{ height: '100%', minHeight: '100%', scrollSnapAlign: 'start', position: 'relative', background: item.gradient, flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
 
       {/* Gradient overlay */}
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 50%)' }} />
