@@ -227,7 +227,7 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 @keyframes apG{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}}
 .apchar{position:relative;z-index:5;animation:apFloat 4.5s ease-in-out infinite}
 @keyframes apFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.apemoji{font-size:130px;line-height:1;filter:drop-shadow(0 8px 32px rgba(0,0,0,.5)) drop-shadow(0 0 50px rgba(123,50,240,.35))}
+.apemoji{width:160px;height:160px;border-radius:50%;object-fit:cover;object-position:center top;filter:drop-shadow(0 8px 32px rgba(0,0,0,.4)) drop-shadow(0 0 50px rgba(123,50,240,.28));border:3px solid rgba(255,255,255,.35)}
 .apspl{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:300px;height:180px;background:radial-gradient(ellipse at 50% 100%,rgba(200,168,96,.1),transparent 65%);pointer-events:none}
 .apwm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:rgba(26,14,5,.05);transform:rotate(-22deg);letter-spacing:.3em;pointer-events:none;z-index:6}
 .aptop{position:absolute;top:0;left:0;right:0;z-index:20;padding:52px 18px 0;display:flex;align-items:center;justify-content:space-between}
@@ -668,7 +668,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
     <div class="apgrain"></div>
     <div class="apzone">
       <div class="apgl r1"></div><div class="apgl r2"></div><div class="apgl r3"></div>
-      <div class="apchar"><div class="apemoji" id="apemoji">💁‍♀️</div></div>
+      <div class="apchar"><img class="apemoji" id="apemoji" src="/default_avatar.jpg"></div>
       <div class="apspl"></div>
     </div>
     <div class="apwm">TWIN TWIN TWIN</div>
@@ -739,7 +739,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
     <span class="cvttl">Create video</span>
   </div>
   <div class="cvchip" onclick="go('avatar-profile')">
-    <div class="cvc" id="cvchipc">💁‍♀️</div>
+    <div class="cvc" id="cvchipc" style="overflow:hidden;"><img src="/default_avatar.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;"></div>
     <div class="cvcn">Your Avatar</div>
     <div class="cvcc" id="cvchipq">44%</div>
     <span style="font-size:11px;color:var(--m);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:3px 8px;font-family:'Sora',sans-serif;font-weight:600">Change</span>
@@ -845,18 +845,18 @@ function back(id){
 
 // Strip — 50%+ result cards with real numbers
 const sCards=[
-  {bg:'linear-gradient(160deg,#D4EECC,#B8DFB0)',ch:'📈',lb:'+12K followers · 2 weeks',stat:true},
-  {bg:'linear-gradient(160deg,#EDD8C8,#DEC4AC)',ch:'💁‍♀️',lb:'Fitness review',stat:false},
-  {bg:'linear-gradient(160deg,#F0E0C0,#E4CC9C)',ch:'💰',lb:'$4.2K affiliate · March',stat:true},
-  {bg:'linear-gradient(160deg,#C8DDF0,#B0CCE4)',ch:'👁',lb:'3.2M impressions · April',stat:true},
-  {bg:'linear-gradient(160deg,#F0D4C0,#E4C0A4)',ch:'👩‍🎤',lb:'Affiliate reveal',stat:false},
-  {bg:'linear-gradient(160deg,#DCC8F0,#CCB4E8)',ch:'🎯',lb:'47 new leads · this week',stat:true},
-  {bg:'linear-gradient(160deg,#F0C8DC,#E4B4CC)',ch:'👱‍♀️',lb:'Beauty routine',stat:false},
-  {bg:'linear-gradient(160deg,#C8F0D4,#B0E4C0)',ch:'🤝',lb:'8 brand deals closed',stat:true},
-  {bg:'linear-gradient(160deg,#F0F0C8,#E4E4A8)',ch:'💸',lb:'$1.1K/day · dropshipping',stat:true},
-  {bg:'linear-gradient(160deg,#DCC8F0,#CEB8EC)',ch:'💃',lb:'NPC trend',stat:false},
+  {bg:'linear-gradient(160deg,#D4EECC,#B8DFB0)',ch:'📈',video:'/video1.mp4',lb:'+12K followers · 2 weeks',stat:true},
+  {bg:'linear-gradient(160deg,#EDD8C8,#DEC4AC)',ch:'💁‍♀️',video:'/video2.mp4',lb:'Fitness review',stat:false},
+  {bg:'linear-gradient(160deg,#F0E0C0,#E4CC9C)',ch:'💰',video:'/video3.mp4',lb:'$4.2K affiliate · March',stat:true},
+  {bg:'linear-gradient(160deg,#C8DDF0,#B0CCE4)',ch:'👁',video:'/video1.mp4',lb:'3.2M impressions · April',stat:true},
+  {bg:'linear-gradient(160deg,#F0D4C0,#E4C0A4)',ch:'👩‍🎤',video:'/video2.mp4',lb:'Affiliate reveal',stat:false},
+  {bg:'linear-gradient(160deg,#DCC8F0,#CCB4E8)',ch:'🎯',video:'/video3.mp4',lb:'47 new leads · this week',stat:true},
+  {bg:'linear-gradient(160deg,#F0C8DC,#E4B4CC)',ch:'👱‍♀️',video:'/video1.mp4',lb:'Beauty routine',stat:false},
+  {bg:'linear-gradient(160deg,#C8F0D4,#B0E4C0)',ch:'🤝',video:'/video2.mp4',lb:'8 brand deals closed',stat:true},
+  {bg:'linear-gradient(160deg,#F0F0C8,#E4E4A8)',ch:'💸',video:'/video3.mp4',lb:'$1.1K/day · dropshipping',stat:true},
+  {bg:'linear-gradient(160deg,#DCC8F0,#CEB8EC)',ch:'💃',video:'/video1.mp4',lb:'NPC trend',stat:false},
 ];
-(()=>{const t=document.getElementById('strack');[...sCards,...sCards].forEach(d=>{const c=document.createElement('div');c.className='sc';const lbColor=d.stat?'#9B4A1C':'rgba(26,14,5,.75)';c.innerHTML=`<div class="sc-bg" style="background:${d.bg}"></div><div class="sc-av">${d.ch}</div><div class="sc-wm">TWIN TWIN</div><div class="sc-lk">🔒</div><div class="sc-ov"><div class="sc-lb" style="color:${lbColor};font-weight:${d.stat?'800':'600'}">${d.lb}</div></div>`;t.appendChild(c);});})();
+(()=>{const t=document.getElementById('strack');[...sCards,...sCards].forEach(d=>{const c=document.createElement('div');c.className='sc';const lbColor=d.stat?'#9B4A1C':'rgba(26,14,5,.75)';c.innerHTML=`<div class="sc-bg" style="background:${d.bg}"></div>${d.video?`<video src="${d.video}" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:17px;z-index:1"></video>`:`<div class="sc-av">${d.ch}</div>`}<div class="sc-wm" style="z-index:3">TWIN TWIN</div><div class="sc-lk" style="z-index:4">🔒</div><div class="sc-ov" style="z-index:4"><div class="sc-lb" style="color:${lbColor};font-weight:${d.stat?'800':'600'}">${d.lb}</div></div>`;t.appendChild(c);});})();
 
 // Goal selector (new platform screen)
 let selGoalId=null;
@@ -991,8 +991,8 @@ function buildAvatar(){
   avatarCount++;
   const bg=apBgs[Math.floor(Math.random()*apBgs.length)];
   const apbg=document.getElementById('apbg');apbg.style.background=bg;apbg.style.backgroundSize='400% 400%';
-  document.getElementById('apemoji').textContent=avatarEm;
-  document.getElementById('cvchipc').textContent=avatarEm;
+  // avatar shown via img#apemoji
+  // cvchipc shown via img
   // Dynamic quality from actual assets
   const qStr=avatarQuality+'%';
   const qbadge=document.getElementById('apqb');if(qbadge)qbadge.textContent=qStr;
