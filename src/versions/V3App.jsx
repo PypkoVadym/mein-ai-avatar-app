@@ -79,23 +79,64 @@ function GenProgress({ steps, progress, done }) {
   )
 }
 
-// Sheet primitives
-function Sheet({ open, tall, children }) {
+// Modal primitives
+function Modal({ open, tall, onClose, children }) {
+  return (
+    <div onClick={onClose} style={{
+      position: 'absolute', inset: 0,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: open ? 'rgba(0,0,0,.55)' : 'transparent',
+      zIndex: 210,
+      pointerEvents: open ? 'all' : 'none',
+      transition: 'background .25s ease',
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        background: '#fff', borderRadius: 24,
+        width: 'calc(100% - 32px)',
+        maxHeight: tall ? '92%' : '82%',
+        display: 'flex', flexDirection: 'column',
+        transform: open ? 'scale(1) translateY(0)' : 'scale(.95) translateY(16px)',
+        opacity: open ? 1 : 0,
+        transition: 'transform .3s cubic-bezier(.32,0,.15,1), opacity .25s ease',
+        overflow: 'hidden',
+      }}>
+        {children}
+      </div>
+    </div>
+  )
+}
+const MBar = ({ onClose }) => (
+  <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '12px 14px 0', flexShrink: 0 }}>
+    <button onClick={onClose} style={{ width: 28, height: 28, borderRadius: '50%', border: 'none', background: '#F0EEE9', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><line x1="1" y1="1" x2="9" y2="9" stroke="#9B9894" strokeWidth="1.8" strokeLinecap="round"/><line x1="9" y1="1" x2="1" y2="9" stroke="#9B9894" strokeWidth="1.8" strokeLinecap="round"/></svg>
+    </button>
+  </div>
+)
+
+// Full-screen modal — slides up from bottom, covers entire viewport (avatar creation flow)
+function FullModal({ open, children }) {
   return (
     <div style={{
-      position: 'absolute', bottom: 0, left: 0, right: 0,
-      background: '#fff', borderRadius: '24px 24px 0 0',
-      zIndex: 210, maxHeight: tall ? '96%' : '88%',
+      position: 'absolute', inset: 0,
+      background: '#FAFAF8',
+      zIndex: 220,
       display: 'flex', flexDirection: 'column',
       transform: open ? 'translateY(0)' : 'translateY(100%)',
-      transition: 'transform .36s cubic-bezier(.32,0,.15,1)',
+      transition: 'transform .38s cubic-bezier(.32,0,.15,1)',
       pointerEvents: open ? 'all' : 'none',
     }}>
       {children}
     </div>
   )
 }
-const Handle  = () => <div style={{ width: 36, height: 4, background: '#E0DDD6', borderRadius: 2, margin: '12px auto 0', flexShrink: 0 }} />
+const FMBar = ({ onClose, label = 'Back' }) => (
+  <div style={{ display: 'flex', alignItems: 'center', padding: '54px 16px 0', flexShrink: 0 }}>
+    <button onClick={onClose} style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 2px', color: '#9B9894', fontSize: 14, fontWeight: 500, fontFamily: 'inherit' }}>
+      <svg width="8" height="14" viewBox="0 0 8 14" fill="none"><polyline points="7,1 1,7 7,13" stroke="#9B9894" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      {label}
+    </button>
+  </div>
+)
 const SScroll = ({ children }) => <div style={{ flex: 1, overflowY: 'auto', padding: '0 20px', scrollbarWidth: 'none' }}>{children}</div>
 const STitle  = ({ children }) => <div style={{ fontSize: 20, fontWeight: 700, color: '#1A1916', padding: '16px 0 4px', lineHeight: 1.25 }}>{children}</div>
 const SSub    = ({ children }) => <div style={{ fontSize: 14, color: '#9B9894', lineHeight: 1.6, marginBottom: 16 }}>{children}</div>
@@ -109,6 +150,7 @@ const PrimaryBtn = ({ children, onClick, disabled }) => (
 // ── V3 App ────────────────────────────────────────────────────────────────────
 
 export default function V3App() {
+  const [showSplash,   setShowSplash]   = useState(true)
   const [activeTab,    setActiveTab]    = useState('home')
   const [activeSheet,  setActiveSheet]  = useState(null)
   const [avatar,       setAvatar]       = useState(null)
@@ -148,12 +190,27 @@ export default function V3App() {
   const [videoGenProgress, setVideoGenProgress] = useState(0)
   const [videoGenDone,     setVideoGenDone]     = useState(false)
 
+  // Use-style modal
+  const [useStyleItem,   setUseStyleItem]   = useState(null)
+  const [useStyleAvatar, setUseStyleAvatar] = useState('mine')
+  const previewVideoRef = useRef(null)
+
   useEffect(() => () => { clearInterval(vrecTimerRef.current); clearTimeout(playTimerRef.current) }, [])
+
+  // Play/pause preview video when modal opens/closes
+  useEffect(() => {
+    const el = previewVideoRef.current
+    if (!el) return
+    if (activeSheet === 'sh-use-style') { el.currentTime = 0; el.play().catch(() => {}) }
+    else el.pause()
+  }, [activeSheet])
 
   // ── Handlers ──────────────────────────────────────────────────────────────
 
   const goSheet   = (id) => setActiveSheet(id)
   const closeSheet = ()  => setActiveSheet(null)
+
+  const startFromSplash = () => { setShowSplash(false); goSheet('sh-path') }
 
   const onPlusPress = () => {
     if (!avatar) goSheet('sh-path')
@@ -223,6 +280,19 @@ export default function V3App() {
     }, 700)
   }
 
+  const openUseStyle = (item) => {
+    setUseStyleItem(item)
+    setUseStyleAvatar(avatar ? 'mine' : 'template')
+    setPrompt('')
+    goSheet('sh-use-style')
+  }
+
+  const handleUseStyleGenerate = () => {
+    if (!prompt.trim()) return
+    if (useStyleItem && !useStyleItem.isMine) setActiveTemplate(useStyleItem)
+    startVideoGen()
+  }
+
   const handleVideoClose = () => {
     setMyVideos(v => [{
       id: Date.now(),
@@ -254,7 +324,7 @@ export default function V3App() {
           <FeedCard
             key={item.id}
             item={item}
-            onUseTemplate={() => { setActiveTemplate(item.isMine ? activeTemplate : item); goSheet('sh-prompt') }}
+            onUseTemplate={() => openUseStyle(item)}
           />
         ))}
       </div>
@@ -309,14 +379,11 @@ export default function V3App() {
         })}
       </div>
 
-      {/* Overlay */}
-      {activeSheet && <div onClick={closeSheet} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,.6)', zIndex: 200 }} />}
-
       {/* ══════════════════════════════════════
           SH-PATH
       ══════════════════════════════════════ */}
-      <Sheet open={activeSheet === 'sh-path'}>
-        <Handle />
+      <FullModal open={activeSheet === 'sh-path'}>
+        <FMBar onClose={closeSheet} />
         <SScroll>
           <STitle>Create your character</STitle>
           <SSub>You only do this once — then just type and generate.</SSub>
@@ -337,13 +404,13 @@ export default function V3App() {
           </div>
         </SScroll>
         <SSticky><PrimaryBtn onClick={handlePathNext}>{path === 'A' ? 'Continue with face scan →' : 'Continue with seed →'}</PrimaryBtn></SSticky>
-      </Sheet>
+      </FullModal>
 
       {/* ══════════════════════════════════════
           SH-SCAN
       ══════════════════════════════════════ */}
-      <Sheet open={activeSheet === 'sh-scan'} tall>
-        <Handle />
+      <FullModal open={activeSheet === 'sh-scan'}>
+        <FMBar onClose={() => goSheet('sh-path')} />
         <SScroll>
           <STitle>Take 3 photos</STitle>
           <SSub>Position your face in the oval and tap the shutter.</SSub>
@@ -375,13 +442,13 @@ export default function V3App() {
           {scanDone && <div style={{ textAlign: 'center', fontSize: 14, fontWeight: 600, color: 'var(--green)', marginBottom: 8 }}>All photos taken ✓</div>}
         </SScroll>
         <SSticky><PrimaryBtn disabled={!scanDone} onClick={() => goSheet('sh-consent')}>{scanDone ? 'Continue →' : `Photo ${scanStep + 1} of 3`}</PrimaryBtn></SSticky>
-      </Sheet>
+      </FullModal>
 
       {/* ══════════════════════════════════════
           SH-CONSENT
       ══════════════════════════════════════ */}
-      <Sheet open={activeSheet === 'sh-consent'}>
-        <Handle />
+      <FullModal open={activeSheet === 'sh-consent'}>
+        <FMBar onClose={() => goSheet('sh-scan')} />
         <SScroll>
           <STitle>Before we continue</STitle>
           <SSub>We need your consent before processing your photos.</SSub>
@@ -402,13 +469,13 @@ export default function V3App() {
           </div>
         </SScroll>
         <SSticky><PrimaryBtn disabled={!consent1 || !consent2} onClick={() => goSheet('sh-voice')}>I agree — choose my voice →</PrimaryBtn></SSticky>
-      </Sheet>
+      </FullModal>
 
       {/* ══════════════════════════════════════
           SH-SEED
       ══════════════════════════════════════ */}
-      <Sheet open={activeSheet === 'sh-seed'} tall>
-        <Handle />
+      <FullModal open={activeSheet === 'sh-seed'}>
+        <FMBar onClose={() => goSheet('sh-path')} />
         <SScroll>
           <STitle>Choose a look</STitle>
           <SSub>Generated just for you — shown to no one else.</SSub>
@@ -427,13 +494,13 @@ export default function V3App() {
           </div>
         </SScroll>
         <SSticky><PrimaryBtn disabled={!selectedSeed} onClick={handleSeedNext}>{selectedSeed ? `Continue with ${SEEDS.find(s=>s.id===selectedSeed)?.name} →` : 'Select a look first'}</PrimaryBtn></SSticky>
-      </Sheet>
+      </FullModal>
 
       {/* ══════════════════════════════════════
           SH-VOICE
       ══════════════════════════════════════ */}
-      <Sheet open={activeSheet === 'sh-voice'} tall>
-        <Handle />
+      <FullModal open={activeSheet === 'sh-voice'}>
+        <FMBar onClose={() => goSheet(path === 'A' ? 'sh-consent' : 'sh-seed')} />
         <SScroll>
           <STitle>Choose a voice</STitle>
           <SSub>It'll narrate your videos. Listen or record your own.</SSub>
@@ -485,13 +552,13 @@ export default function V3App() {
           </div>
         </SScroll>
         <SSticky><PrimaryBtn onClick={handleVoiceNext}>{vrecState==='done' ? 'Use my voice →' : `Use ${voices.find(v=>v.id===selectedVoice)?.name} voice →`}</PrimaryBtn></SSticky>
-      </Sheet>
+      </FullModal>
 
       {/* ══════════════════════════════════════
           SH-GEN (avatar)
       ══════════════════════════════════════ */}
-      <Sheet open={activeSheet === 'sh-gen'}>
-        <Handle />
+      <FullModal open={activeSheet === 'sh-gen'}>
+        <FMBar onClose={() => goSheet('sh-voice')} label="Cancel" />
         <SScroll>
           <STitle>Creating your avatar</STitle>
           <SSub>We'll notify you when it's ready.</SSub>
@@ -511,13 +578,13 @@ export default function V3App() {
             </>}
           </div>
         </SScroll>
-      </Sheet>
+      </FullModal>
 
       {/* ══════════════════════════════════════
           SH-PROMPT
       ══════════════════════════════════════ */}
-      <Sheet open={activeSheet === 'sh-prompt'}>
-        <Handle />
+      <Modal open={activeSheet === 'sh-prompt'} onClose={closeSheet}>
+        <MBar onClose={closeSheet} />
         <SScroll>
           <STitle>What's your video about?</STitle>
 
@@ -546,13 +613,13 @@ export default function V3App() {
           </div>
         </SScroll>
         <SSticky><PrimaryBtn disabled={!prompt.trim()} onClick={handleGenerate}>Choose format →</PrimaryBtn></SSticky>
-      </Sheet>
+      </Modal>
 
       {/* ══════════════════════════════════════
           SH-TEMPLATES — change style
       ══════════════════════════════════════ */}
-      <Sheet open={activeSheet === 'sh-templates'}>
-        <Handle />
+      <Modal open={activeSheet === 'sh-templates'} onClose={closeSheet}>
+        <MBar onClose={closeSheet} />
         <SScroll>
           <STitle>Choose a style</STitle>
           <SSub>Pick the vibe for your next video.</SSub>
@@ -569,13 +636,13 @@ export default function V3App() {
             ))}
           </div>
         </SScroll>
-      </Sheet>
+      </Modal>
 
       {/* ══════════════════════════════════════
           SH-FORMAT
       ══════════════════════════════════════ */}
-      <Sheet open={activeSheet === 'sh-format'}>
-        <Handle />
+      <Modal open={activeSheet === 'sh-format'} onClose={closeSheet}>
+        <MBar onClose={closeSheet} />
         <SScroll>
           <STitle>Format</STitle>
           <SSub>Pick the format for your video.</SSub>
@@ -592,13 +659,13 @@ export default function V3App() {
           </div>
         </SScroll>
         <SSticky><PrimaryBtn onClick={startVideoGen}>Generate →</PrimaryBtn></SSticky>
-      </Sheet>
+      </Modal>
 
       {/* ══════════════════════════════════════
           SH-VGEN
       ══════════════════════════════════════ */}
-      <Sheet open={activeSheet === 'sh-vgen'}>
-        <Handle />
+      <Modal open={activeSheet === 'sh-vgen'} onClose={closeSheet}>
+        <MBar onClose={closeSheet} />
         <SScroll>
           <STitle>Generating your video</STitle>
           <SSub>Sit back — usually a few minutes.</SSub>
@@ -612,13 +679,95 @@ export default function V3App() {
             </div>
           </div>
         </SScroll>
-      </Sheet>
+      </Modal>
+
+      {/* ══════════════════════════════════════
+          SH-USE-STYLE — use a style from feed
+      ══════════════════════════════════════ */}
+      <Modal open={activeSheet === 'sh-use-style'} onClose={closeSheet}>
+        <MBar onClose={closeSheet} />
+        <SScroll>
+          <STitle>{useStyleItem?.isMine ? 'Make similar' : 'Use this style'}</STitle>
+          <SSub>Pick your avatar and describe your video idea.</SSub>
+
+          {/* ── Style preview block ── */}
+          <div style={{ position: 'relative', width: '100%', height: 168, borderRadius: 18, overflow: 'hidden', background: useStyleItem?.gradient || '#111', marginBottom: 20, flexShrink: 0 }}>
+            {useStyleItem?.video && (
+              <video ref={previewVideoRef} src={useStyleItem.video} muted loop playsInline
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            )}
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 60%)' }} />
+            {useStyleItem?.avatar && (
+              <div style={{ position: 'absolute', top: 10, right: 10, width: 36, height: 36, borderRadius: '50%', background: useStyleItem.avatar.gradient, border: '2px solid rgba(255,255,255,.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, fontWeight: 700, color: '#fff' }}>
+                {useStyleItem.avatar.name[0]}
+              </div>
+            )}
+            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '10px 14px 12px' }}>
+              {useStyleItem?.metric && (
+                <div style={{ fontSize: 16, fontWeight: 900, color: '#fff', lineHeight: 1, marginBottom: 3 }}>{useStyleItem.metric.value} <span style={{ fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,.6)' }}>· {useStyleItem.metric.context}</span></div>
+              )}
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,.85)', lineHeight: 1.4, marginBottom: 5 }}>{useStyleItem?.caption || useStyleItem?.label}</div>
+              <span style={{ display: 'inline-block', fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 20, background: 'rgba(255,255,255,.18)', color: '#fff', backdropFilter: 'blur(6px)' }}>{useStyleItem?.label}</span>
+            </div>
+          </div>
+
+          {/* ── Avatar selector ── */}
+          <div style={{ fontSize: 13, fontWeight: 600, color: '#1A1916', marginBottom: 10 }}>Choose avatar</div>
+          <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
+            {avatar && (
+              <div onClick={() => setUseStyleAvatar('mine')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, cursor: 'pointer' }}>
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: avatar.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, fontWeight: 700, color: '#fff', border: useStyleAvatar === 'mine' ? '2.5px solid #1A1916' : '2.5px solid transparent', boxShadow: useStyleAvatar === 'mine' ? '0 0 0 3px rgba(26,25,22,.12)' : 'none', transition: 'all .15s' }}>
+                  {avatar.name[0]}
+                </div>
+                <div style={{ fontSize: 11, fontWeight: useStyleAvatar === 'mine' ? 700 : 400, color: useStyleAvatar === 'mine' ? '#1A1916' : '#9B9894' }}>You</div>
+                {useStyleAvatar === 'mine' && <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#1A1916', marginTop: -2 }} />}
+              </div>
+            )}
+            {useStyleItem?.avatar && (
+              <div onClick={() => setUseStyleAvatar('template')} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, cursor: 'pointer' }}>
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: useStyleItem.avatar.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, fontWeight: 700, color: '#fff', border: useStyleAvatar === 'template' ? '2.5px solid #1A1916' : '2.5px solid transparent', boxShadow: useStyleAvatar === 'template' ? '0 0 0 3px rgba(26,25,22,.12)' : 'none', transition: 'all .15s' }}>
+                  {useStyleItem.avatar.name[0]}
+                </div>
+                <div style={{ fontSize: 11, fontWeight: useStyleAvatar === 'template' ? 700 : 400, color: useStyleAvatar === 'template' ? '#1A1916' : '#9B9894' }}>{useStyleItem.avatar.name}</div>
+                {useStyleAvatar === 'template' && <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#1A1916', marginTop: -2 }} />}
+              </div>
+            )}
+            {!avatar && (
+              <div onClick={() => { closeSheet(); goSheet('sh-path') }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, cursor: 'pointer' }}>
+                <div style={{ width: 52, height: 52, borderRadius: '50%', background: '#F0EEE9', border: '2px dashed #D4D1CB', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><line x1="9" y1="3" x2="9" y2="15" stroke="#9B9894" strokeWidth="2" strokeLinecap="round"/><line x1="3" y1="9" x2="15" y2="9" stroke="#9B9894" strokeWidth="2" strokeLinecap="round"/></svg>
+                </div>
+                <div style={{ fontSize: 11, color: '#9B9894' }}>Create mine</div>
+              </div>
+            )}
+          </div>
+
+          {/* ── Prompt ── */}
+          <div style={{ fontSize: 13, fontWeight: 600, color: '#1A1916', marginBottom: 8 }}>Your video idea</div>
+          <textarea value={prompt} onChange={e => setPrompt(e.target.value)}
+            placeholder={`e.g. ${useStyleItem?.caption ? useStyleItem.caption.slice(0, 48) + '…' : '3 mistakes creators make when using AI…'}`}
+            style={{ width: '100%', minHeight: 96, padding: 14, borderRadius: 14, border: '1.5px solid #E0DDD6', background: '#fff', fontSize: 14, color: '#1A1916', fontFamily: 'inherit', resize: 'none', outline: 'none', lineHeight: 1.55, boxSizing: 'border-box' }}
+          />
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10, marginBottom: 6 }}>
+            {['3 tips for…', 'Why nobody talks about…', 'The secret to…'].map(s => (
+              <div key={s} onClick={() => setPrompt(s)} style={{ padding: '6px 12px', borderRadius: 20, border: '1px solid #E8E5E0', background: '#fff', fontSize: 12, color: '#1A1916', cursor: 'pointer', whiteSpace: 'nowrap' }}>{s}</div>
+            ))}
+          </div>
+        </SScroll>
+        <SSticky>
+          <PrimaryBtn disabled={!prompt.trim()} onClick={handleUseStyleGenerate}>Generate video →</PrimaryBtn>
+        </SSticky>
+      </Modal>
+
+      {/* ── Splash screen ── */}
+      {showSplash && <SplashScreen onStart={startFromSplash} />}
 
       <style>{`
         @keyframes camFlash3  { from{opacity:.9} to{opacity:0} }
         @keyframes gpa3       { 0%,100%{opacity:1} 50%{opacity:.25} }
         @keyframes vpa3       { from{transform:scaleY(1)} to{transform:scaleY(2.2)} }
         @keyframes recPulse3  { 0%,100%{box-shadow:0 0 0 0 rgba(229,57,53,.4)} 50%{box-shadow:0 0 0 10px rgba(229,57,53,0)} }
+        @keyframes splashFade { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
       `}</style>
     </div>
   )
@@ -688,6 +837,63 @@ function FeedCard({ item, onUseTemplate }) {
             {item.isMine ? '🔁 Make similar' : '✦ Use this style'}
           </span>
         </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Splash Screen ─────────────────────────────────────────────────────────────
+
+function SplashScreen({ onStart }) {
+  return (
+    <div style={{ position: 'absolute', inset: 0, zIndex: 300, overflow: 'hidden', background: '#0a0a0a' }}>
+
+      {/* Background video */}
+      <video autoPlay muted loop playsInline src="/video1.mp4"
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+
+      {/* Gradient overlays */}
+      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,.25) 0%, rgba(0,0,0,.1) 35%, rgba(0,0,0,.7) 65%, rgba(0,0,0,.97) 100%)' }} />
+
+      {/* Content */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '0 28px 52px', display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'splashFade .55s ease both' }}>
+
+        {/* Brand */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 32 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg,#667eea,#764ba2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, boxShadow: '0 4px 14px rgba(102,126,234,.5)' }}>✦</div>
+          <span style={{ fontSize: 20, fontWeight: 800, color: '#fff', letterSpacing: '-.02em' }}>Twin AI</span>
+        </div>
+
+        {/* Headline */}
+        <div style={{ fontSize: 34, fontWeight: 900, color: '#fff', textAlign: 'center', lineHeight: 1.1, letterSpacing: '-.03em', marginBottom: 14 }}>
+          Grow your social media<br/>on autopilot.
+        </div>
+        <div style={{ fontSize: 15, color: 'rgba(255,255,255,.55)', textAlign: 'center', lineHeight: 1.6, marginBottom: 40, maxWidth: 270 }}>
+          Your AI twin creates and posts videos — while you sleep.
+        </div>
+
+        {/* Primary CTA */}
+        <button onClick={onStart} style={{
+          width: '100%', padding: '17px 0', borderRadius: 16,
+          background: '#fff', color: '#1A1916',
+          fontSize: 16, fontWeight: 700, fontFamily: 'inherit',
+          border: 'none', cursor: 'pointer', marginBottom: 12,
+          boxShadow: '0 4px 24px rgba(0,0,0,.35)',
+        }}>
+          Create my avatar
+        </button>
+
+        {/* Secondary CTA */}
+        <button onClick={onStart} style={{
+          width: '100%', padding: '16px 0', borderRadius: 16,
+          background: 'rgba(255,255,255,.08)', color: 'rgba(255,255,255,.8)',
+          fontSize: 15, fontWeight: 500, fontFamily: 'inherit',
+          border: '1.5px solid rgba(255,255,255,.22)', cursor: 'pointer',
+          backdropFilter: 'blur(10px)',
+        }}>
+          I already have an account
+        </button>
+
       </div>
     </div>
   )
