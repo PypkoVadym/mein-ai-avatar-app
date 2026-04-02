@@ -683,8 +683,8 @@ function FeedCard({ item, onUseTemplate }) {
         <div style={{ fontSize: 14, color: 'rgba(255,255,255,.9)', lineHeight: 1.45, marginBottom: 14 }}>{item.caption || item.label}</div>
 
         {/* Use this style — full-width prominent CTA */}
-        <div onClick={onUseTemplate} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', borderRadius: 14, background: 'rgba(255,255,255,.18)', border: '1.5px solid rgba(255,255,255,.45)', cursor: 'pointer', backdropFilter: 'blur(8px)' }}>
-          <span style={{ fontSize: 15, fontWeight: 700, color: '#fff' }}>
+        <div onClick={onUseTemplate} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '13px 20px', borderRadius: 14, background: 'linear-gradient(135deg, rgba(255,255,255,.28) 0%, rgba(180,160,255,.35) 50%, rgba(255,180,120,.28) 100%)', border: '1.5px solid rgba(255,255,255,.6)', cursor: 'pointer', backdropFilter: 'blur(12px)', boxShadow: '0 2px 16px rgba(160,120,255,.25)' }}>
+          <span style={{ fontSize: 15, fontWeight: 700, color: '#fff', textShadow: '0 1px 6px rgba(0,0,0,.3)' }}>
             {item.isMine ? '🔁 Make similar' : '✦ Use this style'}
           </span>
         </div>
