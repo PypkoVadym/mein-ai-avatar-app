@@ -37,9 +37,9 @@ const GEN_STEPS_VIDEO  = ['Content moderation', 'Writing script', 'Generating vi
 
 // Feed templates — each is a pre-built style the user can adopt
 const TEMPLATES = [
-  { id: 1, label: 'Expert take',    video: '/video1.mp4', caption: 'The one thing nobody tells you about AI content 👇', tag: '#business' },
-  { id: 2, label: 'Hype drop',      video: '/video2.mp4', caption: 'POV: Your AI twin just went viral 🔥🔥🔥',            tag: '#creator'  },
-  { id: 3, label: 'Calm explainer', video: '/video3.mp4', caption: 'Let me explain this in under 60 seconds 🧠',           tag: '#education'},
+  { id: 1, label: 'Expert take',    video: '/video1.mp4', caption: 'The one thing nobody tells you about AI content 👇', tag: '#business',  metric: { value: '47 new leads',    context: 'this week'   } },
+  { id: 2, label: 'Hype drop',      video: '/video2.mp4', caption: 'POV: Your AI twin just went viral 🔥🔥🔥',            tag: '#creator',   metric: { value: '$1.1K/day',       context: 'dropshipping'} },
+  { id: 3, label: 'Calm explainer', video: '/video3.mp4', caption: 'Let me explain this in under 60 seconds 🧠',           tag: '#education', metric: { value: '+12K followers',  context: '2 weeks'     } },
 ]
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -660,6 +660,19 @@ function FeedCard({ item, onUseTemplate }) {
 
       {/* Gradient overlay */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 55%)' }} />
+
+      {/* Metric badge — result proof overlay */}
+      {item.metric && (
+        <div style={{
+          position: 'absolute', top: 16, left: 12, zIndex: 2,
+          background: 'rgba(0,0,0,.55)', backdropFilter: 'blur(10px)',
+          borderRadius: 12, padding: '8px 12px',
+          border: '1px solid rgba(255,255,255,.15)',
+        }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: '#fff', lineHeight: 1.1, letterSpacing: '-.01em' }}>{item.metric.value}</div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,.55)', marginTop: 2, fontWeight: 500 }}>{item.metric.context}</div>
+        </div>
+      )}
 
       {/* Bottom info — padded above the floating tab bar */}
       <div style={{ position: 'relative', zIndex: 1, padding: '0 16px 88px' }}>
