@@ -37,9 +37,9 @@ const GEN_STEPS_VIDEO  = ['Content moderation', 'Writing script', 'Generating vi
 
 // Feed templates — each is a pre-built style the user can adopt
 const TEMPLATES = [
-  { id: 1, label: 'Expert take',    video: '/video1.mp4', caption: 'The one thing nobody tells you about AI content 👇', tag: '#business',  metric: { value: '47 new leads',    context: 'this week'   } },
-  { id: 2, label: 'Hype drop',      video: '/video2.mp4', caption: 'POV: Your AI twin just went viral 🔥🔥🔥',            tag: '#creator',   metric: { value: '$1.1K/day',       context: 'dropshipping'} },
-  { id: 3, label: 'Calm explainer', video: '/video3.mp4', caption: 'Let me explain this in under 60 seconds 🧠',           tag: '#education', metric: { value: '+12K followers',  context: '2 weeks'     } },
+  { id: 1, label: 'Expert take',    video: '/video1.mp4', caption: 'The one thing nobody tells you about AI content 👇', tag: '#business',  metric: { value: '47 new leads',   context: 'this week'    }, avatar: { gradient: 'linear-gradient(160deg,#667eea,#764ba2)', name: 'Sophia' } },
+  { id: 2, label: 'Hype drop',      video: '/video2.mp4', caption: 'POV: Your AI twin just went viral 🔥🔥🔥',            tag: '#creator',   metric: { value: '$1.1K/day',      context: 'dropshipping' }, avatar: { gradient: 'linear-gradient(160deg,#f093fb,#f5576c)', name: 'Marcus' } },
+  { id: 3, label: 'Calm explainer', video: '/video3.mp4', caption: 'Let me explain this in under 60 seconds 🧠',           tag: '#education', metric: { value: '+12K followers', context: '2 weeks'      }, avatar: { gradient: 'linear-gradient(160deg,#4facfe,#00f2fe)', name: 'Elena'  } },
 ]
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -661,21 +661,24 @@ function FeedCard({ item, onUseTemplate }) {
       {/* Gradient overlay */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 55%)' }} />
 
-      {/* Metric badge — result proof overlay */}
-      {item.metric && (
-        <div style={{
-          position: 'absolute', top: 16, left: 12, zIndex: 2,
-          background: 'rgba(0,0,0,.55)', backdropFilter: 'blur(10px)',
-          borderRadius: 12, padding: '8px 12px',
-          border: '1px solid rgba(255,255,255,.15)',
-        }}>
-          <div style={{ fontSize: 16, fontWeight: 800, color: '#fff', lineHeight: 1.1, letterSpacing: '-.01em' }}>{item.metric.value}</div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,.55)', marginTop: 2, fontWeight: 500 }}>{item.metric.context}</div>
+      {/* Avatar — top-right corner */}
+      {item.avatar && (
+        <div style={{ position: 'absolute', top: 14, right: 12, zIndex: 2 }}>
+          <div style={{ width: 42, height: 42, borderRadius: '50%', background: item.avatar.gradient, border: '2px solid rgba(255,255,255,.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, fontWeight: 700, color: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,.4)' }}>
+            {item.avatar.name[0]}
+          </div>
         </div>
       )}
 
       {/* Bottom info — padded above the floating tab bar */}
       <div style={{ position: 'relative', zIndex: 1, padding: '0 16px 88px' }}>
+        {/* Metric — bright result text above username */}
+        {item.metric && (
+          <div style={{ marginBottom: 8 }}>
+            <span style={{ fontSize: 22, fontWeight: 900, color: '#fff', letterSpacing: '-.02em', lineHeight: 1 }}>{item.metric.value}</span>
+            <span style={{ fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,.6)', marginLeft: 6 }}>· {item.metric.context}</span>
+          </div>
+        )}
         <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 4 }}>@twin_ai_{item.id}</div>
         <div style={{ fontSize: 14, color: 'rgba(255,255,255,.9)', lineHeight: 1.45, marginBottom: 14 }}>{item.caption || item.label}</div>
 
@@ -686,10 +689,6 @@ function FeedCard({ item, onUseTemplate }) {
           </span>
         </div>
       </div>
-
-      {/* Badge */}
-      {!item.isMine && <div style={{ position: 'absolute', top: 60, left: 12, background: 'rgba(0,0,0,.5)', borderRadius: 8, padding: '3px 8px', fontSize: 10, fontWeight: 700, color: '#fff', letterSpacing: '.04em', zIndex: 2 }}>AI TEMPLATE</div>}
-      {item.isMine && <div style={{ position: 'absolute', top: 60, left: 12, background: 'rgba(238,29,82,.8)', borderRadius: 8, padding: '3px 8px', fontSize: 10, fontWeight: 700, color: '#fff', zIndex: 2 }}>MY VIDEO</div>}
     </div>
   )
 }
