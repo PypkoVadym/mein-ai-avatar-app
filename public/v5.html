@@ -23,8 +23,8 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .sback:active{opacity:.55}
 .sback.lt{background:rgba(44,26,10,.09);color:var(--choco)}
 .sback.dk{background:var(--gl);border:1px solid var(--glb);color:var(--ivory2)}
-.btn-gold{width:100%;height:54px;border-radius:18px;border:none;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#FFF8F2;font-family:'Sora',sans-serif;font-size:16px;font-weight:800;cursor:pointer;letter-spacing:-.02em;box-shadow:0 8px 28px var(--gg);transition:transform .1s}
-.btn-gold:active{transform:scale(.97)}
+.btn-gold{width:100%;height:54px;border-radius:18px;border:none;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#FFF8F2;font-family:'Sora',sans-serif;font-size:16px;font-weight:800;cursor:pointer;letter-spacing:-.02em;animation:ctaPulse 2.4s ease-in-out infinite;transition:transform .1s}
+.btn-gold:active{transform:scale(.97);animation:none}
 .btn-gold:disabled{opacity:.35;pointer-events:none}
 .or-line{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--choco3);font-weight:500}
 .or-line::before,.or-line::after{content:'';flex:1;height:1px;background:var(--ivory3)}
@@ -88,8 +88,8 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .seed-footer{padding:8px 22px 32px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
 .seed-disclaimer{text-align:center;font-size:11px;color:var(--m);line-height:1.45;padding:0 4px}
 
-/* Pulse animation for Create video CTA */
-@keyframes ctaPulse{0%,100%{box-shadow:0 8px 28px rgba(200,168,96,.22)}50%{box-shadow:0 8px 28px rgba(200,168,96,.22),0 0 0 6px rgba(200,168,96,.12),0 0 0 14px rgba(200,168,96,.05)}}
+/* Pulse animation for main CTA */
+@keyframes ctaPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
 
 /* PLATFORM — old CSS kept for compat */
 #platform{background:#FFF8F2}
