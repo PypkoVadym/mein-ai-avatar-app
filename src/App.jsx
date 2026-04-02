@@ -3,12 +3,14 @@ import V1App from './versions/V1App.jsx'
 import V2App from './versions/V2App.jsx'
 import V3App from './versions/V3App.jsx'
 import V4App from './versions/V4App.jsx'
+import V5App from './versions/V5App.jsx'
 
 const VERSIONS = [
   { id: 1, label: 'V1', App: V1App },
   { id: 2, label: 'V2', App: V2App },
   { id: 3, label: 'V3', App: V3App },
   { id: 4, label: 'V4', App: V4App },
+  { id: 5, label: 'V5', App: V5App },
 ]
 
 function StatusBar() {
