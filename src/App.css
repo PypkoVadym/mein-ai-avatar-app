@@ -142,13 +142,17 @@ input { font-family: inherit; }
 
 /* ── Status Bar ────────────────────────────────────────────────────────────── */
 .status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 54px 28px 4px;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 10;
+  padding: 16px 28px 0;
+  height: 58px;
+  z-index: 50;
+  pointer-events: none;
 }
 
 .status-time {

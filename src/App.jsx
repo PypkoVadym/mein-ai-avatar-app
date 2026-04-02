@@ -64,8 +64,11 @@ export default function App() {
           <div className="dynamic-island" />
         </div>
 
-        {/* Status Bar */}
+        {/* Status Bar — absolutely positioned at island level */}
         <StatusBar />
+
+        {/* Spacer so V1/V2 flex content starts below the status bar */}
+        <div style={{ height: 58, flexShrink: 0 }} />
 
         {/* Active version — re-mounts on switch so each version has fresh state */}
         <ActiveApp key={activeVersion} />
