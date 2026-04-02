@@ -227,37 +227,36 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .apemoji{width:100%;height:100%;border-radius:0;object-fit:cover;object-position:center top;filter:drop-shadow(0 -8px 40px rgba(0,0,0,.25));border:none}
 .apspl{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:300px;height:180px;background:radial-gradient(ellipse at 50% 100%,rgba(200,168,96,.1),transparent 65%);pointer-events:none}
 .apwm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:rgba(26,14,5,.05);transform:rotate(-22deg);letter-spacing:.3em;pointer-events:none;z-index:6}
-.aptop{position:absolute;top:0;left:0;right:0;z-index:20;padding:52px 18px 0;display:flex;align-items:center;justify-content:space-between}
-.aptrr{display:flex;gap:8px;align-items:center}
+.aptop{position:absolute;top:0;left:0;right:0;z-index:20;padding:52px 18px 0;display:flex;align-items:center;gap:10px}
+.ap-nav-title{flex:1;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:rgba(26,14,5,.5);text-align:center}
+.ap-nav-spacer{width:36px;flex-shrink:0}
+.apzone-pills{position:absolute;bottom:12px;left:0;right:0;z-index:10;display:flex;gap:8px;justify-content:center}
 .appill{background:rgba(0,0,0,.38);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 12px;display:flex;align-items:center;gap:5px;font-family:'Sora',sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.6);cursor:pointer}
 .appill:active{background:rgba(0,0,0,.5)}
 .ld{width:6px;height:6px;border-radius:50%;background:var(--red);animation:ldP 1.2s ease-in-out infinite}
 @keyframes ldP{0%,100%{opacity:1}50%{opacity:.25}}
-.apbot{position:absolute;bottom:0;left:0;right:0;z-index:20;background:rgba(253,248,242,.95);backdrop-filter:blur(28px);border-top:1px solid rgba(255,255,255,.07)}
-.apnr{padding:16px 20px 0;display:flex;align-items:center;justify-content:space-between}
-.apname{font-family:'Sora',sans-serif;font-size:26px;font-weight:900;color:var(--ivory);letter-spacing:-.03em}
-.apqb{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--choco);font-family:'Sora',sans-serif;font-size:12px;font-weight:800;padding:5px 12px;border-radius:20px}
+.apbot{position:absolute;bottom:0;left:0;right:0;z-index:20;background:rgba(253,248,242,.95);backdrop-filter:blur(28px);border-top:1px solid rgba(26,14,5,.06)}
+.apnr{padding:14px 20px 0;display:flex;align-items:flex-start;justify-content:space-between}
+.apname{font-family:'Sora',sans-serif;font-size:22px;font-weight:900;color:var(--choco);letter-spacing:-.03em}
+.ap-status{display:flex;align-items:center;gap:5px;font-family:'Sora',sans-serif;font-size:11px;font-weight:600;color:var(--green);margin-top:3px}
+.ap-status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+.apq-big{display:flex;flex-direction:column;align-items:flex-end;padding-top:2px}
+.apq-lbl{font-family:'Sora',sans-serif;font-size:10px;font-weight:600;color:rgba(26,14,5,.4);text-transform:uppercase;letter-spacing:.05em}
+.apq-big span{font-family:'Sora',sans-serif;font-size:28px;font-weight:900;color:var(--gold2);line-height:1;letter-spacing:-.03em}
 .aptags{display:flex;gap:5px;padding:7px 20px 0;flex-wrap:wrap}
-.aptag{font-size:11px;font-weight:600;color:rgba(255,255,255,.45);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px 10px}
-.apstats{display:grid;grid-template-columns:1fr 1fr 1fr;margin:12px 18px 0;background:rgba(26,14,5,.04);border:1px solid rgba(26,14,5,.08);border-radius:14px;overflow:hidden}
-.apst{display:flex;flex-direction:column;align-items:center;gap:2px;padding:11px 8px;cursor:pointer;transition:background .15s;position:relative}
-.apst:not(:last-child)::after{content:'';position:absolute;right:0;top:25%;bottom:25%;width:1px;background:rgba(26,14,5,.08)}
-.apst:active{background:rgba(255,255,255,.05)}
-.apsn{font-family:'Sora',sans-serif;font-size:19px;font-weight:900;color:var(--ivory)}
-.apsn.g{color:var(--gold)}.apsn.gr{color:var(--green)}
-.apsl{font-size:10px;color:rgba(248,243,236,.3);font-weight:500;text-align:center}
+.aptag{font-size:11px;font-weight:600;color:var(--choco3);background:rgba(26,14,5,.05);border:1px solid rgba(26,14,5,.1);border-radius:20px;padding:3px 10px}
 .aptok{margin:10px 18px 0;background:var(--gw);border:1px solid var(--gwb);border-radius:12px;padding:9px 13px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:background .15s}
 .aptok:active{background:rgba(200,168,96,.12)}
 .tt{flex:1;height:4px;background:rgba(26,14,5,.08);border-radius:2px;overflow:hidden}
 .tf{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--gold2),var(--gold));width:73%}
-.tl{font-size:9.5px;color:rgba(200,168,96,.4);margin-top:2px}
-.tc{font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--gold);white-space:nowrap}
+.tok-label{font-family:'Sora',sans-serif;font-size:12px;font-weight:600;color:var(--choco2);white-space:nowrap;flex-shrink:0}
+.tok-topup{font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:#FFF8F2;background:linear-gradient(135deg,var(--gold2),var(--gold));border:none;border-radius:8px;padding:5px 12px;cursor:pointer;flex-shrink:0}
 .apcr{padding:10px 18px 0;display:flex;gap:8px}
 .apcm{flex:1;height:52px;border-radius:16px;border:none;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#FFF8F2;font-family:'Sora',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:transform .1s}
 .apcm:active{transform:scale(.97)}
-.apmo{width:52px;height:52px;border-radius:16px;background:rgba(26,14,5,.05);border:1px solid rgba(26,14,5,.1);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:background .15s}
-.apmo:active{background:rgba(255,255,255,.12)}
-.apsh{text-align:center;padding:8px 0 16px;font-size:10.5px;color:rgba(26,14,5,.3);font-weight:500;font-family:'Sora',sans-serif}
+.apmo{width:52px;height:52px;border-radius:16px;background:rgba(26,14,5,.05);border:1px solid rgba(26,14,5,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:18px;cursor:pointer;transition:background .15s}
+.apmo:active{background:rgba(26,14,5,.09)}
+.apmo-lbl{font-family:'Sora',sans-serif;font-size:8px;font-weight:700;color:rgba(26,14,5,.4)}
 
 /* MOVES SHEET */
 .ms{position:absolute;inset:0;z-index:30;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);display:none;flex-direction:column;justify-content:flex-end}
@@ -497,9 +496,17 @@ body{background:transparent!important;padding:0!important;display:block!importan
   <div class="wt">
     <div class="we">Welcome to TWIN</div>
     <div class="wh">Grow your social<br>media on<br><em>autopilot.</em></div>
-    <div class="ws">Your AI avatar posts for you — <em style="font-style:normal;color:var(--gold);font-weight:700">every day</em>, every platform, <em style="font-style:normal;color:var(--gold);font-weight:700">while you sleep.</em></div>
+    <div class="ws">Your AI avatar posts for you — every day, every platform, while you sleep.</div>
   </div>
   <div class="strip"><div class="strip-track" id="strack"></div></div>
+  <div style="margin:0 24px;display:flex;align-items:center;gap:10px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.18);border-radius:14px;padding:11px 14px">
+    <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#C8E6C9,#A5D6A7);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">👤</div>
+    <div>
+      <div style="font-family:'Sora',sans-serif;font-size:12px;font-weight:800;color:var(--choco)">47 new leads in one week</div>
+      <div style="font-size:11px;color:var(--choco3);margin-top:1px">@marina.twin · TWIN user since Jan</div>
+    </div>
+    <div style="margin-left:auto;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:#16A34A;background:rgba(34,197,94,.1);border-radius:8px;padding:3px 8px;white-space:nowrap">Real result</div>
+  </div>
   <div class="wb">
     <button class="btn-gold" onclick="go('avatar-entry')">Create my AI avatar →</button>
     <button style="width:100%;height:46px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--m);font-family:'Sora',sans-serif;font-size:13px;font-weight:600;cursor:pointer" onclick="go('avatar-entry')">I already have an account</button>
@@ -668,57 +675,49 @@ body{background:transparent!important;padding:0!important;display:block!importan
       <div class="apgl r1"></div><div class="apgl r2"></div><div class="apgl r3"></div>
       <div class="apchar"><img class="apemoji" id="apemoji" src="/default_avatar.jpg"></div>
       <div class="apspl"></div>
-    </div>
-    <div class="apwm">TWIN TWIN TWIN</div>
-    <div class="aptop">
-      <button class="sback dk" style="background:rgba(0,0,0,.35)" onclick="back('processing')">←</button>
-      <div class="aptrr">
+      <!-- Moves / Preview overlaid at bottom of avatar zone -->
+      <div class="apzone-pills">
         <div class="appill" onclick="openMoves()">🎬 Moves</div>
         <div class="appill"><div class="ld"></div> Preview</div>
       </div>
     </div>
+    <div class="apwm">TWIN TWIN TWIN</div>
+    <div class="aptop">
+      <button class="sback dk" style="background:rgba(0,0,0,.35)" onclick="back('processing')">←</button>
+      <div class="ap-nav-title" id="ap-nav-title">My avatars (1)</div>
+      <div class="ap-nav-spacer"></div>
+    </div>
     <div class="apbot">
+      <!-- Name + Quality в одной строке -->
       <div class="apnr">
-        <div class="apname" id="apname">Your Avatar</div>
-        <div class="apqb" id="apqb">44%</div>
+        <div>
+          <div class="apname" id="apname">Your Avatar</div>
+          <div class="ap-status"><div class="ap-status-dot"></div>Ready to use</div>
+        </div>
+        <div class="apq-big"><div class="apq-lbl">Quality</div><span id="apqb">44%</span></div>
       </div>
-      <div class="aptags" id="aptags"><div class="aptag">All platforms</div><div class="aptag">EN</div></div>
-      <div class="apstats">
-        <div class="apst"><div class="apsn">0</div><div class="apsl">Videos<br>made</div></div>
-        <div class="apst"><div class="apsn g" id="apstq">44%</div><div class="apsl">Avatar<br>quality</div></div>
-        <div class="apst"><div class="apsn gr">Ready</div><div class="apsl">Status</div></div>
-      </div>
-      <div class="aptok" onclick="alert('Top up tokens')">
-        <span style="font-size:16px;flex-shrink:0">⚡</span>
-        <div style="flex:1"><div class="tt"><div class="tf"></div></div><div class="tl">73 tokens · tap to top up</div></div>
-        <div class="tc">73</div>
-      </div>
-      <!-- Quality nudge — soft, tappable -->
-      <div onclick="back('avatar-entry')" style="margin:8px 18px 0;display:flex;align-items:center;gap:10px;background:rgba(200,168,96,.06);border:1px solid rgba(200,168,96,.12);border-radius:12px;padding:10px 13px;cursor:pointer;transition:background .15s" onmousedown="this.style.background='rgba(200,168,96,.11)'" onmouseup="this.style.background='rgba(200,168,96,.06)'">
-        <span style="font-size:16px;flex-shrink:0">📸</span>
+      <!-- Add more photos — upsell amber -->
+      <div onclick="back('avatar-entry')" style="margin:10px 18px 0;display:flex;align-items:center;gap:10px;background:rgba(250,238,218,.55);border:1px solid rgba(200,148,60,.2);border-radius:12px;padding:10px 13px;cursor:pointer;transition:background .15s" onmousedown="this.style.background='rgba(250,238,218,.8)'" onmouseup="this.style.background='rgba(250,238,218,.55)'">
         <div style="flex:1">
-          <div style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--gold)" data-quality-nudge>Add more photos → 65%</div>
-          <div style="font-size:10.5px;color:rgba(200,168,96,.45);margin-top:1px">Each video you create also improves quality</div>
+          <div style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--choco)" data-quality-nudge>Add more photos → 77%</div>
+          <div style="font-size:10.5px;color:var(--choco3);margin-top:1px">Each video also improves quality</div>
         </div>
-        <span style="font-size:16px;color:rgba(200,168,96,.35)">›</span>
+        <span style="font-size:14px;color:var(--choco3)">›</span>
       </div>
+      <!-- Tokens row -->
+      <div class="aptok" onclick="alert('Top up tokens')">
+        <span style="font-size:15px;flex-shrink:0">⚡</span>
+        <div class="tt"><div class="tf"></div></div>
+        <span class="tok-label">73 tokens</span>
+        <button class="tok-topup" onclick="event.stopPropagation();alert('Top up tokens')">Top up</button>
+      </div>
+      <!-- CTA -->
       <div class="apcr">
-        <button class="apcm" onclick="go('create-video')">Create video →</button>
-        <div class="apmo" onclick="openMoves()">🎭</div>
+        <button class="apcm" onclick="go('create-video')">Create video</button>
+        <div class="apmo" onclick="openMoves()">🎭<span class="apmo-lbl">Styles</span></div>
       </div>
-      <!-- Multiple avatar management -->
-      <div style="margin:8px 18px 0;display:flex;gap:8px">
-        <div onclick="go('avatar-entry')" style="flex:1;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;cursor:pointer">
-          <span style="font-size:14px">＋</span>
-          <span style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--m2)">Add avatar</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;cursor:pointer">
-          <span style="font-size:14px">👤</span>
-          <span style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--m2)" id="ap-avatar-count">1 avatar</span>
-          <span style="color:var(--m);font-size:12px">›</span>
-        </div>
-      </div>
-      <div class="apsh">Tap 🎭 to see what your avatar can do</div>
+      <!-- Add another avatar -->
+      <div onclick="go('avatar-entry')" style="text-align:center;padding:10px 0 16px;font-family:'Sora',sans-serif;font-size:12px;font-weight:600;color:var(--choco3);cursor:pointer;opacity:.7" onmousedown="this.style.opacity='1'" onmouseup="this.style.opacity='.7'">+ Add another avatar</div>
     </div>
   </div>
   <div class="ms" id="movesSheet" onclick="closeMoves(event)">
@@ -854,7 +853,7 @@ const sCards=[
   {bg:'linear-gradient(160deg,#F0F0C8,#E4E4A8)',ch:'💸',video:'/video3.mp4',lb:'$1.1K/day · dropshipping',stat:true},
   {bg:'linear-gradient(160deg,#DCC8F0,#CEB8EC)',ch:'💃',video:'/video1.mp4',lb:'NPC trend',stat:false},
 ];
-(()=>{const t=document.getElementById('strack');[...sCards,...sCards].forEach(d=>{const c=document.createElement('div');c.className='sc';const lbColor=d.stat?'#9B4A1C':'rgba(26,14,5,.75)';c.innerHTML=`<div class="sc-bg" style="background:${d.bg}"></div>${d.video?`<video src="${d.video}" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:17px;z-index:1"></video>`:`<div class="sc-av">${d.ch}</div>`}<div class="sc-wm" style="z-index:3">TWIN TWIN</div><div class="sc-lk" style="z-index:4">🔒</div><div class="sc-ov" style="z-index:4"><div class="sc-lb" style="color:${lbColor};font-weight:${d.stat?'800':'600'}">${d.lb}</div></div>`;t.appendChild(c);});})();
+(()=>{const t=document.getElementById('strack');[...sCards,...sCards].forEach(d=>{const c=document.createElement('div');c.className='sc';const lbColor=d.stat?'#9B4A1C':'rgba(26,14,5,.75)';c.innerHTML=`<div class="sc-bg" style="background:${d.bg}"></div>${d.video?`<video src="${d.video}" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:17px;z-index:1"></video>`:`<div class="sc-av">${d.ch}</div>`}<div class="sc-wm" style="z-index:3">TWIN TWIN</div><div class="sc-ov" style="z-index:4"><div class="sc-lb" style="color:${lbColor};font-weight:${d.stat?'800':'600'}">${d.lb}</div></div>`;t.appendChild(c);});})();
 
 // Goal selector (new platform screen)
 let selGoalId=null;
@@ -994,20 +993,20 @@ function buildAvatar(){
   // Dynamic quality from actual assets
   const qStr=avatarQuality+'%';
   const qbadge=document.getElementById('apqb');if(qbadge)qbadge.textContent=qStr;
-  const qstat=document.getElementById('apstq');if(qstat)qstat.textContent=qStr;
   const cvq=document.getElementById('cvchipq');if(cvq)cvq.textContent=qStr;
   // Quality nudge target
   const nudge=document.querySelector('[data-quality-nudge]');
-  if(nudge)nudge.textContent=`Add more → ${Math.min(100,avatarQuality+18)}%`;
+  if(nudge)nudge.textContent=`Add more photos → ${Math.min(100,avatarQuality+18)}%`;
   // Avatar count
   const countEl=document.getElementById('ap-avatar-count');
   if(countEl)countEl.textContent=avatarCount+' avatar'+(avatarCount>1?'s':'');
+  const navTitle=document.getElementById('ap-nav-title');
+  if(navTitle)navTitle.textContent=`My avatars (${avatarCount})`;
   // Platform tags
   const tags=[];
   if(selPlats.has('all'))tags.push('All platforms');
   else{if(selPlats.has('tiktok'))tags.push('TikTok');if(selPlats.has('insta'))tags.push('Instagram');if(selPlats.has('yt'))tags.push('YouTube');}
-  tags.push('EN');
-  document.getElementById('aptags').innerHTML=tags.map(t=>`<div class="aptag">${t}</div>`).join('');
+  const tagsEl=document.getElementById('aptags');if(tagsEl)tagsEl.innerHTML=tags.map(t=>`<div class="aptag">${t}</div>`).join('');
   buildMoves();
 }
 
