@@ -535,7 +535,6 @@ export default function V3App() {
           <textarea value={prompt} onChange={e => setPrompt(e.target.value)}
             placeholder="e.g. 3 mistakes creators make when using AI…"
             style={{ width: '100%', minHeight: 110, padding: 14, borderRadius: 14, border: '1.5px solid #E0DDD6', background: '#fff', fontSize: 15, color: '#1A1916', fontFamily: 'inherit', resize: 'none', outline: 'none', lineHeight: 1.55, marginBottom: 14 }}
-            autoFocus
           />
 
           {/* Quick suggestions */}
