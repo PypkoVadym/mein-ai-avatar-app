@@ -219,15 +219,12 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .apbg{position:absolute;inset:0;background-size:400% 400%;animation:apBg 10s ease-in-out infinite}
 @keyframes apBg{0%{background-position:0% 30%}33%{background-position:100% 60%}66%{background-position:50% 0%}100%{background-position:0% 30%}}
 .apgrain{position:absolute;inset:0;opacity:.4;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")}
-.apzone{position:absolute;top:0;left:0;right:0;height:65%;display:flex;align-items:center;justify-content:center}
-.apgl{position:absolute;top:50%;left:50%;border-radius:50%;border:1.5px solid rgba(200,168,96,.18);animation:apG 4.5s ease-in-out infinite}
-.apgl.r1{width:220px;height:220px;transform:translate(-50%,-50%)}
-.apgl.r2{width:285px;height:285px;transform:translate(-50%,-50%);animation-delay:.9s;border-color:rgba(200,168,96,.09)}
-.apgl.r3{width:350px;height:350px;transform:translate(-50%,-50%);animation-delay:1.8s;border-color:rgba(200,168,96,.04)}
+.apzone{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center}
+.apgl{display:none}
 @keyframes apG{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}}
-.apchar{position:relative;z-index:5;animation:apFloat 4.5s ease-in-out infinite}
-@keyframes apFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.apemoji{width:160px;height:160px;border-radius:50%;object-fit:cover;object-position:center top;filter:drop-shadow(0 8px 32px rgba(0,0,0,.4)) drop-shadow(0 0 50px rgba(123,50,240,.28));border:3px solid rgba(255,255,255,.35)}
+.apchar{position:absolute;inset:0;z-index:5;animation:apFloat 6s ease-in-out infinite}
+@keyframes apFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.apemoji{width:100%;height:100%;border-radius:0;object-fit:cover;object-position:center top;filter:drop-shadow(0 -8px 40px rgba(0,0,0,.25));border:none}
 .apspl{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:300px;height:180px;background:radial-gradient(ellipse at 50% 100%,rgba(200,168,96,.1),transparent 65%);pointer-events:none}
 .apwm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:rgba(26,14,5,.05);transform:rotate(-22deg);letter-spacing:.3em;pointer-events:none;z-index:6}
 .aptop{position:absolute;top:0;left:0;right:0;z-index:20;padding:52px 18px 0;display:flex;align-items:center;justify-content:space-between}
