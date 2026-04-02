@@ -37,9 +37,9 @@ const GEN_STEPS_VIDEO  = ['Content moderation', 'Writing script', 'Generating vi
 
 // Feed templates — each is a pre-built style the user can adopt
 const TEMPLATES = [
-  { id: 1, label: 'Expert take',    video: '/video1.mp4', caption: 'The one thing nobody tells you about AI content 👇', tag: '#business',  metrics: { likes: '1.2M', comments: '4.3K', bookmarks: '89K', shares: '22K' } },
-  { id: 2, label: 'Hype drop',      video: '/video2.mp4', caption: 'POV: Your AI twin just went viral 🔥🔥🔥',            tag: '#creator',   metrics: { likes: '847K', comments: '12K',  bookmarks: '61K', shares: '58K' } },
-  { id: 3, label: 'Calm explainer', video: '/video3.mp4', caption: 'Let me explain this in under 60 seconds 🧠',           tag: '#education', metrics: { likes: '503K', comments: '7.1K', bookmarks: '114K', shares: '31K' } },
+  { id: 1, label: 'Expert take',    video: '/video1.mp4', caption: 'The one thing nobody tells you about AI content 👇', tag: '#business' },
+  { id: 2, label: 'Hype drop',      video: '/video2.mp4', caption: 'POV: Your AI twin just went viral 🔥🔥🔥',            tag: '#creator'  },
+  { id: 3, label: 'Calm explainer', video: '/video3.mp4', caption: 'Let me explain this in under 60 seconds 🧠',           tag: '#education'},
 ]
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -661,42 +661,8 @@ function FeedCard({ item, onUseTemplate }) {
       {/* Gradient overlay */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to top, rgba(0,0,0,.8) 0%, transparent 55%)' }} />
 
-      {/* Right-side metrics panel — TikTok style */}
-      {item.metrics && (
-        <div style={{ position: 'absolute', right: 12, bottom: 100, zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18 }}>
-          {/* Likes */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-            <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-            </div>
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,.6)' }}>{item.metrics.likes}</span>
-          </div>
-          {/* Comments */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-            <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-            </div>
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,.6)' }}>{item.metrics.comments}</span>
-          </div>
-          {/* Bookmarks */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-            <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-            </div>
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,.6)' }}>{item.metrics.bookmarks}</span>
-          </div>
-          {/* Shares */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-            <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-            </div>
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', textShadow: '0 1px 4px rgba(0,0,0,.6)' }}>{item.metrics.shares}</span>
-          </div>
-        </div>
-      )}
-
       {/* Bottom info — padded above the floating tab bar */}
-      <div style={{ position: 'relative', zIndex: 1, padding: '0 16px 88px', paddingRight: item.metrics ? '72px' : '16px' }}>
+      <div style={{ position: 'relative', zIndex: 1, padding: '0 16px 88px' }}>
         <div style={{ fontSize: 13, fontWeight: 600, color: '#fff', marginBottom: 4 }}>@twin_ai_{item.id}</div>
         <div style={{ fontSize: 14, color: 'rgba(255,255,255,.9)', lineHeight: 1.45, marginBottom: 14 }}>{item.caption || item.label}</div>
 
