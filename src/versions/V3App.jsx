@@ -249,7 +249,7 @@ export default function V3App() {
     <div style={{ flex: 1, position: 'relative', overflow: 'hidden', isolation: 'isolate', background: '#000' }}>
 
       {/* ── Video feed — fills entire screen ── */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, height: '100%', overflowY: 'scroll', scrollSnapType: 'y mandatory', scrollbarWidth: 'none', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflowY: 'scroll', scrollSnapType: 'y mandatory', scrollbarWidth: 'none', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
         {feedItems.map((item) => (
           <FeedCard
             key={item.id}
