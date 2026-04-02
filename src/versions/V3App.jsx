@@ -37,9 +37,9 @@ const GEN_STEPS_VIDEO  = ['Content moderation', 'Writing script', 'Generating vi
 
 // Feed templates — each is a pre-built style the user can adopt
 const TEMPLATES = [
-  { id: 1, label: 'Expert take',    video: '/video1.mp4', caption: 'The one thing nobody tells you about AI content 👇', tag: '#business',  metric: { value: '47 new leads',   context: 'this week'    }, avatar: { gradient: 'linear-gradient(160deg,#667eea,#764ba2)', name: 'Sophia' } },
-  { id: 2, label: 'Hype drop',      video: '/video2.mp4', caption: 'POV: Your AI twin just went viral 🔥🔥🔥',            tag: '#creator',   metric: { value: '$1.1K/day',      context: 'dropshipping' }, avatar: { gradient: 'linear-gradient(160deg,#f093fb,#f5576c)', name: 'Marcus' } },
-  { id: 3, label: 'Calm explainer', video: '/video3.mp4', caption: 'Let me explain this in under 60 seconds 🧠',           tag: '#education', metric: { value: '+12K followers', context: '2 weeks'      }, avatar: { gradient: 'linear-gradient(160deg,#4facfe,#00f2fe)', name: 'Elena'  } },
+  { id: 1, label: 'Expert take',    video: '/video1.mp4', caption: 'The one thing nobody tells you about AI content 👇', tag: '#business',  gradient: 'linear-gradient(160deg,#667eea,#764ba2)', metric: { value: '47 new leads',   context: 'this week'    }, avatar: { gradient: 'linear-gradient(160deg,#667eea,#764ba2)', name: 'Sophia' } },
+  { id: 2, label: 'Hype drop',      video: '/video2.mp4', caption: 'POV: Your AI twin just went viral 🔥🔥🔥',            tag: '#creator',   gradient: 'linear-gradient(160deg,#f093fb,#f5576c)', metric: { value: '$1.1K/day',      context: 'dropshipping' }, avatar: { gradient: 'linear-gradient(160deg,#f093fb,#f5576c)', name: 'Marcus' } },
+  { id: 3, label: 'Calm explainer', video: '/video3.mp4', caption: 'Let me explain this in under 60 seconds 🧠',           tag: '#education', gradient: 'linear-gradient(160deg,#4facfe,#00f2fe)', metric: { value: '+12K followers', context: '2 weeks'      }, avatar: { gradient: 'linear-gradient(160deg,#4facfe,#00f2fe)', name: 'Elena'  } },
 ]
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -559,7 +559,7 @@ export default function V3App() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
             {TEMPLATES.map(t => (
               <div key={t.id} onClick={() => { setActiveTemplate(t); goSheet('sh-prompt') }} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 14px', borderRadius: 16, border: `1.5px solid ${activeTemplate.id===t.id ? '#1A1916' : '#E8E5E0'}`, background: '#fff', cursor: 'pointer', boxShadow: activeTemplate.id===t.id ? '0 0 0 3px rgba(26,25,22,.07)' : 'none' }}>
-                <div style={{ width: 44, height: 56, borderRadius: 10, background: t.gradient, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{t.avatar}</div>
+                <div style={{ width: 44, height: 56, borderRadius: 10, background: t.gradient, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, color: '#fff', fontWeight: 700 }}>{t.avatar?.name?.[0]}</div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#1A1916', marginBottom: 2 }}>{t.label}</div>
                   <div style={{ fontSize: 12, color: '#9B9894' }}>{t.tone} · {t.mood} · {t.tag}</div>
