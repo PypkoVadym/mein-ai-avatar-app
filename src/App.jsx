@@ -40,7 +40,7 @@ function StatusBar() {
 }
 
 export default function App() {
-  const [activeVersion, setActiveVersion] = useState(1)
+  const [activeVersion, setActiveVersion] = useState(5)
   const { App: ActiveApp } = VERSIONS.find(v => v.id === activeVersion)
 
   return (
