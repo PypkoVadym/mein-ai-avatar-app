@@ -146,25 +146,44 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .qf{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold2),var(--gold));width:0%;transition:width .5s}
 .qp{font-size:12px;font-weight:600;color:var(--choco2);width:30px;text-align:right}
 
-/* CAM */
-#cam-shoot{background:#1A0E05}
-.cvf{flex:1;position:relative;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 44%,#2A1A0A 30%,#140A03 100%)}
-.co{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:200px;height:262px;border:2px solid rgba(200,168,96,.55);border-radius:50% 50% 50% 50%/55% 55% 45% 45%;animation:camP 2.5s ease-in-out infinite}
-@keyframes scanLine{0%{top:5%}50%{top:88%}100%{top:5%}}
-@keyframes camP{0%,100%{opacity:.45}50%{opacity:1}}
-.ch{position:absolute;top:50%;left:50%;transform:translate(-50%,76px);background:rgba(0,0,0,.58);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:8px 14px;color:rgba(255,255,255,.78);font-size:12px;text-align:center;white-space:nowrap;font-weight:500}
-.ctb{position:absolute;top:0;left:0;right:0;padding:56px 18px 0;display:flex;align-items:center;justify-content:space-between;z-index:10}
-.cenc{background:rgba(123,50,240,.2);border:1px solid rgba(123,50,240,.3);color:rgba(190,160,255,.85);font-size:10px;font-weight:600;padding:5px 10px;border-radius:20px;font-family:'Sora',sans-serif}
-.ctips{position:absolute;top:85px;right:14px;display:flex;flex-direction:column;gap:6px}
-.ctip{background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.62);font-size:10px;padding:5px 9px;border-radius:8px}
-.cb{background:#1A0E05;padding:14px 32px 28px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.rt{color:rgba(255,255,255,.55);font-family:'Sora',sans-serif;font-size:13px;font-weight:600;letter-spacing:.04em}
-.ro{width:78px;height:78px;border-radius:50%;background:transparent;border:4px solid rgba(255,255,255,.7);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .1s}
+/* CAM — shared layout */
+#cam-shoot,#cam-photos{background:var(--bg)}
+.cam-topbar{padding:56px 18px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cam-topbar-title{font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--choco)}
+.cenc{background:rgba(123,50,240,.12);border:1px solid rgba(123,50,240,.22);color:rgba(123,50,240,.8);font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;font-family:'Sora',sans-serif}
+/* Viewfinder rectangle */
+.cam-vf-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:16px 24px 0}
+.cam-vf{width:100%;max-width:290px;height:348px;border-radius:22px;background:radial-gradient(ellipse 72% 65% at 50% 46%,#2B1A09 20%,#0E0603 100%);position:relative;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.5),0 0 0 1px rgba(200,168,96,.18)}
+/* Face oval guide */
+.co{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:210px;border:2px solid rgba(200,168,96,.6);border-radius:50% 50% 50% 50%/55% 55% 45% 45%;animation:camP 2.5s ease-in-out infinite}
+@keyframes camP{0%,100%{opacity:.35}50%{opacity:.9}}
+/* Corner brackets */
+.cam-corner{position:absolute;width:20px;height:20px;border-color:rgba(200,168,96,.75);border-style:solid}
+.cam-corner.tl{top:14px;left:14px;border-width:2px 0 0 2px;border-radius:5px 0 0 0}
+.cam-corner.tr{top:14px;right:14px;border-width:2px 2px 0 0;border-radius:0 5px 0 0}
+.cam-corner.bl{bottom:14px;left:14px;border-width:0 0 2px 2px;border-radius:0 0 0 5px}
+.cam-corner.br{bottom:14px;right:14px;border-width:0 2px 2px 0;border-radius:0 0 5px 0}
+/* Instruction below viewfinder */
+.cam-hint-text{font-size:13px;font-weight:600;color:var(--choco2);text-align:center;margin-top:16px}
+.cam-tips-row{display:flex;gap:8px;justify-content:center;margin-top:8px}
+.cam-tip-pill{background:rgba(26,14,5,.06);border:1px solid rgba(26,14,5,.1);color:var(--choco3);font-size:11px;padding:5px 10px;border-radius:20px}
+/* Controls */
+.cam-controls{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 32px 8px;flex-shrink:0}
+/* Shutter (photos) */
+.cam-shutter-btn{width:74px;height:74px;border-radius:50%;background:transparent;border:4px solid var(--choco);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s;flex-shrink:0}
+.cam-shutter-btn:active{transform:scale(.9)}
+.cam-shutter-core{width:56px;height:56px;border-radius:50%;background:var(--choco);transition:all .15s}
+/* Record button (video) */
+.rt{color:var(--choco3);font-family:'Sora',sans-serif;font-size:12px;font-weight:600;letter-spacing:.04em}
+.ro{width:74px;height:74px;border-radius:50%;background:transparent;border:4px solid var(--choco);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .1s}
 .ro:active{transform:scale(.92)}
 .ro.recording .ri{width:26px;height:26px;border-radius:6px;animation:rP 1s ease-in-out infinite}
 .ri{width:56px;height:56px;border-radius:50%;background:var(--red);transition:all .2s}
 @keyframes rP{0%,100%{opacity:1}50%{opacity:.5}}
-.cor{background:#1A0E05;padding:8px 20px 14px;display:flex;align-items:center;justify-content:center;gap:6px}
+/* Footer switch link */
+.cam-footer-link{padding:6px 20px 18px;display:flex;align-items:center;justify-content:center;gap:5px;flex-shrink:0}
+.cam-footer-link span{font-size:11px;color:var(--choco3)}
+.cam-footer-link button{font-size:12px;color:var(--gold);font-weight:600;background:none;border:none;cursor:pointer}
 
 /* SEED PICKER */
 #seed-picker{background:var(--bg)}
@@ -656,59 +675,66 @@ body{background:transparent!important;padding:0!important;display:block!importan
 
 <!-- CAM SHOOT -->
 <div class="screen" id="cam-shoot">
-  <div class="cvf">
-    <div class="ctb">
-      <button class="sback dk" onclick="back('avatar-entry')">←</button>
-      <div class="cenc">🔒 On-device</div>
-    </div>
-    <div class="co"></div>
-    <div class="ch" id="camhint">Tap record · look straight · just talk</div>
-    <div class="ctips"><div class="ctip">💡 Any light</div><div class="ctip">📱 Hold still</div></div>
+  <div class="cam-topbar">
+    <button class="sback" onclick="back('avatar-entry')">←</button>
+    <span class="cam-topbar-title">Record your face</span>
+    <div class="cenc">🔒 Private</div>
   </div>
-  <div class="cb">
-    <div class="rt" id="rec-timer">Tap to start · 5 seconds</div>
+  <div class="cam-vf-wrap">
+    <div class="cam-vf">
+      <div class="co"></div>
+      <div class="cam-corner tl"></div>
+      <div class="cam-corner tr"></div>
+      <div class="cam-corner bl"></div>
+      <div class="cam-corner br"></div>
+    </div>
+    <div class="cam-hint-text" id="camhint">Look straight at the camera</div>
+    <div class="cam-tips-row">
+      <div class="cam-tip-pill">💡 Any light</div>
+      <div class="cam-tip-pill">📱 Hold still</div>
+      <div class="cam-tip-pill">⏱ 5 seconds</div>
+    </div>
+  </div>
+  <div class="cam-controls">
+    <div class="rt" id="rec-timer">Tap to start</div>
     <button class="ro" id="rec-outer" onclick="toggleRec()"><div class="ri" id="rec-inner"></div></button>
   </div>
-  <div class="cor">
-    <span style="font-size:11px;color:rgba(255,255,255,.32);font-weight:500">Photos instead?</span>
-    <button style="font-size:11.5px;color:rgba(200,168,96,.55);font-weight:600;background:none;border:none;cursor:pointer;text-decoration:underline;margin-left:6px" onclick="back('avatar-entry')">Switch to gallery</button>
+  <div class="cam-footer-link">
+    <span>Photos instead?</span>
+    <button onclick="back('avatar-entry')">Switch to gallery</button>
   </div>
 </div>
 
-<!-- CAM PHOTOS: guided 3-shot in-app camera -->
+<!-- CAM PHOTOS: single-shot in-app camera -->
 <div class="screen" id="cam-photos">
-  <div style="position:relative;flex:1;background:radial-gradient(ellipse 70% 60% at 50% 44%,#2A1A0A 30%,#140A03 100%);overflow:hidden">
-    <!-- Top bar -->
-    <div style="position:absolute;top:0;left:0;right:0;padding:54px 18px 0;display:flex;align-items:center;justify-content:space-between;z-index:10">
-      <button class="sback dk" onclick="back('avatar-entry')">←</button>
-      <div style="background:rgba(0,0,0,.5);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 14px;font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--ivory);display:flex;align-items:center;gap:6px">
-        <span id="cp-counter">1</span><span style="color:var(--m)">/</span><span style="color:var(--m)">3</span>
-      </div>
-      <div style="background:rgba(123,50,240,.2);border:1px solid rgba(123,50,240,.3);border-radius:20px;padding:5px 10px;font-size:10px;font-weight:600;color:rgba(190,160,255,.85);font-family:'Sora',sans-serif">🔒 On-device</div>
+  <div class="cam-topbar">
+    <button class="sback" onclick="back('avatar-entry')">←</button>
+    <span class="cam-topbar-title">Take a selfie</span>
+    <div class="cenc">🔒 Private</div>
+  </div>
+  <div class="cam-vf-wrap">
+    <div class="cam-vf">
+      <div class="co"></div>
+      <div class="cam-corner tl"></div>
+      <div class="cam-corner tr"></div>
+      <div class="cam-corner bl"></div>
+      <div class="cam-corner br"></div>
+      <div id="cp-flash" style="position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .08s"></div>
     </div>
-    <!-- Face oval guide -->
-    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:200px;height:262px;border:2px solid rgba(200,168,96,.55);border-radius:50% 50% 50% 50%/55% 55% 45% 45%;animation:camP 2.5s ease-in-out infinite"></div>
-    <!-- Shot instruction -->
-    <div id="cp-hint" style="position:absolute;top:50%;left:50%;transform:translate(-50%,76px);background:rgba(0,0,0,.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:9px 16px;color:rgba(255,255,255,.85);font-size:13px;text-align:center;font-weight:600;white-space:nowrap">Look straight at the camera</div>
-    <!-- Flash overlay -->
-    <div id="cp-flash" style="position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .08s"></div>
-    <!-- Shot dots -->
-    <div style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:10px">
-      <div class="cp-dot active" id="cpd1"></div>
-      <div class="cp-dot" id="cpd2"></div>
-      <div class="cp-dot" id="cpd3"></div>
+    <div class="cam-hint-text" id="cp-hint">Look straight at the camera</div>
+    <div class="cam-tips-row">
+      <div class="cam-tip-pill">☀️ Good lighting</div>
+      <div class="cam-tip-pill">😐 Neutral face</div>
     </div>
   </div>
-  <!-- Shutter controls -->
-  <div style="background:#1A0E05;padding:14px 32px 28px;display:flex;flex-direction:column;align-items:center;gap:12px">
-    <div id="cp-step-lbl" style="color:rgba(200,168,96,.6);font-family:'Sora',sans-serif;font-size:12px;font-weight:600;letter-spacing:.04em">Shot 1 of 3</div>
-    <button id="cp-shutter" onclick="takeShot()" style="width:78px;height:78px;border-radius:50%;background:transparent;border:4px solid rgba(255,255,255,.7);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .1s">
-      <div style="width:60px;height:60px;border-radius:50%;background:#fff"></div>
+  <div class="cam-controls">
+    <button id="cp-shutter" class="cam-shutter-btn" onclick="takeShot()">
+      <div class="cam-shutter-core"></div>
     </button>
   </div>
-  <div style="background:#1A0E05;padding:6px 20px 16px;display:flex;align-items:center;justify-content:center;gap:6px">
-    <span style="font-size:11px;color:rgba(255,255,255,.28);font-weight:500">Have photos already?</span>
-    <button style="font-size:11.5px;color:rgba(200,168,96,.55);font-weight:600;background:none;border:none;cursor:pointer;text-decoration:underline" onclick="back('avatar-entry')">Use my library</button>
+  <div class="cam-footer-link">
+    <span>Have photos already?</span>
+    <button onclick="back('avatar-entry')">Use my library</button>
   </div>
 </div>
 
@@ -1035,11 +1061,8 @@ function resetAvatarFlow(){
   });
   // Reset cam-photos
   camPhotosTaken=0;
-  const cpd=['cpd1','cpd2','cpd3'];
-  cpd.forEach((id,i)=>{const d=document.getElementById(id);if(d){d.className='cp-dot'+(i===0?' active':'');}});
-  const cpc=document.getElementById('cp-counter');if(cpc)cpc.textContent='1';
-  const cpl=document.getElementById('cp-step-lbl');if(cpl)cpl.textContent='Shot 1 of 3';
   const cph=document.getElementById('cp-hint');if(cph)cph.textContent='Look straight at the camera';
+  const sb=document.getElementById('cp-shutter');if(sb)sb.style.opacity='1';
   avatarQuality=44;
   // Reset seed picker
   document.querySelectorAll('.seed-tile').forEach(t=>t.classList.remove('sel'));
@@ -1127,7 +1150,7 @@ function addPhoto(){
 // Cam
 function toggleRec(){
   const ro=document.getElementById('rec-outer'),timer=document.getElementById('rec-timer'),hint=document.getElementById('camhint');
-  if(!recActive){recActive=true;recSec=0;ro.classList.add('recording');recInt=setInterval(()=>{recSec++;const s=recSec%60,m=Math.floor(recSec/60);timer.textContent=`Recording ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;if(recSec===2)hint.textContent='Keep looking at the camera…';if(recSec>=5){clearInterval(recInt);recActive=false;ro.classList.remove('recording');timer.textContent='✓ Done!';avatarQuality=67;setTimeout(()=>go('processing'),500);}},1000);}
+  if(!recActive){recActive=true;recSec=0;ro.classList.add('recording');recInt=setInterval(()=>{recSec++;const s=recSec%60,m=Math.floor(recSec/60);timer.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} recording…`;if(recSec===2)hint.textContent='Keep looking at the camera…';if(recSec>=5){clearInterval(recInt);recActive=false;ro.classList.remove('recording');timer.textContent='✓ Done!';avatarQuality=67;setTimeout(()=>go('processing'),500);}},1000);}
   else{clearInterval(recInt);recActive=false;ro.classList.remove('recording');if(recSec>=3){avatarQuality=Math.max(40,Math.round(recSec/5*67));setTimeout(()=>go('processing'),300);}}
 }
 
@@ -1169,29 +1192,17 @@ function goFromSeed(){
   go('processing');
 }
 
-// Guided photo shots
-const cpInstructions=['Look straight at the camera','Turn slightly left, keep eyes on lens','Natural smile — slight right turn'];
+// Single-shot photo
 function takeShot(){
-  if(camPhotosTaken>=3)return;
+  if(camPhotosTaken>=1)return;
   // Flash
   const fl=document.getElementById('cp-flash');
   if(fl){fl.style.opacity='1';setTimeout(()=>fl.style.opacity='0',120);}
-  // Mark dot done
-  const prevDot=document.getElementById('cpd'+(camPhotosTaken+1));
-  if(prevDot)prevDot.className='cp-dot done';
-  camPhotosTaken++;
-  avatarQuality=Math.round(35+camPhotosTaken*8); // 43%, 51%, 59%
-  if(camPhotosTaken>=3){
-    const lbl=document.getElementById('cp-step-lbl');if(lbl)lbl.textContent='✓ All done!';
-    const sb=document.getElementById('cp-shutter');if(sb)sb.style.opacity='0.4';
-    setTimeout(()=>go('processing'),600);
-  } else {
-    const next=camPhotosTaken+1;
-    const cpc=document.getElementById('cp-counter');if(cpc)cpc.textContent=next;
-    const lbl=document.getElementById('cp-step-lbl');if(lbl)lbl.textContent=`Shot ${next} of 3`;
-    const hint=document.getElementById('cp-hint');if(hint)hint.textContent=cpInstructions[camPhotosTaken];
-    const nextDot=document.getElementById('cpd'+next);if(nextDot)nextDot.className='cp-dot active';
-  }
+  camPhotosTaken=1;
+  avatarQuality=59;
+  const sb=document.getElementById('cp-shutter');if(sb)sb.style.opacity='0.4';
+  const hint=document.getElementById('cp-hint');if(hint)hint.textContent='✓ Got it!';
+  setTimeout(()=>go('processing'),500);
 }
 
 // Processing
