@@ -340,6 +340,40 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .tiss strong{color:var(--gold2);font-family:'Sora',sans-serif;font-weight:700}
 .ehi{font-size:14px;animation:ehiS 2.2s linear infinite}
 @keyframes ehiS{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.2) rotate(180deg)}}
+/* Subtitles toggle */
+.sub-toggle{margin:10px 18px 0;display:flex;align-items:center;gap:10px;cursor:pointer}
+.sub-toggle-track{width:38px;height:22px;border-radius:11px;background:rgba(26,14,5,.12);position:relative;transition:background .2s;flex-shrink:0}
+.sub-toggle-track.on{background:var(--choco)}
+.sub-toggle-knob{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.18);transition:transform .2s}
+.sub-toggle-track.on .sub-toggle-knob{transform:translateX(16px)}
+.sub-toggle-lbl{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--choco)}
+/* Subtitle preview card */
+.sub-preview{margin:8px 18px 0;border-radius:14px;overflow:hidden;border:1px solid rgba(26,14,5,.08);background:#111;aspect-ratio:9/5;position:relative;cursor:pointer;flex-shrink:0}
+.sub-preview-bg{position:absolute;inset:0;background:linear-gradient(160deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center}
+.sub-preview-avatar{font-size:36px;opacity:.35}
+.sub-preview-text{position:absolute;left:0;right:0;display:flex;justify-content:center;padding:0 12px;pointer-events:none}
+.sub-preview-text.pos-top{top:12px}
+.sub-preview-text.pos-center{top:50%;transform:translateY(-50%)}
+.sub-preview-text.pos-bottom{bottom:12px}
+.sub-chip{display:inline-block;padding:4px 10px;border-radius:6px;font-weight:800;font-size:13px;line-height:1.3;text-align:center;max-width:100%}
+.sub-edit-hint{position:absolute;top:7px;right:8px;background:rgba(255,255,255,.12);border-radius:6px;padding:2px 8px;font-size:9px;font-weight:600;color:rgba(255,255,255,.6);font-family:'Sora',sans-serif}
+/* Bottom sheet */
+.sub-sheet{position:absolute;inset:0;z-index:50;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);display:none;flex-direction:column;justify-content:flex-end}
+.sub-sheet.open{display:flex;animation:msUp .3s cubic-bezier(.32,.72,0,1)}
+.sub-sheet-inner{background:var(--bg);border-radius:24px 24px 0 0;border-top:1px solid rgba(26,14,5,.07);padding:16px 20px 40px;display:flex;flex-direction:column;gap:16px}
+.sub-handle{width:36px;height:4px;background:rgba(26,14,5,.12);border-radius:2px;margin:0 auto 4px}
+.sub-sh-ttl{font-family:'Sora',sans-serif;font-size:15px;font-weight:900;color:var(--choco)}
+.sub-sh-row{display:flex;flex-direction:column;gap:7px}
+.sub-sh-lbl{font-family:'Sora',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--choco3)}
+.sub-opts{display:flex;gap:7px;flex-wrap:wrap}
+.sub-opt{padding:7px 13px;border-radius:10px;border:1.5px solid rgba(26,14,5,.1);background:transparent;font-family:'Sora',sans-serif;font-size:12px;font-weight:600;color:var(--choco2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.sub-opt.on{border-color:var(--choco);background:var(--choco);color:#FFF8F2}
+.sub-colors{display:flex;gap:8px}
+.sub-color{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:border-color .15s;flex-shrink:0}
+.sub-color.on{border-color:var(--choco)}
+.sub-pos-row{display:flex;gap:7px}
+.sub-pos{flex:1;padding:9px 6px;border-radius:10px;border:1.5px solid rgba(26,14,5,.1);background:transparent;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--choco3);cursor:pointer;text-align:center;transition:all .15s}
+.sub-pos.on{border-color:var(--choco);background:var(--choco);color:#FFF8F2}
 .cvbot{padding:12px 18px 36px;flex-shrink:0;display:flex;flex-direction:column;gap:6px}
 .cveta{text-align:center;font-size:11px;color:var(--m)}
 .cveta strong{color:var(--choco)}
@@ -791,6 +825,19 @@ body{background:transparent!important;padding:0!important;display:block!importan
     <!-- Expanded panel inside card -->
     <div id="cv-alt-area" style="display:none;flex-direction:column;gap:7px;padding:0 14px 14px"></div>
   </div>
+  <!-- Subtitles toggle -->
+  <div class="sub-toggle" onclick="subToggle()">
+    <div class="sub-toggle-track" id="sub-track"><div class="sub-toggle-knob"></div></div>
+    <span class="sub-toggle-lbl">Add subtitles</span>
+  </div>
+  <!-- Subtitle preview (hidden by default) -->
+  <div class="sub-preview" id="sub-preview" style="display:none" onclick="subOpenSheet()">
+    <div class="sub-preview-bg"><div class="sub-preview-avatar">👤</div></div>
+    <div class="sub-preview-text pos-bottom" id="sub-preview-pos">
+      <div class="sub-chip" id="sub-chip" style="background:#000;color:#fff;font-family:sans-serif">Your text here</div>
+    </div>
+    <div class="sub-edit-hint">Edit style ›</div>
+  </div>
   <!-- Variations -->
   <div class="cv-vars">
     <div class="cv-vars-lbl">Variations</div>
@@ -803,6 +850,54 @@ body{background:transparent!important;padding:0!important;display:block!importan
   <div class="cvbot">
     <button class="btn-gold" onclick="go('queued')">Generate video →</button>
     <div class="cveta">Ready in <strong>8–12 min</strong> · appears in Grow tab</div>
+  </div>
+  <!-- Subtitle style sheet -->
+  <div class="sub-sheet" id="sub-sheet" onclick="subCloseSheet(event)">
+    <div class="sub-sheet-inner" onclick="event.stopPropagation()">
+      <div class="sub-handle"></div>
+      <div class="sub-sh-ttl">Subtitle style</div>
+      <!-- Font -->
+      <div class="sub-sh-row">
+        <div class="sub-sh-lbl">Font</div>
+        <div class="sub-opts" id="sub-fonts">
+          <div class="sub-opt on" data-font="sans-serif" onclick="subSet('font',this)">Default</div>
+          <div class="sub-opt" data-font="'Sora',sans-serif" onclick="subSet('font',this)">Sora</div>
+          <div class="sub-opt" data-font="Georgia,serif" onclick="subSet('font',this)">Serif</div>
+          <div class="sub-opt" data-font="'Courier New',monospace" onclick="subSet('font',this)">Mono</div>
+        </div>
+      </div>
+      <!-- Text color -->
+      <div class="sub-sh-row">
+        <div class="sub-sh-lbl">Text color</div>
+        <div class="sub-colors" id="sub-txt-colors">
+          <div class="sub-color on" data-val="#ffffff" style="background:#fff;border-color:var(--choco)" onclick="subSet('txtColor',this)"></div>
+          <div class="sub-color" data-val="#1A0E05" style="background:#1A0E05" onclick="subSet('txtColor',this)"></div>
+          <div class="sub-color" data-val="#F5C842" style="background:#F5C842" onclick="subSet('txtColor',this)"></div>
+          <div class="sub-color" data-val="#FF4757" style="background:#FF4757" onclick="subSet('txtColor',this)"></div>
+          <div class="sub-color" data-val="#2ED573" style="background:#2ED573" onclick="subSet('txtColor',this)"></div>
+        </div>
+      </div>
+      <!-- Background color -->
+      <div class="sub-sh-row">
+        <div class="sub-sh-lbl">Background</div>
+        <div class="sub-colors" id="sub-bg-colors">
+          <div class="sub-color on" data-val="#000000" style="background:#000;border-color:var(--choco)" onclick="subSet('bgColor',this)"></div>
+          <div class="sub-color" data-val="transparent" style="background:transparent;border:2px dashed rgba(26,14,5,.2)" onclick="subSet('bgColor',this)"></div>
+          <div class="sub-color" data-val="#1A0E05" style="background:#1A0E05" onclick="subSet('bgColor',this)"></div>
+          <div class="sub-color" data-val="#5B21B6" style="background:#5B21B6" onclick="subSet('bgColor',this)"></div>
+          <div class="sub-color" data-val="#C4622C" style="background:#C4622C" onclick="subSet('bgColor',this)"></div>
+        </div>
+      </div>
+      <!-- Position -->
+      <div class="sub-sh-row">
+        <div class="sub-sh-lbl">Position</div>
+        <div class="sub-pos-row" id="sub-positions">
+          <div class="sub-pos" data-pos="pos-top" onclick="subSet('pos',this)">↑ Top</div>
+          <div class="sub-pos" data-pos="pos-center" onclick="subSet('pos',this)">· Center</div>
+          <div class="sub-pos on" data-pos="pos-bottom" onclick="subSet('pos',this)">↓ Bottom</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1113,6 +1208,11 @@ function cvInit(){
   const att=document.getElementById('cv-attachments');if(att){att.style.display='none';att.innerHTML='';}
   document.querySelectorAll('.cv-alt-chip').forEach(c=>c.classList.remove('on'));
   document.querySelectorAll('.cv-var').forEach((v,i)=>v.classList.toggle('on',i===0));
+  // Reset subtitles
+  subState.on=false;subState.font='sans-serif';subState.txtColor='#ffffff';subState.bgColor='#000000';subState.pos='pos-bottom';
+  const st=document.getElementById('sub-track');if(st)st.classList.remove('on');
+  const sp=document.getElementById('sub-preview');if(sp)sp.style.display='none';
+  document.getElementById('sub-sheet')?.classList.remove('open');
 }
 function cvTextChange(ta){
   const enh=document.getElementById('cv-enhance');
@@ -1160,6 +1260,38 @@ function cvRemoveLink(){
 }
 function selVar(el){document.querySelectorAll('.cv-var').forEach(v=>v.classList.remove('on'));el.classList.add('on');}
 
+// Subtitles
+const subState={on:false,font:'sans-serif',txtColor:'#ffffff',bgColor:'#000000',pos:'pos-bottom'};
+function subToggle(){
+  subState.on=!subState.on;
+  document.getElementById('sub-track').classList.toggle('on',subState.on);
+  const prev=document.getElementById('sub-preview');
+  prev.style.display=subState.on?'block':'none';
+}
+function subOpenSheet(){document.getElementById('sub-sheet').classList.add('open');}
+function subCloseSheet(e){if(e.target===document.getElementById('sub-sheet'))document.getElementById('sub-sheet').classList.remove('open');}
+function subSet(type,el){
+  if(type==='font'){
+    document.querySelectorAll('#sub-fonts .sub-opt').forEach(o=>o.classList.remove('on'));
+    el.classList.add('on');subState.font=el.dataset.font;
+  } else if(type==='txtColor'){
+    document.querySelectorAll('#sub-txt-colors .sub-color').forEach(o=>o.classList.remove('on'));
+    el.classList.add('on');subState.txtColor=el.dataset.val;
+  } else if(type==='bgColor'){
+    document.querySelectorAll('#sub-bg-colors .sub-color').forEach(o=>o.classList.remove('on'));
+    el.classList.add('on');subState.bgColor=el.dataset.val;
+  } else if(type==='pos'){
+    document.querySelectorAll('#sub-positions .sub-pos').forEach(o=>o.classList.remove('on'));
+    el.classList.add('on');subState.pos=el.dataset.pos;
+  }
+  subUpdatePreview();
+}
+function subUpdatePreview(){
+  const chip=document.getElementById('sub-chip');
+  if(chip){chip.style.fontFamily=subState.font;chip.style.color=subState.txtColor;chip.style.background=subState.bgColor;}
+  const posEl=document.getElementById('sub-preview-pos');
+  if(posEl){posEl.className='sub-preview-text '+subState.pos;}
+}
 // Grow tab
 const growVideos=[];
 function queueVideo(){
