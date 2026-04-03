@@ -290,12 +290,28 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .aptop{position:absolute;top:0;left:0;right:0;z-index:20;padding:52px 18px 0;display:flex;align-items:center;gap:10px}
 .ap-nav-title{flex:1;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:rgba(26,14,5,.5);text-align:center}
 .ap-nav-spacer{width:36px;flex-shrink:0}
+.ap-tok-badge{font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:#FFF8F2;background:linear-gradient(135deg,var(--gold2),var(--gold));border-radius:20px;padding:5px 11px;cursor:pointer;white-space:nowrap;flex-shrink:0}
 .apzone-pills{position:absolute;bottom:12px;left:0;right:0;z-index:10;display:flex;gap:8px;justify-content:center}
 .appill{background:rgba(0,0,0,.38);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:6px 12px;display:flex;align-items:center;gap:5px;font-family:'Sora',sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.6);cursor:pointer}
 .appill:active{background:rgba(0,0,0,.5)}
 .ld{width:6px;height:6px;border-radius:50%;background:var(--red);animation:ldP 1.2s ease-in-out infinite}
 @keyframes ldP{0%,100%{opacity:1}50%{opacity:.25}}
 .apbot{position:absolute;bottom:66px;left:0;right:0;z-index:20;background:rgba(253,248,242,.95);backdrop-filter:blur(28px);border-top:1px solid rgba(26,14,5,.06)}
+/* AVATARS TAB SCREEN */
+#avatars{background:var(--bg)}
+.av-hdr{padding:56px 20px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.av-hdr-title{font-family:'Sora',sans-serif;font-size:24px;font-weight:900;color:var(--choco);letter-spacing:-.03em}
+.av-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 100px;overflow-y:auto}
+.av-card{border-radius:20px;overflow:hidden;aspect-ratio:3/4;position:relative;cursor:pointer;background:var(--warm);transition:transform .12s}
+.av-card:active{transform:scale(.97)}
+.av-card img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.av-card-foot{position:absolute;bottom:0;left:0;right:0;padding:30px 12px 12px;background:linear-gradient(transparent,rgba(26,14,5,.6));display:flex;align-items:flex-end;justify-content:space-between}
+.av-card-name{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#FFF8F2;letter-spacing:-.01em}
+.av-card-qual{font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--gold);background:rgba(26,14,5,.45);border-radius:8px;padding:2px 7px}
+.av-new-card{border-radius:20px;aspect-ratio:3/4;border:2px dashed rgba(26,14,5,.15);background:rgba(26,14,5,.03);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:background .15s}
+.av-new-card:active{background:rgba(26,14,5,.07)}
+.av-new-icon{width:44px;height:44px;border-radius:50%;background:rgba(26,14,5,.07);display:flex;align-items:center;justify-content:center;font-size:22px;color:rgba(26,14,5,.3)}
+.av-new-lbl{font-family:'Sora',sans-serif;font-size:12px;font-weight:600;color:rgba(26,14,5,.3)}
 .apnr{padding:14px 20px 0;display:flex;align-items:flex-start;justify-content:space-between}
 .apname{font-family:'Sora',sans-serif;font-size:22px;font-weight:900;color:var(--choco);letter-spacing:-.03em}
 .ap-status{display:flex;align-items:center;gap:5px;font-family:'Sora',sans-serif;font-size:11px;font-weight:600;color:var(--green);margin-top:3px}
@@ -504,7 +520,7 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 /* Create tab — gold circle */
 .tab-create{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:4px;cursor:pointer;user-select:none}
 .tab-create:active .tab-create-ring{transform:scale(.9)}
-.tab-create-ring{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));display:flex;align-items:center;justify-content:center;box-shadow:0 3px 14px rgba(196,98,44,.45);transition:transform .12s;margin-top:-4px}
+.tab-create-ring{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));display:flex;align-items:center;justify-content:center;transition:transform .12s;margin-top:-4px}
 .tab-create-lbl{font-family:'Sora',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:-.01em}
 /* QUEUED */
 #queued{background:var(--bg)}
@@ -861,6 +877,46 @@ body{background:transparent!important;padding:0!important;display:block!importan
   </div>
 </div>
 
+<!-- AVATARS TAB -->
+<div class="screen" id="avatars">
+  <div class="av-hdr">
+    <div class="av-hdr-title">My Avatars</div>
+    <div class="ap-tok-badge" onclick="alert('Top up tokens')">⚡ 73</div>
+  </div>
+  <div class="av-grid">
+    <div class="av-card" onclick="go('avatar-profile')">
+      <img src="/default_avatar.jpg">
+      <div class="av-card-foot">
+        <div class="av-card-name">Avatar 1</div>
+        <div class="av-card-qual">44%</div>
+      </div>
+    </div>
+    <div class="av-new-card" onclick="go('avatar-entry')">
+      <div class="av-new-icon">+</div>
+      <div class="av-new-lbl">New avatar</div>
+    </div>
+  </div>
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <div class="tab-item" onclick="goTab('discover')">
+      <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"/></svg></div>
+      <div class="tab-lbl">Discover</div>
+    </div>
+    <div class="tab-item" onclick="goTab('grow')">
+      <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
+      <div class="tab-lbl">Videos</div>
+    </div>
+    <div class="tab-item on" onclick="goTab('avatars')">
+      <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2"/><path d="M22 21v-1a3 3 0 0 0-3-3"/></svg></div>
+      <div class="tab-lbl">Avatars</div>
+    </div>
+    <div class="tab-create" onclick="goTab('create-video')">
+      <div class="tab-create-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="#FFF8F2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
+      <div class="tab-create-lbl">Create</div>
+    </div>
+  </div>
+</div>
+
 <!-- DISCOVER -->
 <div class="screen" id="discover" style="background:var(--bg)">
   <div style="padding:58px 20px 0;flex-shrink:0">
@@ -881,12 +937,12 @@ body{background:transparent!important;padding:0!important;display:block!importan
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Videos</div>
     </div>
-    <div class="tab-item" onclick="goTab('avatar-profile')">
+    <div class="tab-item" onclick="goTab('avatars')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2"/><path d="M22 21v-1a3 3 0 0 0-3-3"/></svg></div>
       <div class="tab-lbl">Avatars</div>
     </div>
     <div class="tab-create" onclick="goTab('create-video')">
-      <div class="tab-create-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="#1A0E05"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
+      <div class="tab-create-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="#FFF8F2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
       <div class="tab-create-lbl">Create</div>
     </div>
   </div>
@@ -909,9 +965,9 @@ body{background:transparent!important;padding:0!important;display:block!importan
     </div>
     <div class="apwm">TWIN TWIN TWIN</div>
     <div class="aptop">
-      <button class="sback dk" style="background:rgba(0,0,0,.35)" onclick="back('processing')">←</button>
-      <div class="ap-nav-title" id="ap-nav-title">My avatars (1)</div>
-      <div class="ap-nav-spacer"></div>
+      <button class="sback dk" style="background:rgba(0,0,0,.35)" onclick="back('avatars')">←</button>
+      <div class="ap-nav-title" id="ap-nav-title">Avatar 1</div>
+      <div class="ap-tok-badge" onclick="alert('Top up tokens')">⚡ 73</div>
     </div>
     <div class="apbot">
       <!-- Name + Quality в одной строке -->
@@ -930,13 +986,6 @@ body{background:transparent!important;padding:0!important;display:block!importan
         </div>
         <span style="font-size:14px;color:var(--choco3)">›</span>
       </div>
-      <!-- Tokens row -->
-      <div class="aptok" onclick="alert('Top up tokens')">
-        <span style="font-size:15px;flex-shrink:0">⚡</span>
-        <div class="tt"><div class="tf"></div></div>
-        <span class="tok-label">73 tokens</span>
-        <button class="tok-topup" onclick="event.stopPropagation();alert('Top up tokens')">Top up</button>
-      </div>
       <!-- Voice -->
       <div class="voice-row" onclick="openVoiceSheet()">
         <div class="voice-ico">🎙</div>
@@ -951,8 +1000,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
         <button class="apcm" onclick="go('create-video')">Create video</button>
         <div class="apmo" onclick="openMoves()">🎭<span class="apmo-lbl">Styles</span></div>
       </div>
-      <!-- Add another avatar -->
-      <div onclick="go('avatar-entry')" style="text-align:center;padding:10px 0 20px;font-family:'Sora',sans-serif;font-size:12px;font-weight:600;color:var(--choco3);cursor:pointer;opacity:.7" onmousedown="this.style.opacity='1'" onmouseup="this.style.opacity='.7'">+ Add another avatar</div>
+      <div style="height:14px"></div>
     </div>
   </div>
   <!-- Tab bar -->
@@ -965,12 +1013,12 @@ body{background:transparent!important;padding:0!important;display:block!importan
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Videos</div>
     </div>
-    <div class="tab-item on" onclick="goTab('avatar-profile')">
+    <div class="tab-item on" onclick="goTab('avatars')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2"/><path d="M22 21v-1a3 3 0 0 0-3-3"/></svg></div>
       <div class="tab-lbl">Avatars</div>
     </div>
     <div class="tab-create" onclick="goTab('create-video')">
-      <div class="tab-create-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="#1A0E05"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
+      <div class="tab-create-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="#FFF8F2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
       <div class="tab-create-lbl">Create</div>
     </div>
   </div>
@@ -1005,7 +1053,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
     <span class="cvttl">New video</span>
   </div>
   <!-- Avatar card -->
-  <div class="cvchip" onclick="goTab('avatar-profile')">
+  <div class="cvchip" onclick="goTab('avatars')">
     <div class="cvc" id="cvchipc"><img src="/default_avatar.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;"></div>
     <div style="flex:1">
       <div class="cvcn">My Avatar</div>
@@ -1165,12 +1213,12 @@ body{background:transparent!important;padding:0!important;display:block!importan
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Videos</div>
     </div>
-    <div class="tab-item" onclick="goTab('avatar-profile')">
+    <div class="tab-item" onclick="goTab('avatars')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2"/><path d="M22 21v-1a3 3 0 0 0-3-3"/></svg></div>
       <div class="tab-lbl">Avatars</div>
     </div>
     <div class="tab-create" onclick="goTab('create-video')">
-      <div class="tab-create-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="#1A0E05"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
+      <div class="tab-create-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="#FFF8F2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
       <div class="tab-create-lbl">Create</div>
     </div>
   </div>
@@ -1227,7 +1275,7 @@ function showScreen(id,dir){
   if(dir==='up')el.classList.add('s-up');
   setTimeout(()=>el.classList.remove('s-in','s-back','s-up'),350);
 }
-const TAB_SCREENS=new Set(['discover','grow','avatar-profile','create-video']);
+const TAB_SCREENS=new Set(['discover','grow','avatars','create-video']);
 function goTab(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active','s-in','s-back','s-up'));
   const el=document.getElementById(id);if(!el)return;
@@ -1402,7 +1450,7 @@ function buildAvatar(){
   const countEl=document.getElementById('ap-avatar-count');
   if(countEl)countEl.textContent=avatarCount+' avatar'+(avatarCount>1?'s':'');
   const navTitle=document.getElementById('ap-nav-title');
-  if(navTitle)navTitle.textContent=`My avatars (${avatarCount})`;
+  if(navTitle)navTitle.textContent=document.getElementById('apname')?.textContent||'Avatar 1';
   // Platform tags
   const tags=[];
   if(selPlats.has('all'))tags.push('All platforms');
@@ -1429,6 +1477,7 @@ function buildMoves(){
     g.appendChild(c);
   });
 }
+
 function unlockMove(m,i){if(confirm(`Unlock "${m.n}" for ${m.cost} tokens?`)){movesData[i].ul=true;buildMoves();}}
 function openMoves(){document.getElementById('movesSheet').classList.add('open');}
 function closeMoves(e){if(!e||e.target===document.getElementById('movesSheet'))document.getElementById('movesSheet').classList.remove('open');}
