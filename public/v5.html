@@ -312,6 +312,8 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .cv-enhance{display:none;align-items:center;justify-content:center;gap:6px;margin:0 14px 12px;padding:11px;border-radius:12px;background:#EEE8FF;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#5B21B6;transition:background .15s;width:calc(100% - 28px)}
 .cv-enhance:active{background:#E0D4FF}
 .cv-enhance.done{background:#EEE8FF}
+.cv-link-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(26,14,5,.05);border:1px solid rgba(26,14,5,.1);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--choco2);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv-link-chip button{background:none;border:none;cursor:pointer;font-size:13px;color:var(--choco3);line-height:1;padding:0 0 0 2px;flex-shrink:0}
 .cv-card-sep{height:1px;background:rgba(26,14,5,.07);margin:0 14px}
 .cv-alt-chips{display:flex;gap:6px;padding:10px 14px}
 .cv-alt-chip{display:flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;border:1px solid rgba(26,14,5,.1);background:transparent;font-family:'Sora',sans-serif;font-size:11px;font-weight:600;color:var(--choco3);cursor:pointer;transition:all .18s}
@@ -740,6 +742,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
         <div class="cv-shimmer-line" style="width:55%;animation-delay:.1s"></div>
       </div>
     </div>
+    <div id="cv-attachments" style="display:none;flex-wrap:wrap;gap:5px;padding:0 14px 8px"></div>
     <button class="cv-enhance" id="cv-enhance" onclick="runEnh()">✦ Enhance with AI</button>
     <div class="cv-card-sep"></div>
     <div class="cv-alt-chips">
@@ -1047,6 +1050,7 @@ function cvInit(){
   const enh=document.getElementById('cv-enhance');if(enh){enh.style.display='none';enh.classList.remove('done');enh.style.pointerEvents='auto';enh.style.opacity='1';enh.innerHTML='✦ Enhance with AI';}
   const badge=document.getElementById('cv-enhanced-badge');if(badge){badge.classList.remove('show');badge.style.display='none';}
   const alt=document.getElementById('cv-alt-area');if(alt){alt.style.display='none';alt.innerHTML='';}
+  const att=document.getElementById('cv-attachments');if(att){att.style.display='none';att.innerHTML='';}
   document.querySelectorAll('.cv-alt-chip').forEach(c=>c.classList.remove('on'));
   document.querySelectorAll('.cv-var').forEach((v,i)=>v.classList.toggle('on',i===0));
 }
@@ -1070,7 +1074,7 @@ function cvAlt(mode,chip){
   alt.style.display='flex';
   const sep=`<div style="height:1px;background:rgba(26,14,5,.07);margin-bottom:2px"></div>`;
   if(mode==='link'){
-    alt.innerHTML=sep+`<div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'Sora',sans-serif;font-size:11px;font-weight:600;color:var(--choco3)">Paste a reference or inspiration link</div><div style="display:flex;align-items:center;gap:8px;background:rgba(26,14,5,.03);border:1px solid rgba(26,14,5,.1);border-radius:12px;padding:10px 12px"><input style="flex:1;border:none;background:transparent;color:var(--choco);font-size:13px;font-family:'DM Sans',sans-serif;outline:none" placeholder="https://..." id="linp"></div></div>`;
+    alt.innerHTML=sep+`<div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'Sora',sans-serif;font-size:11px;font-weight:600;color:var(--choco3)">Paste a reference or inspiration link</div><div style="display:flex;align-items:center;background:rgba(26,14,5,.03);border:1px solid rgba(26,14,5,.1);border-radius:12px;padding:10px 12px"><input style="flex:1;border:none;background:transparent;color:var(--choco);font-size:13px;font-family:'DM Sans',sans-serif;outline:none" placeholder="https://..." id="linp" oninput="cvLinkInput(this)"></div></div>`;
   } else if(mode==='trend'){
     alt.innerHTML=sep+`<div class="tlist">${[
       {tag:'#GlowUpChallenge',s:'<strong>4.2M</strong> posts · <strong>+340%</strong> · Fitness',on:true},
@@ -1080,6 +1084,19 @@ function cvAlt(mode,chip){
   } else if(mode==='audio'){
     alt.innerHTML=sep+`<div style="display:flex;align-items:center;gap:12px;background:rgba(26,14,5,.03);border:1px solid rgba(26,14,5,.08);border-radius:12px;padding:12px"><button style="width:48px;height:48px;border-radius:50%;background:var(--choco);border:none;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0" onmousedown="startVoice()" onmouseup="stopVoice()" ontouchstart="startVoice(event)" ontouchend="stopVoice()" id="vbtn">🎙</button><div style="flex:1"><div style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--choco)" id="vhint">Hold to describe your video</div><div class="vtr" id="vtr" style="background:transparent;border:none;padding:2px 0;font-size:12px;color:var(--choco3)"></div></div></div>`;
   }
+}
+function cvLinkInput(inp){
+  const att=document.getElementById('cv-attachments');
+  if(!att)return;
+  const val=inp.value.trim();
+  if(!val){att.style.display='none';att.innerHTML='';return;}
+  const label=val.replace(/^https?:\/\/(www\.)?/,'').split('/')[0];
+  att.style.display='flex';
+  att.innerHTML=`<div class="cv-link-chip">🔗 ${label}<button onclick="cvRemoveLink()">×</button></div>`;
+}
+function cvRemoveLink(){
+  const att=document.getElementById('cv-attachments');if(att){att.style.display='none';att.innerHTML='';}
+  const inp=document.getElementById('linp');if(inp)inp.value='';
 }
 function selVar(el){document.querySelectorAll('.cv-var').forEach(v=>v.classList.remove('on'));el.classList.add('on');}
 function selTrend(el,tag){document.querySelectorAll('.ti3').forEach(t=>{t.classList.remove('on');const d=t.querySelector('.tidot');if(d)d.textContent='';});el.classList.add('on');const d=el.querySelector('.tidot');if(d)d.textContent='✓';document.getElementById('qtopic').textContent=tag;}
