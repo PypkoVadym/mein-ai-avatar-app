@@ -283,62 +283,51 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 
 /* CREATE VIDEO */
 #create-video{background:var(--bg)}
-.cvhdr{padding:56px 18px 0;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.cvttl{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--m2);letter-spacing:.03em}
-.cvchip{margin:12px 18px 0;flex-shrink:0;display:flex;align-items:center;gap:10px;background:rgba(30,20,8,.85);border:1px solid var(--gwb);border-radius:14px;padding:10px 13px;cursor:pointer;transition:border-color .2s}
+.cvhdr{padding:56px 18px 0;display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--bg)}
+.cvttl{font-family:'Sora',sans-serif;font-size:17px;font-weight:900;color:var(--choco);letter-spacing:-.02em;flex:1}
+.cvchip{margin:14px 18px 0;flex-shrink:0;display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid rgba(26,14,5,.08);border-radius:14px;padding:10px 13px;cursor:pointer;transition:border-color .2s}
 .cvchip:active{border-color:var(--gold)}
-.cvc{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#3A0E8A,var(--pur));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.cvcn{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--ivory);flex:1}
-.cvcc{font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--gold)}
-.cvmodes{display:flex;gap:4px;padding:11px 18px 0;flex-shrink:0}
-.cvm{flex:1;padding:8px 0;border-radius:11px;border:1.5px solid rgba(255,255,255,.07);background:transparent;color:var(--m);font-family:'Sora',sans-serif;font-size:10px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
-.cvm .mi{font-size:15px}
-.cvm.on{background:var(--gw);border-color:var(--gwb);color:var(--gold)}
-.cvcon{flex:1;overflow-y:auto;padding:11px 18px 0;display:flex;flex-direction:column;gap:8px;-ms-overflow-style:none;scrollbar-width:none}
-.cvcon::-webkit-scrollbar{display:none}
-.vp{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:10px 0}
-.vrings{position:relative;width:130px;height:130px;display:flex;align-items:center;justify-content:center}
-.vr2{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(200,168,96,.15);animation:vR2 2.2s ease-out infinite}
-.vr2:nth-child(2){animation-delay:.7s}.vr2:nth-child(3){animation-delay:1.4s}
-@keyframes vR2{0%{transform:scale(.55);opacity:.7}100%{transform:scale(1.55);opacity:0}}
-.vbtn{width:94px;height:94px;border-radius:50%;background:linear-gradient(135deg,#3A0A90,var(--pur));border:none;cursor:pointer;font-size:36px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 40px var(--purG);transition:transform .12s,box-shadow .2s;position:relative;z-index:1}
-.vbtn.on{transform:scale(1.08);box-shadow:0 0 70px var(--purG)}
-.vhint{font-size:14px;color:var(--m2);text-align:center;line-height:1.5}
-.vhint strong{color:var(--ivory)}
-.wf2{display:flex;align-items:center;gap:3px;height:32px;opacity:0;transition:opacity .3s}
-.wf2.on{opacity:1}
-.wb2{width:3px;border-radius:2px;animation:wB2 .55s ease-in-out infinite}
-.wb2:nth-child(2n){background:var(--gold)}.wb2:nth-child(2n+1){background:var(--purL)}
-@keyframes wB2{0%,100%{height:4px}50%{height:26px}}
-.vtr{background:rgba(30,20,8,.7);border:1px solid var(--gwb);border-radius:13px;padding:11px 13px;font-size:13px;color:var(--ivory2);line-height:1.5;width:100%;min-height:52px;display:none;font-style:italic;opacity:.82}
-.vtr.on{display:block}
-.vsug{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
-.vc{background:rgba(30,20,8,.7);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:5px 11px;font-size:11px;color:var(--m2);cursor:pointer;white-space:nowrap}
-.vc:active{background:var(--gw);color:var(--gold);border-color:var(--gwb)}
+.cvc{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#E8DDD0,#D4C4AE);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;overflow:hidden}
+.cvcn{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--choco)}
+.cv-ready{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--green);margin-top:2px}
+.cv-ready-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.cv-chip-arr{font-size:16px;color:var(--choco3);margin-left:auto}
+/* Input card */
+.cv-input-card{margin:12px 18px 0;background:#fff;border:1px solid rgba(26,14,5,.08);border-radius:16px;overflow:hidden;flex-shrink:0}
+.cv-q{font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:var(--choco);padding:14px 14px 0}
+.cvta{width:100%;min-height:88px;background:transparent;border:none;padding:8px 14px 10px;color:var(--choco);font-size:14px;font-family:'DM Sans',sans-serif;resize:none;outline:none;line-height:1.6;display:block}
+.cvta::placeholder{color:rgba(26,14,5,.28)}
+.cv-enhance{display:none;align-items:center;justify-content:center;gap:6px;margin:0 14px 12px;padding:10px;border-radius:11px;background:#EEE8FF;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#5B21B6;transition:background .15s}
+.cv-enhance:active{background:#E0D4FF}
+.cv-card-sep{height:1px;background:rgba(26,14,5,.07);margin:0 14px}
+.cv-alt-chips{display:flex;gap:6px;padding:10px 14px}
+.cv-alt-chip{display:flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;border:1px solid rgba(26,14,5,.1);background:transparent;font-family:'Sora',sans-serif;font-size:11px;font-weight:600;color:var(--choco3);cursor:pointer;transition:all .18s}
+.cv-alt-chip:active,.cv-alt-chip.on{background:var(--gw);border-color:var(--gwb);color:var(--gold2)}
+/* Variations */
+.cv-vars{margin:12px 18px 0;flex-shrink:0}
+.cv-vars-lbl{font-family:'Sora',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--choco3);margin-bottom:7px}
+.cv-vars-row{display:flex;gap:8px}
+.cv-var{flex:1;padding:10px 12px;border-radius:12px;border:1.5px solid rgba(26,14,5,.1);background:transparent;font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--choco3);cursor:pointer;text-align:center;transition:all .18s}
+.cv-var.on{background:var(--choco);color:#FFF8F2;border-color:var(--choco)}
+.cv-var:active{opacity:.75}
+.cv-var-ab{font-size:9px;font-weight:800;background:rgba(255,255,255,.2);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle}
+.cv-var.on .cv-var-ab{background:rgba(255,255,255,.15)}
+/* Trend list */
 .tlist{display:flex;flex-direction:column;gap:7px}
-.ti3{background:rgba(30,20,8,.75);border:1px solid rgba(200,168,96,.08);border-radius:13px;padding:11px 13px;cursor:pointer;transition:border-color .18s}
+.ti3{background:rgba(255,252,248,.6);border:1px solid rgba(26,14,5,.1);border-radius:13px;padding:11px 13px;cursor:pointer;transition:border-color .18s}
 .ti3.on{border-color:var(--gold)}
 .tir{display:flex;align-items:center;gap:8px}
-.titag{font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:var(--ivory);flex:1}
-.tidot{width:17px;height:17px;border-radius:50%;border:1.5px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;transition:all .2s}
-.ti3.on .tidot{background:var(--gold);border-color:var(--gold);color:var(--choco)}
+.titag{font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:var(--choco);flex:1}
+.tidot{width:17px;height:17px;border-radius:50%;border:1.5px solid rgba(26,14,5,.15);display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;transition:all .2s}
+.ti3.on .tidot{background:var(--gold);border-color:var(--gold);color:#fff}
 .tis{display:flex;gap:8px;margin-top:4px}
 .tiss{font-size:11px;color:var(--m)}
-.tiss strong{color:var(--gold);font-family:'Sora',sans-serif;font-weight:700}
-.cvta{min-height:100px;background:rgba(30,20,8,.75);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px;color:var(--ivory);font-size:14px;font-family:'DM Sans',sans-serif;resize:none;outline:none;line-height:1.6}
-.cvta:focus{border-color:var(--gwb)}
-.cvta::placeholder{color:rgba(248,243,236,.15)}
-.cvsug{display:flex;gap:4px;flex-wrap:wrap}
-.cvs{background:rgba(30,20,8,.75);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:5px 10px;font-size:10.5px;color:var(--m2);cursor:pointer;white-space:nowrap}
-.cvs:active{background:var(--gw);color:var(--gold);border-color:var(--gwb)}
-.cver{padding:8px 18px;flex-shrink:0}
-.cve{width:100%;padding:12px;border-radius:13px;border:1.5px solid var(--gwb);background:var(--gw);color:var(--gold);font-family:'Sora',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
-.cve:active{background:rgba(200,168,96,.12)}
+.tiss strong{color:var(--gold2);font-family:'Sora',sans-serif;font-weight:700}
 .ehi{font-size:14px;animation:ehiS 2.2s linear infinite}
 @keyframes ehiS{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.2) rotate(180deg)}}
-.cvbot{padding:9px 18px 36px;flex-shrink:0;display:flex;flex-direction:column;gap:6px}
+.cvbot{padding:12px 18px 36px;flex-shrink:0;display:flex;flex-direction:column;gap:6px}
 .cveta{text-align:center;font-size:11px;color:var(--m)}
-.cveta strong{color:var(--ivory)}
+.cveta strong{color:var(--choco)}
 
 /* QUEUED */
 #queued{background:var(--bg)}
@@ -414,29 +403,8 @@ body{background:transparent!important;padding:0!important;display:block!importan
 .plat-chip { border-color: rgba(26,14,5,.12) !important; background: rgba(26,14,5,.04) !important; color: var(--m) !important; }
 .plat-chip.sel { border-color: var(--choco2) !important; background: rgba(74,46,18,.12) !important; color: var(--ivory2) !important; }
 
-/* Create-video screen */
-.cvhdr { background: var(--bg2) !important; border-bottom-color: rgba(26,14,5,.06) !important; }
-.cvttl { color: var(--ivory) !important; }
-.cvchip { background: var(--bg2) !important; border-color: rgba(26,14,5,.08) !important; }
-.cvcn { color: var(--ivory) !important; }
-.cvm { border-color: rgba(26,14,5,.1) !important; color: var(--m) !important; }
-.cvm.on { background: var(--gw) !important; border-color: var(--gwb) !important; color: var(--gold) !important; }
-.cvcon { background: transparent !important; }
-.cvta { background: rgba(255,252,248,.8) !important; border-color: rgba(26,14,5,.12) !important; color: var(--ivory) !important; }
-.cvta::placeholder { color: var(--ivory3) !important; }
-.cve { background: var(--gw) !important; border-color: var(--gwb) !important; color: var(--gold) !important; }
-.cveta { color: var(--m) !important; }
-.cvbot { background: var(--bg2) !important; border-top-color: rgba(26,14,5,.06) !important; }
-
-/* Voice recorder */
-.vhint { color: var(--m2) !important; }
-.vhint strong { color: var(--ivory) !important; }
-.vtr { color: var(--ivory) !important; }
-.vc { background: rgba(26,14,5,.05) !important; border-color: rgba(26,14,5,.1) !important; color: var(--ivory3) !important; }
-.wf2 .wb2 { background: var(--gold) !important; }
-
-/* Trend list */
-.ti3 { background: rgba(255,252,248,.5) !important; border-color: rgba(26,14,5,.1) !important; }
+/* Trend list override (light theme) */
+.ti3 { background: rgba(255,252,248,.6) !important; }
 .ti3.on { border-color: var(--gold) !important; background: rgba(196,98,44,.07) !important; }
 .titag { color: var(--ivory) !important; }
 .tiss { color: var(--m) !important; }
@@ -732,28 +700,44 @@ body{background:transparent!important;padding:0!important;display:block!importan
 <!-- CREATE VIDEO -->
 <div class="screen" id="create-video">
   <div class="cvhdr">
-    <button class="sback dk" onclick="back('avatar-profile')">←</button>
-    <span class="cvttl">Create video</span>
+    <button class="sback lt" onclick="back('avatar-profile')">←</button>
+    <span class="cvttl">New video</span>
   </div>
+  <!-- Avatar card -->
   <div class="cvchip" onclick="go('avatar-profile')">
-    <div class="cvc" id="cvchipc" style="overflow:hidden;"><img src="/default_avatar.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;"></div>
-    <div class="cvcn">Your Avatar</div>
-    <div class="cvcc" id="cvchipq">44%</div>
-    <span style="font-size:11px;color:var(--m);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:3px 8px;font-family:'Sora',sans-serif;font-weight:600">Change</span>
+    <div class="cvc" id="cvchipc"><img src="/default_avatar.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;"></div>
+    <div style="flex:1">
+      <div class="cvcn">My Avatar</div>
+      <div class="cv-ready"><div class="cv-ready-dot"></div>Ready to use</div>
+    </div>
+    <span class="cv-chip-arr">›</span>
   </div>
-  <div class="cvmodes">
-    <button class="cvm on" data-m="voice" onclick="cvMode('voice')"><span class="mi">🎙</span>Voice</button>
-    <button class="cvm" data-m="type"    onclick="cvMode('type')"> <span class="mi">✍️</span>Write</button>
-    <button class="cvm" data-m="link"    onclick="cvMode('link')"> <span class="mi">🔗</span>Link</button>
-    <button class="cvm" data-m="trend"   onclick="cvMode('trend')"><span class="mi">📈</span>Trend</button>
+  <!-- Input card -->
+  <div class="cv-input-card">
+    <div class="cv-q">What's your video about?</div>
+    <textarea class="cvta" id="cvta" placeholder="How to grow on Instagram in 2025 — break it down into 3 steps, no fluff." oninput="cvTextChange(this)"></textarea>
+    <button class="cv-enhance" id="cv-enhance" onclick="runEnh()"><span class="ehi">✳</span> Enhance with AI</button>
+    <div class="cv-card-sep"></div>
+    <div class="cv-alt-chips">
+      <div class="cv-alt-chip" id="chip-audio" onclick="cvAlt('audio',this)">🎙 Audio</div>
+      <div class="cv-alt-chip" id="chip-link"  onclick="cvAlt('link',this)">🔗 Link</div>
+      <div class="cv-alt-chip" id="chip-trend" onclick="cvAlt('trend',this)">📈 Trend</div>
+    </div>
   </div>
-  <div class="cvcon" id="cvcontent"></div>
-  <div class="cver">
-    <button class="cve" onclick="runEnh()"><span class="ehi">✳</span> Enhance with AI</button>
+  <!-- Alt input area (link / trend) -->
+  <div id="cv-alt-area" style="margin:8px 18px 0;display:none;flex-direction:column;gap:7px"></div>
+  <!-- Variations -->
+  <div class="cv-vars">
+    <div class="cv-vars-lbl">Variations</div>
+    <div class="cv-vars-row">
+      <div class="cv-var on" onclick="selVar(this)">1 video</div>
+      <div class="cv-var" onclick="selVar(this)">2–3 videos <span class="cv-var-ab">A/B</span></div>
+    </div>
   </div>
+  <!-- CTA -->
   <div class="cvbot">
-    <button class="btn-gold" onclick="go('queued')">Queue video →</button>
-    <div class="cveta">Ready in <strong>8–12 min</strong> · goes to Grow tab</div>
+    <button class="btn-gold" onclick="go('queued')">Generate video →</button>
+    <div class="cveta">Ready in <strong>8–12 min</strong> · appears in Grow tab</div>
   </div>
 </div>
 
@@ -832,7 +816,7 @@ function go(id){
   if(id==='avatar-entry') resetAvatarFlow();
   showScreen(id,'in');
   if(id==='processing'){ procDone=false; startProc(); }
-  if(id==='create-video') cvMode('voice');
+  if(id==='create-video') cvInit();
 }
 function back(id){
   // Reset if going back to start of creation funnel
@@ -1033,28 +1017,41 @@ function openMoves(){document.getElementById('movesSheet').classList.add('open')
 function closeMoves(e){if(!e||e.target===document.getElementById('movesSheet'))document.getElementById('movesSheet').classList.remove('open');}
 
 // Create Video
-function cvMode(m){
-  document.querySelectorAll('.cvm').forEach(t=>t.classList.toggle('on',t.dataset.m===m));
-  const c=document.getElementById('cvcontent');c.innerHTML='';
-  if(m==='voice'){
-    c.innerHTML=`<div class="vp"><div class="vrings"><div class="vr2"></div><div class="vr2"></div><div class="vr2"></div><button class="vbtn" id="vbtn" onmousedown="startVoice()" ontouchstart="startVoice(event)" onmouseup="stopVoice()" ontouchend="stopVoice()">🎙</button></div><div class="wf2" id="wf2">${Array.from({length:10},(_,i)=>`<div class="wb2" style="animation-delay:${i*.07}s"></div>`).join('')}</div><div class="vhint" id="vhint"><strong>Hold</strong> to describe your video</div><div class="vtr" id="vtr"></div><div class="vsug"><div class="vc" onclick="fillVoice('Affiliate income reveal, 30s, confident')">💰 Affiliate</div><div class="vc" onclick="fillVoice('Product review, strong hook first 3 secs')">📦 Review</div><div class="vc" onclick="fillVoice('Day in my life, trending audio vibe')">🌅 Day in life</div></div></div>`;
-  } else if(m==='type'){
-    c.innerHTML=`<textarea class="cvta" id="cvta" placeholder="Describe your video. Topic, tone, hook, length…"></textarea><div class="cvsug"><div class="cvs" onclick="document.getElementById('cvta').value='60-sec product review, energetic, hook first 3 secs'">🔥 Review</div><div class="cvs" onclick="document.getElementById('cvta').value='Affiliate reveal, show results not process, 30s'">💸 Affiliate</div><div class="cvs" onclick="document.getElementById('cvta').value='Trending audio, text overlay, lifestyle, aspirational'">🎵 Trending</div></div>`;
-  } else if(m==='link'){
-    c.innerHTML=`<div style="display:flex;align-items:center;gap:8px;background:rgba(30,20,8,.8);border:1px solid var(--gwb);border-radius:13px;padding:10px 12px"><span style="font-size:16px">🔗</span><input style="flex:1;border:none;background:transparent;color:var(--ivory);font-size:13px;font-family:'DM Sans',sans-serif;outline:none" placeholder="TikTok, Reel, product page…" id="linp"><button style="background:var(--gw);border:1px solid var(--gwb);border-radius:8px;padding:5px 10px;color:var(--gold);font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Sora',sans-serif" onclick="document.getElementById('linp').value='tiktok.com/@creator/video/…'">Paste</button></div>`;
-  } else {
-    c.innerHTML=`<div class="tlist">${[
-      {tag:'#GlowUpChallenge',s:'<strong>4.2M</strong> posts · <strong>+340%</strong> · Fitness · Open window',on:true},
-      {tag:'#FacelessMarketing',s:'<strong>1.8M</strong> posts · <strong>+82%</strong> · Digital · Rising',on:false},
-      {tag:'#AffiliateReveal',s:'<strong>920K</strong> posts · <strong>+55%</strong> · Commerce · First mover',on:false},
+function cvInit(){
+  const ta=document.getElementById('cvta');if(ta)ta.value='';
+  const enh=document.getElementById('cv-enhance');if(enh)enh.style.display='none';
+  const alt=document.getElementById('cv-alt-area');if(alt){alt.style.display='none';alt.innerHTML='';}
+  document.querySelectorAll('.cv-alt-chip').forEach(c=>c.classList.remove('on'));
+  document.querySelectorAll('.cv-var').forEach((v,i)=>v.classList.toggle('on',i===0));
+}
+function cvTextChange(ta){
+  const enh=document.getElementById('cv-enhance');
+  if(enh)enh.style.display=ta.value.trim()?'flex':'none';
+}
+function cvAlt(mode,chip){
+  const wasOn=chip.classList.contains('on');
+  document.querySelectorAll('.cv-alt-chip').forEach(c=>c.classList.remove('on'));
+  const alt=document.getElementById('cv-alt-area');
+  if(wasOn){alt.style.display='none';alt.innerHTML='';return;}
+  chip.classList.add('on');
+  alt.style.display='flex';
+  if(mode==='link'){
+    alt.innerHTML=`<div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(26,14,5,.1);border-radius:13px;padding:10px 12px"><span style="font-size:16px">🔗</span><input style="flex:1;border:none;background:transparent;color:var(--choco);font-size:13px;font-family:'DM Sans',sans-serif;outline:none" placeholder="TikTok, Reel, product page…" id="linp"><button style="background:var(--gw);border:1px solid var(--gwb);border-radius:8px;padding:5px 10px;color:var(--gold2);font-size:11.5px;font-weight:700;cursor:pointer;font-family:'Sora',sans-serif" onclick="document.getElementById('linp').value='tiktok.com/@creator/video/…'">Paste</button></div>`;
+  } else if(mode==='trend'){
+    alt.innerHTML=`<div class="tlist">${[
+      {tag:'#GlowUpChallenge',s:'<strong>4.2M</strong> posts · <strong>+340%</strong> · Fitness',on:true},
+      {tag:'#FacelessMarketing',s:'<strong>1.8M</strong> posts · <strong>+82%</strong> · Digital',on:false},
+      {tag:'#AffiliateReveal',s:'<strong>920K</strong> posts · <strong>+55%</strong> · Commerce',on:false},
     ].map(t=>`<div class="ti3${t.on?' on':''}" onclick="selTrend(this,'${t.tag}')"><div class="tir"><div class="titag">${t.tag}</div><div class="tidot">${t.on?'✓':''}</div></div><div class="tis"><span class="tiss">${t.s}</span></div></div>`).join('')}</div>`;
+  } else if(mode==='audio'){
+    alt.innerHTML=`<div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid rgba(26,14,5,.1);border-radius:13px;padding:12px 14px"><button style="width:52px;height:52px;border-radius:50%;background:var(--choco);border:none;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0" onmousedown="startVoice()" onmouseup="stopVoice()" ontouchstart="startVoice(event)" ontouchend="stopVoice()" id="vbtn">🎙</button><div style="flex:1"><div style="font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--choco)" id="vhint">Hold to describe your video</div><div class="vtr" id="vtr" style="background:transparent;border:none;padding:2px 0;color:var(--choco3)"></div></div></div>`;
   }
 }
+function selVar(el){document.querySelectorAll('.cv-var').forEach(v=>v.classList.remove('on'));el.classList.add('on');}
 function selTrend(el,tag){document.querySelectorAll('.ti3').forEach(t=>{t.classList.remove('on');const d=t.querySelector('.tidot');if(d)d.textContent='';});el.classList.add('on');const d=el.querySelector('.tidot');if(d)d.textContent='✓';document.getElementById('qtopic').textContent=tag;}
-function startVoice(e){if(e)e.preventDefault();vaActive=true;const b=document.getElementById('vbtn');if(b)b.classList.add('on');const w=document.getElementById('wf2');if(w)w.classList.add('on');const h=document.getElementById('vhint');if(h)h.textContent='Listening…';const t=document.getElementById('vtr');const lines=['Talking about…','Affiliate income, fitness niche…','Affiliate income, 60 seconds, energetic, money reveal hook'];let i=0;vaTimer=setInterval(()=>{if(i<lines.length&&t){t.textContent=lines[i];t.classList.add('on');i++;}},900);}
-function stopVoice(){vaActive=false;clearInterval(vaTimer);const b=document.getElementById('vbtn');if(b)b.classList.remove('on');const w=document.getElementById('wf2');if(w)w.classList.remove('on');const h=document.getElementById('vhint');if(h)h.innerHTML='<strong>Hold</strong> to describe your video';}
-function fillVoice(txt){const t=document.getElementById('vtr');if(t){t.textContent=txt;t.classList.add('on');}}
-function runEnh(){const b=document.querySelector('.cve');b.innerHTML='✳ Enhancing…';b.style.opacity='.6';b.style.pointerEvents='none';setTimeout(()=>{b.innerHTML='<span class="ehi">✳</span> Enhance with AI';b.style.opacity='1';b.style.pointerEvents='auto';alert('✓ Prompt enhanced');},2000);}
+function startVoice(e){if(e)e.preventDefault();vaActive=true;const b=document.getElementById('vbtn');if(b)b.style.background='var(--gold2)';const h=document.getElementById('vhint');if(h)h.textContent='Listening…';const t=document.getElementById('vtr');if(t){t.style.display='block';}const lines=['Talking about…','Instagram growth, fitness niche…','Instagram growth, 3 clear steps, no fluff, 60s'];let i=0;vaTimer=setInterval(()=>{if(i<lines.length&&t){t.textContent=lines[i];i++;}},900);}
+function stopVoice(){vaActive=false;clearInterval(vaTimer);const b=document.getElementById('vbtn');if(b)b.style.background='var(--choco)';const h=document.getElementById('vhint');if(h)h.textContent='Hold to describe your video';}
+function runEnh(){const b=document.getElementById('cv-enhance');b.textContent='✳ Enhancing…';b.style.opacity='.6';b.style.pointerEvents='none';setTimeout(()=>{b.innerHTML='<span class="ehi">✳</span> Enhance with AI';b.style.opacity='1';b.style.pointerEvents='auto';},2000);}
 </script>
 </body>
 </html>
