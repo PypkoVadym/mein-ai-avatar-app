@@ -90,6 +90,13 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 
 /* Pulse animation for main CTA */
 @keyframes ctaPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
+/* Toast notification */
+.toast{position:absolute;top:20px;left:16px;right:16px;z-index:500;background:rgba(26,14,5,.93);backdrop-filter:blur(12px);border-radius:16px;padding:13px 16px;display:flex;align-items:center;gap:11px;pointer-events:none;transform:translateY(-90px);transition:transform .35s cubic-bezier(.34,1.26,.64,1),opacity .3s}
+.toast.show{transform:translateY(0)}
+.toast-ico{font-size:18px;flex-shrink:0}
+.toast-body{flex:1;min-width:0}
+.toast-title{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#FFF8F2;letter-spacing:-.01em}
+.toast-sub{font-size:11.5px;color:rgba(255,248,242,.5);margin-top:1px}
 
 /* PLATFORM — old CSS kept for compat */
 #platform{background:#FFF8F2}
@@ -297,6 +304,37 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .ld{width:6px;height:6px;border-radius:50%;background:var(--red);animation:ldP 1.2s ease-in-out infinite}
 @keyframes ldP{0%,100%{opacity:1}50%{opacity:.25}}
 .apbot{position:absolute;bottom:66px;left:0;right:0;z-index:20;background:rgba(253,248,242,.95);backdrop-filter:blur(28px);border-top:1px solid rgba(26,14,5,.06)}
+/* TOKEN SHEET */
+.tok-sheet{position:absolute;inset:0;z-index:60;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);display:none;flex-direction:column;justify-content:flex-end}
+.tok-sheet.open{display:flex;animation:msUp .3s cubic-bezier(.32,.72,0,1)}
+.tok-inner{background:var(--bg);border-radius:28px 28px 0 0;border-top:1px solid rgba(26,14,5,.08);padding:20px 20px 44px;display:flex;flex-direction:column;gap:18px;max-height:88%;overflow-y:auto}
+.tok-inner::-webkit-scrollbar{display:none}
+.tok-sh-hdr{display:flex;align-items:center;justify-content:space-between}
+.tok-sh-title{font-family:'Sora',sans-serif;font-size:17px;font-weight:900;color:var(--choco);letter-spacing:-.02em}
+.tok-sh-bal{font-family:'Sora',sans-serif;font-size:12px;font-weight:600;color:var(--choco3)}
+.tok-close{width:30px;height:30px;border-radius:50%;background:rgba(26,14,5,.07);border:none;font-size:14px;cursor:pointer;color:var(--choco3);display:flex;align-items:center;justify-content:center}
+.pro-card{border-radius:20px;background:linear-gradient(145deg,#2C1A0A,#100A04);padding:18px;display:flex;flex-direction:column;gap:14px;border:1px solid rgba(196,98,44,.2)}
+.pro-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#FFF8F2;font-family:'Sora',sans-serif;font-size:10px;font-weight:800;letter-spacing:.08em;padding:4px 10px;border-radius:20px;align-self:flex-start}
+.pro-headline{font-family:'Sora',sans-serif;font-size:20px;font-weight:900;color:#FFF8F2;letter-spacing:-.025em;line-height:1.15}
+.pro-price-row{display:flex;align-items:baseline;gap:5px}
+.pro-price-num{font-family:'Sora',sans-serif;font-size:26px;font-weight:900;color:#FFF8F2}
+.pro-price-sub{font-size:12px;color:rgba(255,248,242,.45)}
+.pro-perks{display:flex;flex-direction:column;gap:9px}
+.pro-perk{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,248,242,.8)}
+.pro-perk-ck{width:20px;height:20px;border-radius:50%;background:rgba(196,98,44,.25);border:1px solid rgba(196,98,44,.45);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;color:var(--gold)}
+.pro-btn{width:100%;height:50px;border-radius:15px;border:none;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#FFF8F2;font-family:'Sora',sans-serif;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:-.01em;transition:transform .1s}
+.pro-btn:active{transform:scale(.98)}
+.tok-packs-lbl{font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--choco3);letter-spacing:.08em;text-transform:uppercase}
+.tok-packs{display:flex;flex-direction:column;gap:8px}
+.tok-pack{display:flex;align-items:center;gap:12px;background:var(--bg2);border:1.5px solid rgba(26,14,5,.08);border-radius:16px;padding:13px 14px;cursor:pointer;transition:border-color .15s}
+.tok-pack:active{border-color:var(--gold)}
+.tok-pack-left{flex:1;display:flex;flex-direction:column;gap:2px}
+.tok-pack-name{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--choco)}
+.tok-pack-desc{font-size:11px;color:var(--choco3)}
+.tok-pack-tag{font-family:'Sora',sans-serif;font-size:9px;font-weight:800;color:var(--gold);background:rgba(196,98,44,.1);border:1px solid rgba(196,98,44,.22);border-radius:6px;padding:2px 7px;letter-spacing:.04em;text-transform:uppercase;align-self:flex-start;margin-top:2px}
+.tok-pack-price{font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--choco);letter-spacing:-.01em;flex-shrink:0}
+.tok-pack-btn{background:var(--choco);color:#FFF8F2;border:none;border-radius:10px;padding:8px 15px;font-family:'Sora',sans-serif;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;transition:opacity .15s}
+.tok-pack-btn:active{opacity:.75}
 /* AVATARS TAB SCREEN */
 #avatars{background:var(--bg)}
 .av-hdr{padding:56px 20px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
@@ -453,6 +491,35 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .cveta{text-align:center;font-size:11px;color:var(--m)}
 .cveta strong{color:var(--choco)}
 
+/* DISCOVER / INSPO */
+#discover{background:var(--bg)}
+.disc-hdr{padding:56px 18px 0;flex-shrink:0}
+.disc-title{font-family:'Sora',sans-serif;font-size:24px;font-weight:900;color:var(--choco);letter-spacing:-.03em}
+.disc-sub{font-size:13px;color:var(--choco3);margin-top:3px}
+.ipills{display:flex;gap:7px;padding:12px 16px 0;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
+.ipills::-webkit-scrollbar{display:none}
+.ipill{flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid rgba(26,14,5,.1);background:var(--bg2);color:var(--choco3);font-family:'Sora',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.ipill.on{background:var(--choco);color:#FFF8F2;border-color:var(--choco)}
+.disc-body{display:flex;gap:8px;padding:10px 10px 100px;overflow-y:auto;align-items:flex-start;flex:1}
+.disc-body::-webkit-scrollbar{display:none}
+.disc-col{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
+.icard{background:var(--bg2);border-radius:16px;overflow:hidden;border:1px solid rgba(26,14,5,.07)}
+.ithumb{position:relative;width:100%;overflow:hidden;cursor:pointer}
+.iai-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);color:#fff;font-size:9px;font-weight:800;letter-spacing:.8px;padding:2px 6px;border-radius:6px;backdrop-filter:blur(4px);z-index:3}
+.ifmt-pill{position:absolute;bottom:38px;left:8px;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);color:#fff;font-size:9px;font-weight:700;letter-spacing:.3px;padding:3px 8px;border-radius:20px;border:1px solid rgba(255,255,255,.25);z-index:3}
+.isave-btn{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;transition:all .15s;line-height:1}
+.isave-btn.saved{background:rgba(220,38,38,.8);border-color:transparent}
+.ithumb-foot{position:absolute;bottom:0;left:0;right:0;padding:24px 10px 8px;background:linear-gradient(to top,rgba(0,0,0,.55),transparent);z-index:3}
+.ititle{font-size:11px;font-weight:700;line-height:1.35;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.ifoot{padding:8px 10px 10px;display:flex;flex-direction:column;gap:7px}
+.iauthor-row{display:flex;align-items:center;gap:6px}
+.iavatar{width:22px;height:22px;border-radius:50%;background:var(--warm);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.iauthor-info{display:flex;align-items:center;gap:3px;flex:1;min-width:0}
+.iauthor-name{font-family:'Sora',sans-serif;font-size:11px;font-weight:600;color:var(--choco);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iverified{font-size:9px;color:var(--gold);flex-shrink:0}
+.ilikes{font-size:10px;color:var(--choco3);white-space:nowrap;flex-shrink:0}
+.imake-sim{width:100%;padding:6px 0;border:1.5px solid rgba(26,14,5,.1);border-radius:10px;background:var(--bg);color:var(--choco);font-family:'Sora',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.imake-sim:active{background:var(--choco);color:#FFF8F2;border-color:var(--choco)}
 /* GROW */
 #grow{background:var(--bg)}
 .grow-hdr{padding:56px 18px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-bottom:1px solid rgba(26,14,5,.06)}
@@ -669,6 +736,13 @@ body{background:transparent!important;padding:0!important;display:block!importan
 <body>
 <div class="phone">
 <div class="island"></div>
+<div class="toast" id="toast">
+  <div class="toast-ico">🎬</div>
+  <div class="toast-body">
+    <div class="toast-title">Generating your video</div>
+    <div class="toast-sub">We'll notify you when it's ready</div>
+  </div>
+</div>
 
 <!-- WELCOME -->
 <div class="screen active" id="welcome">
@@ -900,7 +974,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
 <div class="screen" id="avatars">
   <div class="av-hdr">
     <div class="av-hdr-title">My Avatars</div>
-    <div class="ap-tok-badge" onclick="alert('Top up tokens')">⚡ 73</div>
+    <div class="ap-tok-badge" onclick="openTokSheet()">⚡ 73</div>
   </div>
   <div class="av-grid">
     <div class="av-card" onclick="go('avatar-profile')">
@@ -937,15 +1011,15 @@ body{background:transparent!important;padding:0!important;display:block!importan
 </div>
 
 <!-- DISCOVER -->
-<div class="screen" id="discover" style="background:var(--bg)">
-  <div style="padding:58px 20px 0;flex-shrink:0">
-    <div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:900;color:var(--choco);letter-spacing:-.03em">Discover</div>
-    <div style="font-size:13px;color:var(--choco3);margin-top:3px">Trending content from TWIN creators</div>
+<div class="screen" id="discover">
+  <div class="disc-hdr">
+    <div class="disc-title">Discover</div>
+    <div class="disc-sub">Trending from TWIN creators</div>
   </div>
-  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding-bottom:80px">
-    <div style="width:72px;height:72px;border-radius:50%;background:rgba(196,98,44,.1);display:flex;align-items:center;justify-content:center;font-size:32px">🧭</div>
-    <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:var(--choco)">Coming soon</div>
-    <div style="font-size:13px;color:var(--choco3);text-align:center;max-width:220px;line-height:1.5">Explore viral videos from other TWIN creators</div>
+  <div class="ipills" id="ipills"></div>
+  <div class="disc-body">
+    <div class="disc-col" id="discL"></div>
+    <div class="disc-col" id="discR"></div>
   </div>
   <div class="tab-bar">
     <div class="tab-item on" onclick="goTab('discover')">
@@ -982,11 +1056,10 @@ body{background:transparent!important;padding:0!important;display:block!importan
         <div class="appill"><div class="ld"></div> Preview</div>
       </div>
     </div>
-    <div class="apwm">TWIN TWIN TWIN</div>
     <div class="aptop">
       <button class="sback dk" style="background:rgba(0,0,0,.35)" onclick="back('avatars')">←</button>
       <div class="ap-nav-title" id="ap-nav-title">Avatar 1</div>
-      <div class="ap-tok-badge" onclick="alert('Top up tokens')">⚡ 73</div>
+      <div class="ap-tok-badge" onclick="openTokSheet()">⚡ 73</div>
     </div>
     <div class="apbot">
       <!-- Name + Quality в одной строке -->
@@ -1132,7 +1205,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
   </div>
   <!-- CTA -->
   <div class="cvbot">
-    <button class="btn-gold" onclick="go('queued')">Generate video →</button>
+    <button class="btn-gold" onclick="generateVideo()">Generate video →</button>
     <div class="cveta">Ready in <strong>8–12 min</strong> · appears in Grow tab</div>
   </div>
   <!-- Subtitle style sheet -->
@@ -1268,6 +1341,68 @@ body{background:transparent!important;padding:0!important;display:block!importan
   </div>
 </div>
 
+<!-- TOKEN SHEET (global) -->
+<div class="tok-sheet" id="tokSheet" onclick="closeTokSheet(event)">
+  <div class="tok-inner" onclick="event.stopPropagation()">
+    <div class="sub-handle"></div>
+    <div class="tok-sh-hdr">
+      <div>
+        <div class="tok-sh-title">⚡ Tokens & Plans</div>
+        <div class="tok-sh-bal">73 tokens remaining</div>
+      </div>
+      <button class="tok-close" onclick="closeTokSheet()">✕</button>
+    </div>
+
+    <!-- PRO card -->
+    <div class="pro-card">
+      <div class="pro-badge">✦ PRO</div>
+      <div class="pro-headline">Insider knowledge<br>without limits.</div>
+      <div class="pro-price-row">
+        <div class="pro-price-num">$19.99</div>
+        <div class="pro-price-sub">/ month</div>
+      </div>
+      <div class="pro-perks">
+        <div class="pro-perk"><div class="pro-perk-ck">✓</div>Unlimited video generations</div>
+        <div class="pro-perk"><div class="pro-perk-ck">✓</div>Priority rendering · done in 2 min</div>
+        <div class="pro-perk"><div class="pro-perk-ck">✓</div>HD quality output</div>
+        <div class="pro-perk"><div class="pro-perk-ck">✓</div>All Styles & Moves unlocked</div>
+        <div class="pro-perk"><div class="pro-perk-ck">✓</div>Early access to new features</div>
+      </div>
+      <button class="pro-btn" onclick="alert('Redirecting to subscribe…')">Get PRO →</button>
+    </div>
+
+    <!-- Token packs -->
+    <div class="tok-packs-lbl">Or top up tokens</div>
+    <div class="tok-packs">
+      <div class="tok-pack">
+        <div class="tok-pack-left">
+          <div class="tok-pack-name">50 tokens</div>
+          <div class="tok-pack-desc">~5 videos</div>
+        </div>
+        <div class="tok-pack-price">$19.99</div>
+        <button class="tok-pack-btn" onclick="alert('Purchasing 50 tokens…')">Buy</button>
+      </div>
+      <div class="tok-pack">
+        <div class="tok-pack-left">
+          <div class="tok-pack-name">250 tokens</div>
+          <div class="tok-pack-desc">~25 videos · save 50%</div>
+        </div>
+        <div class="tok-pack-price">$49.99</div>
+        <button class="tok-pack-btn" onclick="alert('Purchasing 250 tokens…')">Buy</button>
+      </div>
+      <div class="tok-pack">
+        <div class="tok-pack-left">
+          <div class="tok-pack-name">1000 tokens</div>
+          <div class="tok-pack-desc">~100 videos · save 75%</div>
+          <div class="tok-pack-tag">Best value</div>
+        </div>
+        <div class="tok-pack-price">$99.99</div>
+        <button class="tok-pack-btn" onclick="alert('Purchasing 1000 tokens…')">Buy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 <script>
 let photoCount=0,recActive=false,recInt=null,recSec=0,procDone=false;
@@ -1326,13 +1461,86 @@ function goTab(id){
   el.classList.add('active');
   if(id==='grow') renderGrow();
   if(id==='create-video') cvInit();
+  if(id==='discover') discoverInit();
+}
+
+// ── DISCOVER / INSPO ─────────────────────────────────────────────────────────
+const INSPO_FILTERS=['All','🔥 Trending','⚡ Hot','💼 Business','📚 Education','🌿 Lifestyle','💻 Tech'];
+const INSPO_ITEMS=[
+  {id:1,author:'TWIN Team',handle:'@twin',title:'3 habits that doubled my productivity',category:'Business',format:'TikTok',gradient:'linear-gradient(160deg,#1a1a2e,#0f3460)',textColor:'#e0e0ff',height:220,verified:true,likes:4821,saved:true,avatar:'⚡'},
+  {id:2,author:'Sofia R.',handle:'@sofiar',title:'How I learned Spanish in 90 days',category:'Education',format:'YouTube Short',gradient:'linear-gradient(160deg,#f8b500,#e06c00)',textColor:'#fff',height:300,verified:false,likes:2340,saved:false,avatar:'🎓'},
+  {id:3,author:'TWIN Team',handle:'@twin',title:'Morning routine that actually works',category:'Lifestyle',format:'Instagram Reel',gradient:'linear-gradient(160deg,#e8f5e9,#388e3c)',textColor:'#1b5e20',height:260,verified:true,likes:7103,saved:true,avatar:'🌿'},
+  {id:4,author:'Marcus K.',handle:'@marcusk',title:'Neural networks explained simply',category:'Tech',format:'TED Talk',gradient:'linear-gradient(160deg,#0d0d0d,#2d2d2d)',textColor:'#00e5ff',height:190,verified:false,likes:9430,saved:false,avatar:'🤖'},
+  {id:5,author:'Elena V.',handle:'@elenav',title:'Stop doing this in job interviews',category:'Business',format:'TikTok',gradient:'linear-gradient(160deg,#fce4ec,#c2185b)',textColor:'#4a0019',height:240,verified:false,likes:5677,saved:true,avatar:'💼'},
+  {id:6,author:'TWIN Team',handle:'@twin',title:'Why your content gets 0 views',category:'Education',format:'Instagram Reel',gradient:'linear-gradient(160deg,#1c1c3a,#3949ab)',textColor:'#c5cae9',height:280,verified:true,likes:12041,saved:false,avatar:'⚡'},
+  {id:7,author:'Jordan M.',handle:'@jordanm',title:'5 apps I use every single day',category:'Tech',format:'TikTok',gradient:'linear-gradient(160deg,#fff8e1,#ff8f00)',textColor:'#3e2000',height:200,verified:false,likes:3210,saved:false,avatar:'📱'},
+  {id:8,author:'Zoe P.',handle:'@zoep',title:'Meal prep Sunday — under $40',category:'Lifestyle',format:'YouTube Short',gradient:'linear-gradient(160deg,#e8eaf6,#3f51b5)',textColor:'#1a237e',height:310,verified:false,likes:6550,saved:true,avatar:'🥗'},
+  {id:9,author:'TWIN Team',handle:'@twin',title:'How to go viral on LinkedIn',category:'Business',format:'TED Talk',gradient:'linear-gradient(160deg,#0a192f,#1e3a5f)',textColor:'#64ffda',height:230,verified:true,likes:8820,saved:false,avatar:'⚡'},
+  {id:10,author:'Alex T.',handle:'@alext',title:'Build in public — my $0 to $1k story',category:'Business',format:'Instagram Reel',gradient:'linear-gradient(160deg,#f3e5f5,#7b1fa2)',textColor:'#fff',height:260,verified:false,likes:4100,saved:true,avatar:'🚀'},
+  {id:11,author:'Nina L.',handle:'@ninal',title:'Reading 1 book a week changed me',category:'Lifestyle',format:'TikTok',gradient:'linear-gradient(160deg,#efebe9,#6d4c41)',textColor:'#fff',height:210,verified:false,likes:2890,saved:false,avatar:'📖'},
+  {id:12,author:'TWIN Team',handle:'@twin',title:'AI tools that save 10h per week',category:'Tech',format:'YouTube Short',gradient:'linear-gradient(160deg,#e0f2f1,#00695c)',textColor:'#fff',height:250,verified:true,likes:15230,saved:true,avatar:'⚡'},
+];
+const inspoSaved={};
+INSPO_ITEMS.forEach(i=>inspoSaved[i.id]=i.saved);
+let inspoActiveFilter='All';
+let inspoInited=false;
+
+function discoverInit(){
+  if(!inspoInited){
+    const pills=document.getElementById('ipills');
+    pills.innerHTML=INSPO_FILTERS.map(f=>`<div class="ipill${f==='All'?' on':''}" data-f="${f}" onclick="setInspoFilter(this,'${f}')">${f}</div>`).join('');
+    inspoInited=true;
+  }
+  renderDiscover();
+}
+function setInspoFilter(el,f){
+  inspoActiveFilter=f;
+  document.querySelectorAll('.ipill').forEach(p=>p.classList.toggle('on',p.dataset.f===f));
+  renderDiscover();
+}
+function inspoToggleSave(id){
+  inspoSaved[id]=!inspoSaved[id];
+  const btn=document.querySelector(`[data-sid="${id}"]`);
+  if(btn){btn.className=`isave-btn${inspoSaved[id]?' saved':''}`;btn.textContent=inspoSaved[id]?'♥':'♡';}
+}
+function inspoMakeSimilar(title){
+  const ta=document.getElementById('cvta');if(ta)ta.value=`Similar to: ${title}`;
+  goTab('create-video');
+}
+function fmtLikes(n){return n>=1000?(n/1000).toFixed(1).replace('.0','')+'k':String(n);}
+function renderDiscover(){
+  const cat={'All':null,'🔥 Trending':'trend','⚡ Hot':'hot','💼 Business':'Business','📚 Education':'Education','🌿 Lifestyle':'Lifestyle','💻 Tech':'Tech'}[inspoActiveFilter];
+  let items=cat==='trend'?[...INSPO_ITEMS].sort((a,b)=>b.likes-a.likes)
+    :cat==='hot'?[...INSPO_ITEMS].sort((a,b)=>b.likes-a.likes).slice(0,6)
+    :cat?INSPO_ITEMS.filter(i=>i.category===cat)
+    :INSPO_ITEMS;
+  const L=[],R=[];let lh=0,rh=0;
+  items.forEach(item=>{if(lh<=rh){L.push(item);lh+=item.height;}else{R.push(item);rh+=item.height;}});
+  const card=i=>`<div class="icard">
+    <div class="ithumb" style="background:${i.gradient};height:${i.height}px">
+      <div class="iai-badge">AI</div>
+      <div class="ifmt-pill">${i.format}</div>
+      <div class="isave-btn${inspoSaved[i.id]?' saved':''}" data-sid="${i.id}" onclick="inspoToggleSave(${i.id})">${inspoSaved[i.id]?'♥':'♡'}</div>
+      <div class="ithumb-foot"><div class="ititle" style="color:${i.textColor}">${i.title}</div></div>
+    </div>
+    <div class="ifoot">
+      <div class="iauthor-row">
+        <div class="iavatar">${i.avatar}</div>
+        <div class="iauthor-info"><span class="iauthor-name">${i.author}</span>${i.verified?'<span class="iverified">✦</span>':''}</div>
+        <span class="ilikes">♥ ${fmtLikes(i.likes)}</span>
+      </div>
+      <button class="imake-sim" onclick="inspoMakeSimilar('${i.title.replace(/'/g,String.fromCharCode(39))}')">Make similar →</button>
+    </div>
+  </div>`;
+  document.getElementById('discL').innerHTML=L.map(card).join('');
+  document.getElementById('discR').innerHTML=R.map(card).join('');
 }
 function go(id){
   if(id==='avatar-entry') resetAvatarFlow();
   showScreen(id,'in');
   if(id==='processing'){ procDone=false; startProc(); }
   if(id==='create-video') cvInit();
-  if(id==='queued') queueVideo();
+
   if(id==='grow') renderGrow();
   if(id==='voice-pick') vpInit(_vpFrom);
 }
@@ -1356,7 +1564,7 @@ const sCards=[
   {bg:'linear-gradient(160deg,#F0F0C8,#E4E4A8)',ch:'💸',video:'/video3.mp4',lb:'$1.1K/day · dropshipping',stat:true},
   {bg:'linear-gradient(160deg,#DCC8F0,#CEB8EC)',ch:'💃',video:'/video1.mp4',lb:'NPC trend',stat:false},
 ];
-(()=>{const t=document.getElementById('strack');[...sCards,...sCards].forEach(d=>{const c=document.createElement('div');c.className='sc';const lbColor=d.stat?'#9B4A1C':'rgba(26,14,5,.75)';c.innerHTML=`<div class="sc-bg" style="background:${d.bg}"></div>${d.video?`<video src="${d.video}" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:17px;z-index:1"></video>`:`<div class="sc-av">${d.ch}</div>`}<div class="sc-wm" style="z-index:3">TWIN TWIN</div><div class="sc-ov" style="z-index:4"><div class="sc-lb" style="color:${lbColor};font-weight:${d.stat?'800':'600'}">${d.lb}</div></div>`;t.appendChild(c);});})();
+(()=>{const t=document.getElementById('strack');[...sCards,...sCards].forEach(d=>{const c=document.createElement('div');c.className='sc';const lbColor=d.stat?'#9B4A1C':'rgba(26,14,5,.75)';c.innerHTML=`<div class="sc-bg" style="background:${d.bg}"></div>${d.video?`<video src="${d.video}" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:17px;z-index:1"></video>`:`<div class="sc-av">${d.ch}</div>`}<div class="sc-ov" style="z-index:4"><div class="sc-lb" style="color:${lbColor};font-weight:${d.stat?'800':'600'}">${d.lb}</div></div>`;t.appendChild(c);});})();
 
 // Goal selector (new platform screen)
 let selGoalId=null;
@@ -1516,7 +1724,7 @@ function buildMoves(){
   const g=document.getElementById('mscg');g.innerHTML='';
   movesData.forEach((m,i)=>{
     const c=document.createElement('div');c.className='mc'+(m.ul?' ul':'');
-    c.innerHTML=`<div class="mcbg" style="background:${m.bg};background-size:300% 300%;animation:mcL ${7+i*0.8}s ease-in-out ${i*0.4}s infinite"></div><div class="mcch" style="animation-delay:${i*0.35}s">${m.c}</div><div class="mcwm">TWIN</div>${!m.ul?`<div class="mclk">🔒</div>`:''}<div class="mcov"><div class="mcn">${m.n}</div><div class="mcc">${m.ul?'✓ Unlocked':`⚡ ${m.cost}`}</div></div>`;
+    c.innerHTML=`<div class="mcbg" style="background:${m.bg};background-size:300% 300%;animation:mcL ${7+i*0.8}s ease-in-out ${i*0.4}s infinite"></div><div class="mcch" style="animation-delay:${i*0.35}s">${m.c}</div>${!m.ul?`<div class="mclk">🔒</div>`:''}<div class="mcov"><div class="mcn">${m.n}</div><div class="mcc">${m.ul?'✓ Unlocked':`⚡ ${m.cost}`}</div></div>`;
     c.onclick=()=>m.ul?go('create-video'):unlockMove(m,i);
     g.appendChild(c);
   });
@@ -1632,12 +1840,20 @@ function subUpdatePreview(){
 }
 // Grow tab
 const growVideos=[];
+function generateVideo(){
+  queueVideo();
+  goTab('grow');
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),4000);
+}
 function queueVideo(){
   const topicEl=document.getElementById('cvta');
   const topic=(topicEl&&topicEl.value.trim())||document.getElementById('qtopic').textContent||'New video';
   const short=topic.length>48?topic.slice(0,48)+'…':topic;
   const id=Date.now();
   growVideos.unshift({id,topic:short,status:'gen',ts:Date.now()});
+  renderGrow();
   // Auto-ready after 12s
   setTimeout(()=>{
     const v=growVideos.find(x=>x.id===id);if(v){v.status='ready';renderGrow();}
@@ -1873,6 +2089,8 @@ const voiceData = {
 };
 let selectedVoice = {gender:'f', id:'f1'};
 
+function openTokSheet(){document.getElementById('tokSheet').classList.add('open');}
+function closeTokSheet(e){if(!e||e.target===document.getElementById('tokSheet'))document.getElementById('tokSheet').classList.remove('open');}
 function openVoiceSheet() {
   const sheet = document.getElementById('voiceSheet');
   if (!sheet) return;
