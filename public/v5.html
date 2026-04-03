@@ -294,11 +294,14 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .cv-chip-arr{font-size:16px;color:var(--choco3);margin-left:auto}
 /* Input card */
 .cv-input-card{margin:12px 18px 0;background:#fff;border:1px solid rgba(26,14,5,.08);border-radius:16px;overflow:hidden;flex-shrink:0}
-.cv-q{font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:var(--choco);padding:14px 14px 0}
+.cv-q-row{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 0;gap:8px}
+.cv-q{font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:var(--choco)}
+.cv-enhanced-badge{display:none;align-items:center;gap:4px;background:#EEE8FF;border-radius:20px;padding:3px 10px;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:#5B21B6;white-space:nowrap;flex-shrink:0}
 .cvta{width:100%;min-height:88px;background:transparent;border:none;padding:8px 14px 10px;color:var(--choco);font-size:14px;font-family:'DM Sans',sans-serif;resize:none;outline:none;line-height:1.6;display:block}
 .cvta::placeholder{color:rgba(26,14,5,.28)}
-.cv-enhance{display:none;align-items:center;justify-content:center;gap:6px;margin:0 14px 12px;padding:10px;border-radius:11px;background:#EEE8FF;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#5B21B6;transition:background .15s}
+.cv-enhance{display:none;align-items:center;justify-content:center;gap:6px;margin:0 14px 12px;padding:11px;border-radius:12px;background:#EEE8FF;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#5B21B6;transition:background .15s;width:calc(100% - 28px)}
 .cv-enhance:active{background:#E0D4FF}
+.cv-enhance.done{background:#EEE8FF}
 .cv-card-sep{height:1px;background:rgba(26,14,5,.07);margin:0 14px}
 .cv-alt-chips{display:flex;gap:6px;padding:10px 14px}
 .cv-alt-chip{display:flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;border:1px solid rgba(26,14,5,.1);background:transparent;font-family:'Sora',sans-serif;font-size:11px;font-weight:600;color:var(--choco3);cursor:pointer;transition:all .18s}
@@ -714,9 +717,12 @@ body{background:transparent!important;padding:0!important;display:block!importan
   </div>
   <!-- Input card -->
   <div class="cv-input-card">
-    <div class="cv-q">What's your video about?</div>
+    <div class="cv-q-row">
+      <div class="cv-q">What's your video about?</div>
+      <div class="cv-enhanced-badge" id="cv-enhanced-badge">✦ Enhanced</div>
+    </div>
     <textarea class="cvta" id="cvta" placeholder="How to grow on Instagram in 2025 — break it down into 3 steps, no fluff." oninput="cvTextChange(this)"></textarea>
-    <button class="cv-enhance" id="cv-enhance" onclick="runEnh()"><span class="ehi">✳</span> Enhance with AI</button>
+    <button class="cv-enhance" id="cv-enhance" onclick="runEnh()">✦ Enhance with AI</button>
     <div class="cv-card-sep"></div>
     <div class="cv-alt-chips">
       <div class="cv-alt-chip" id="chip-audio" onclick="cvAlt('audio',this)">🎙 Audio</div>
@@ -1019,14 +1025,23 @@ function closeMoves(e){if(!e||e.target===document.getElementById('movesSheet'))d
 // Create Video
 function cvInit(){
   const ta=document.getElementById('cvta');if(ta)ta.value='';
-  const enh=document.getElementById('cv-enhance');if(enh)enh.style.display='none';
+  const enh=document.getElementById('cv-enhance');if(enh){enh.style.display='none';enh.classList.remove('done');enh.innerHTML='✦ Enhance with AI';}
+  const badge=document.getElementById('cv-enhanced-badge');if(badge)badge.style.display='none';
   const alt=document.getElementById('cv-alt-area');if(alt){alt.style.display='none';alt.innerHTML='';}
   document.querySelectorAll('.cv-alt-chip').forEach(c=>c.classList.remove('on'));
   document.querySelectorAll('.cv-var').forEach((v,i)=>v.classList.toggle('on',i===0));
 }
 function cvTextChange(ta){
   const enh=document.getElementById('cv-enhance');
-  if(enh)enh.style.display=ta.value.trim()?'flex':'none';
+  if(!enh)return;
+  // If text was changed after enhancing — reset enhanced state
+  if(enh.classList.contains('done')){
+    enh.classList.remove('done');
+    enh.innerHTML='✦ Enhance with AI';
+    const badge=document.getElementById('cv-enhanced-badge');
+    if(badge)badge.style.display='none';
+  }
+  enh.style.display=ta.value.trim()?'flex':'none';
 }
 function cvAlt(mode,chip){
   const wasOn=chip.classList.contains('on');
@@ -1051,7 +1066,14 @@ function selVar(el){document.querySelectorAll('.cv-var').forEach(v=>v.classList.
 function selTrend(el,tag){document.querySelectorAll('.ti3').forEach(t=>{t.classList.remove('on');const d=t.querySelector('.tidot');if(d)d.textContent='';});el.classList.add('on');const d=el.querySelector('.tidot');if(d)d.textContent='✓';document.getElementById('qtopic').textContent=tag;}
 function startVoice(e){if(e)e.preventDefault();vaActive=true;const b=document.getElementById('vbtn');if(b)b.style.background='var(--gold2)';const h=document.getElementById('vhint');if(h)h.textContent='Listening…';const t=document.getElementById('vtr');if(t){t.style.display='block';}const lines=['Talking about…','Instagram growth, fitness niche…','Instagram growth, 3 clear steps, no fluff, 60s'];let i=0;vaTimer=setInterval(()=>{if(i<lines.length&&t){t.textContent=lines[i];i++;}},900);}
 function stopVoice(){vaActive=false;clearInterval(vaTimer);const b=document.getElementById('vbtn');if(b)b.style.background='var(--choco)';const h=document.getElementById('vhint');if(h)h.textContent='Hold to describe your video';}
-function runEnh(){const b=document.getElementById('cv-enhance');b.textContent='✳ Enhancing…';b.style.opacity='.6';b.style.pointerEvents='none';setTimeout(()=>{b.innerHTML='<span class="ehi">✳</span> Enhance with AI';b.style.opacity='1';b.style.pointerEvents='auto';},2000);}
+function runEnh(){
+  const b=document.getElementById('cv-enhance');
+  b.innerHTML='✦ Enhancing…';b.style.opacity='.6';b.style.pointerEvents='none';
+  setTimeout(()=>{
+    b.innerHTML='✦ Enhanced';b.style.opacity='1';b.style.pointerEvents='auto';b.classList.add('done');
+    const badge=document.getElementById('cv-enhanced-badge');if(badge)badge.style.display='flex';
+  },1600);
+}
 </script>
 </body>
 </html>
