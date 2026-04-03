@@ -403,6 +403,36 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .grow-empty-ico{font-size:44px}
 .grow-empty-txt{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--choco)}
 .grow-empty-sub{font-size:13px;color:var(--choco3);line-height:1.5}
+/* Voice */
+.voice-row{margin:8px 18px 0;display:flex;align-items:center;gap:10px;background:rgba(26,14,5,.03);border:1px solid rgba(26,14,5,.08);border-radius:12px;padding:10px 13px;cursor:pointer;transition:background .15s}
+.voice-row:active{background:rgba(26,14,5,.07)}
+.voice-ico{width:34px;height:34px;border-radius:50%;background:var(--warm2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.voice-info{flex:1}
+.voice-name{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--choco)}
+.voice-sub{font-size:11px;color:var(--choco3);margin-top:2px}
+.voice-arr{font-size:16px;color:var(--choco3)}
+/* Voice sheet */
+.voice-sheet{position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);display:none;flex-direction:column;justify-content:flex-end}
+.voice-sheet.open{display:flex;animation:msUp .3s cubic-bezier(.32,.72,0,1)}
+.voice-sheet-inner{background:var(--bg);border-radius:24px 24px 0 0;border-top:1px solid rgba(26,14,5,.07);padding:16px 20px 40px;max-height:72%;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.voice-sheet-inner::-webkit-scrollbar{display:none}
+.voice-sh-hdr{display:flex;align-items:center;justify-content:space-between}
+.voice-sh-ttl{font-family:'Sora',sans-serif;font-size:15px;font-weight:900;color:var(--choco)}
+.voice-sh-close{font-size:18px;cursor:pointer;opacity:.4;background:none;border:none;padding:0}
+.voice-tabs{display:flex;gap:6px}
+.voice-tab{flex:1;padding:8px;border-radius:10px;border:1.5px solid rgba(26,14,5,.1);background:transparent;font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--choco3);cursor:pointer;text-align:center;transition:all .15s}
+.voice-tab.on{background:var(--choco);color:#FFF8F2;border-color:var(--choco)}
+.voice-list{display:flex;flex-direction:column;gap:8px}
+.voice-card{display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:14px;border:1.5px solid rgba(26,14,5,.08);background:#fff;cursor:pointer;transition:border-color .15s}
+.voice-card.on{border-color:var(--choco)}
+.voice-card-ico{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.voice-card-info{flex:1}
+.voice-card-name{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--choco)}
+.voice-card-desc{font-size:11px;color:var(--choco3);margin-top:2px}
+.voice-card-check{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(26,14,5,.15);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all .2s}
+.voice-card.on .voice-card-check{background:var(--choco);border-color:var(--choco);color:#fff}
+.voice-play{background:rgba(26,14,5,.06);border:none;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:600;color:var(--choco2);cursor:pointer;flex-shrink:0;font-family:'Sora',sans-serif}
+.voice-play:active{background:rgba(26,14,5,.12)}
 /* Tab bar */
 .tab-bar{position:absolute;bottom:0;left:0;right:0;height:64px;background:rgba(250,246,239,.95);backdrop-filter:blur(16px);border-top:1px solid rgba(26,14,5,.07);display:flex;align-items:center;z-index:30}
 .tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding-bottom:8px;opacity:.4;transition:opacity .15s}
@@ -760,6 +790,15 @@ body{background:transparent!important;padding:0!important;display:block!importan
         <span class="tok-label">73 tokens</span>
         <button class="tok-topup" onclick="event.stopPropagation();alert('Top up tokens')">Top up</button>
       </div>
+      <!-- Voice -->
+      <div class="voice-row" onclick="openVoiceSheet()">
+        <div class="voice-ico">🎙</div>
+        <div class="voice-info">
+          <div class="voice-name" id="voice-name">Female · Natural</div>
+          <div class="voice-sub" id="voice-sub">Warm and clear</div>
+        </div>
+        <span class="voice-arr">›</span>
+      </div>
       <!-- CTA -->
       <div class="apcr">
         <button class="apcm" onclick="go('create-video')">Create video</button>
@@ -773,6 +812,21 @@ body{background:transparent!important;padding:0!important;display:block!importan
   <div class="tab-bar">
     <div class="tab-item on" onclick="go('avatar-profile')"><div class="tab-ico">👤</div><div class="tab-lbl">Avatar</div></div>
     <div class="tab-item" onclick="go('grow')"><div class="tab-ico">📈</div><div class="tab-lbl">Grow</div></div>
+  </div>
+  <!-- Voice sheet -->
+  <div class="voice-sheet" id="voiceSheet" onclick="closeVoiceSheet(event)">
+    <div class="voice-sheet-inner" onclick="event.stopPropagation()">
+      <div class="sub-handle"></div>
+      <div class="voice-sh-hdr">
+        <div class="voice-sh-ttl">Choose voice</div>
+        <button class="voice-sh-close" onclick="closeVoiceSheet()">✕</button>
+      </div>
+      <div class="voice-tabs">
+        <div class="voice-tab on" id="vtab-f" onclick="voiceTab('f')">Female</div>
+        <div class="voice-tab" id="vtab-m" onclick="voiceTab('m')">Male</div>
+      </div>
+      <div class="voice-list" id="voice-list"></div>
+    </div>
   </div>
   <div class="ms" id="movesSheet" onclick="closeMoves(event)">
     <div class="msi" onclick="event.stopPropagation()">
@@ -1417,6 +1471,76 @@ function runEnh(){
     const badge=document.getElementById('cv-enhanced-badge');
     if(badge){badge.style.display='';badge.classList.add('show');}
   },1600);
+}
+
+// ── Voice Sheet ──────────────────────────────────────────────
+const voiceData = {
+  f: [
+    {id:'f1', name:'Natural',   desc:'Warm and clear',         emoji:'👩'},
+    {id:'f2', name:'Energetic', desc:'Upbeat and dynamic',     emoji:'💃'},
+    {id:'f3', name:'Calm',      desc:'Soft and soothing',      emoji:'🧘‍♀️'},
+    {id:'f4', name:'Bold',      desc:'Strong and confident',   emoji:'🌟'},
+  ],
+  m: [
+    {id:'m1', name:'Deep',      desc:'Rich and authoritative', emoji:'👨'},
+    {id:'m2', name:'Confident', desc:'Bold and direct',        emoji:'🎙'},
+    {id:'m3', name:'Warm',      desc:'Friendly and approachable', emoji:'😊'},
+    {id:'m4', name:'Chill',     desc:'Relaxed and smooth',     emoji:'😎'},
+  ]
+};
+let selectedVoice = {gender:'f', id:'f1'};
+
+function openVoiceSheet() {
+  const sheet = document.getElementById('voiceSheet');
+  if (!sheet) return;
+  renderVoiceList(selectedVoice.gender);
+  voiceTab(selectedVoice.gender, false);
+  sheet.classList.add('open');
+}
+
+function closeVoiceSheet(e) {
+  if (e && e.target !== document.getElementById('voiceSheet')) return;
+  document.getElementById('voiceSheet').classList.remove('open');
+}
+
+function voiceTab(gender, render) {
+  document.querySelectorAll('.voice-tab').forEach(t => t.classList.remove('on'));
+  const tab = document.getElementById('vtab-' + gender);
+  if (tab) tab.classList.add('on');
+  if (render !== false) renderVoiceList(gender);
+}
+
+function renderVoiceList(gender) {
+  const list = document.getElementById('voice-list');
+  if (!list) return;
+  const voices = voiceData[gender] || [];
+  list.innerHTML = voices.map(v => {
+    const isOn = selectedVoice.id === v.id;
+    return `
+    <div class="voice-card${isOn ? ' on' : ''}" onclick="selectVoice('${gender}','${v.id}')">
+      <div class="voice-card-ico">${v.emoji}</div>
+      <div class="voice-card-info">
+        <div class="voice-card-name">${v.name}</div>
+        <div class="voice-card-desc">${v.desc}</div>
+      </div>
+      <button class="voice-play" onclick="event.stopPropagation()">▶</button>
+      <div class="voice-card-check">${isOn ? '✓' : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectVoice(gender, id) {
+  selectedVoice = {gender, id};
+  const voice = (voiceData[gender] || []).find(v => v.id === id);
+  if (voice) {
+    const gLabel = gender === 'f' ? 'Female' : 'Male';
+    const nameEl = document.getElementById('voice-name');
+    const subEl  = document.getElementById('voice-sub');
+    if (nameEl) nameEl.textContent = gLabel + ' · ' + voice.name;
+    if (subEl)  subEl.textContent  = voice.desc;
+  }
+  renderVoiceList(gender);
+  setTimeout(() => document.getElementById('voiceSheet').classList.remove('open'), 220);
 }
 </script>
 </body>
