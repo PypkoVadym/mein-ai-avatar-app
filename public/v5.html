@@ -143,9 +143,9 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .ae-method:active{transform:scale(.97)}
 
 /* PHOTO DROP */
-#photo-drop{background:#FFF8F2}
-.dz{flex:1;margin:14px 22px 0;border:2px dashed var(--ivory3);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .2s;padding:20px;position:relative;overflow:hidden}
-.dz.has{border-color:var(--gold);border-style:solid;background:rgba(200,168,96,.03)}
+#photo-drop{background:var(--bg)}
+.dz{flex:1;margin:14px 20px 0;border:2px dashed rgba(26,14,5,.18);border-radius:22px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .2s;padding:20px;position:relative;overflow:hidden}
+.dz.has{border-color:var(--gold);border-style:solid;background:rgba(196,98,44,.04)}
 .dz:active{transform:scale(.99)}
 .dz-em{font-size:44px;line-height:1}
 .dz-t{font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:var(--choco)}
@@ -154,9 +154,9 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .dz.has .dz-th{display:flex}
 .dz.has .dz-em,.dz.has .dz-t,.dz.has .dz-s{display:none}
 .dth{width:52px;height:52px;border-radius:9px;border:1.5px solid rgba(200,168,96,.22);display:flex;align-items:center;justify-content:center;font-size:20px}
-.df{padding:10px 22px 36px;display:flex;flex-direction:column;gap:9px}
+.df{padding:10px 20px 36px;display:flex;flex-direction:column;gap:10px}
 .qw{display:flex;align-items:center;gap:9px;opacity:0;transition:opacity .3s}
-.qt{flex:1;height:5px;background:var(--ivory3);border-radius:3px;overflow:hidden}
+.qt{flex:1;height:5px;background:rgba(26,14,5,.1);border-radius:3px;overflow:hidden}
 .qf{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold2),var(--gold));width:0%;transition:width .5s}
 .qp{font-size:12px;font-weight:600;color:var(--choco2);width:30px;text-align:right}
 
@@ -815,15 +815,16 @@ body{background:transparent!important;padding:0!important;display:block!importan
 </div><!-- /avatar-entry -->
 
 <!-- PHOTO DROP -->
-<div class="screen" id="photo-drop" style="background:var(--ivory)">
-  <div style="padding:58px 22px 0;display:flex;align-items:center;gap:10px;flex-shrink:0">
+<div class="screen" id="photo-drop">
+  <div style="padding:56px 20px 0;display:flex;align-items:center;gap:10px;flex-shrink:0">
     <button class="sback lt" onclick="back('avatar-entry')">←</button>
-    <span style="font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--choco)">Add photos</span>
+    <span style="font-family:'Sora',sans-serif;font-size:17px;font-weight:900;color:var(--choco);letter-spacing:-.02em;flex:1">Choose a photo</span>
+    <span style="font-size:12px;font-weight:600;color:var(--choco3)">3+ recommended</span>
   </div>
   <div class="dz" id="dzz" onclick="addPhoto()">
-    <div class="dz-em">📸</div>
-    <div class="dz-t">Tap to add photos</div>
-    <div class="dz-s">Any photos. AI handles everything.</div>
+    <div class="dz-em">🖼️</div>
+    <div class="dz-t">Tap to select photos</div>
+    <div class="dz-s">Any photos work — AI does the rest.</div>
     <div class="dz-th" id="dzth"></div>
   </div>
   <div class="df">
@@ -834,7 +835,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
     </div>
     <div id="dct" style="text-align:center;font-size:12px;color:var(--choco3);opacity:0;transition:opacity .3s">0 photos</div>
     <button class="btn-gold" id="drop-go" disabled onclick="_vpFrom='photo-drop';go('voice-pick')">Build my avatar →</button>
-    <div style="text-align:center;font-size:12px;color:var(--choco3)">3 is the start. More = sharper.</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:5px"><span style="font-size:11px">🔒</span><span style="font-size:11px;color:var(--choco3)">Photos are processed privately</span></div>
   </div>
 </div>
 
