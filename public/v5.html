@@ -295,7 +295,7 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .appill:active{background:rgba(0,0,0,.5)}
 .ld{width:6px;height:6px;border-radius:50%;background:var(--red);animation:ldP 1.2s ease-in-out infinite}
 @keyframes ldP{0%,100%{opacity:1}50%{opacity:.25}}
-.apbot{position:absolute;bottom:88px;left:0;right:0;z-index:20;background:rgba(253,248,242,.95);backdrop-filter:blur(28px);border-top:1px solid rgba(26,14,5,.06)}
+.apbot{position:absolute;bottom:66px;left:0;right:0;z-index:20;background:rgba(253,248,242,.95);backdrop-filter:blur(28px);border-top:1px solid rgba(26,14,5,.06)}
 .apnr{padding:14px 20px 0;display:flex;align-items:flex-start;justify-content:space-between}
 .apname{font-family:'Sora',sans-serif;font-size:22px;font-weight:900;color:var(--choco);letter-spacing:-.03em}
 .ap-status{display:flex;align-items:center;gap:5px;font-family:'Sora',sans-serif;font-size:11px;font-weight:600;color:var(--green);margin-top:3px}
@@ -442,7 +442,7 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .grow-hdr{padding:56px 18px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-bottom:1px solid rgba(26,14,5,.06)}
 .grow-ttl{font-family:'Sora',sans-serif;font-size:17px;font-weight:900;color:var(--choco);letter-spacing:-.02em;flex:1}
 .grow-count{font-family:'Sora',sans-serif;font-size:12px;font-weight:600;color:var(--choco3)}
-.grow-list{flex:1;overflow-y:auto;padding:12px 18px 96px;display:flex;flex-direction:column;gap:10px}
+.grow-list{flex:1;overflow-y:auto;padding:12px 18px 20px;display:flex;flex-direction:column;gap:10px}
 .grow-list::-webkit-scrollbar{display:none}
 .grow-section-lbl{font-family:'Sora',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--choco3);margin-bottom:2px}
 .gv-card{background:#fff;border:1px solid rgba(26,14,5,.08);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:12px}
@@ -495,7 +495,7 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .voice-play:active{background:rgba(26,14,5,.12)}
 /* Tab bar */
 /* ── TAB BAR — floating pill ── */
-.tab-bar{position:absolute;bottom:14px;left:14px;right:14px;height:66px;background:rgba(250,246,239,.97);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-radius:999px;display:flex;align-items:center;z-index:30;border:1px solid rgba(26,14,5,.1);box-shadow:0 8px 28px rgba(26,14,5,.14)}
+.tab-bar{position:absolute;bottom:0;left:0;right:0;height:66px;background:var(--bg);border-top:1px solid rgba(26,14,5,.08);display:flex;align-items:center;z-index:30}
 .tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:3px;cursor:pointer;color:rgba(26,14,5,.32);transition:color .18s;position:relative;user-select:none}
 .tab-item.on{color:var(--choco)}
 .tab-item:active{opacity:.65}
