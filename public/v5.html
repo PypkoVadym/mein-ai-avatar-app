@@ -1062,7 +1062,7 @@ function resetAvatarFlow(){
   // Reset cam-photos
   camPhotosTaken=0;
   const cph=document.getElementById('cp-hint');if(cph)cph.textContent='Look straight at the camera';
-  const sb=document.getElementById('cp-shutter');if(sb)sb.style.opacity='1';
+  const cpsh=document.getElementById('cp-shutter');if(cpsh)cpsh.style.opacity='1';
   avatarQuality=44;
   // Reset seed picker
   document.querySelectorAll('.seed-tile').forEach(t=>t.classList.remove('sel'));
