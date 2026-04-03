@@ -873,19 +873,19 @@ body{background:transparent!important;padding:0!important;display:block!importan
     <div style="font-size:13px;color:var(--choco3);text-align:center;max-width:220px;line-height:1.5">Explore viral videos from other TWIN creators</div>
   </div>
   <div class="tab-bar">
-    <div class="tab-item on" onclick="go('discover')">
+    <div class="tab-item on" onclick="goTab('discover')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Discover</div>
     </div>
-    <div class="tab-item" onclick="go('grow')">
+    <div class="tab-item" onclick="goTab('grow')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Videos</div>
     </div>
-    <div class="tab-item" onclick="go('avatar-profile')">
+    <div class="tab-item" onclick="goTab('avatar-profile')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2"/><path d="M22 21v-1a3 3 0 0 0-3-3"/></svg></div>
       <div class="tab-lbl">Avatars</div>
     </div>
-    <div class="tab-create" onclick="go('create-video')">
+    <div class="tab-create" onclick="goTab('create-video')">
       <div class="tab-create-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="#1A0E05"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
       <div class="tab-create-lbl">Create</div>
     </div>
@@ -948,7 +948,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
       </div>
       <!-- CTA -->
       <div class="apcr">
-        <button class="apcm" onclick="go('create-video')">Create video</button>
+        <button class=\"apcm\" onclick=\"go('create-video')\">Create video</button>
         <div class="apmo" onclick="openMoves()">🎭<span class="apmo-lbl">Styles</span></div>
       </div>
       <!-- Add another avatar -->
@@ -957,19 +957,19 @@ body{background:transparent!important;padding:0!important;display:block!importan
   </div>
   <!-- Tab bar -->
   <div class="tab-bar">
-    <div class="tab-item" onclick="go('discover')">
+    <div class="tab-item" onclick="goTab('discover')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Discover</div>
     </div>
-    <div class="tab-item" onclick="go('grow')">
+    <div class="tab-item" onclick="goTab('grow')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Videos</div>
     </div>
-    <div class="tab-item on" onclick="go('avatar-profile')">
+    <div class="tab-item on" onclick="goTab('avatar-profile')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2"/><path d="M22 21v-1a3 3 0 0 0-3-3"/></svg></div>
       <div class="tab-lbl">Avatars</div>
     </div>
-    <div class="tab-create" onclick="go('create-video')">
+    <div class="tab-create" onclick="goTab('create-video')">
       <div class="tab-create-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="#1A0E05"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
       <div class="tab-create-lbl">Create</div>
     </div>
@@ -1005,7 +1005,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
     <span class="cvttl">New video</span>
   </div>
   <!-- Avatar card -->
-  <div class="cvchip" onclick="go('avatar-profile')">
+  <div class="cvchip" onclick="goTab('avatar-profile')">
     <div class="cvc" id="cvchipc"><img src="/default_avatar.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;"></div>
     <div style="flex:1">
       <div class="cvcn">My Avatar</div>
@@ -1137,8 +1137,8 @@ body{background:transparent!important;padding:0!important;display:block!importan
       <div class="qro"><div class="ql">Est. ready</div><div class="qv g">~10 min</div></div>
       <div class="qro"><div class="ql">Quality boost</div><div class="qv g">+3% after render</div></div>
     </div>
-    <button class="btn-gold" onclick="go('grow')">📈 Watch it in Grow →</button>
-    <button style="background:none;border:none;font-size:13px;color:var(--choco3);font-weight:600;cursor:pointer" onclick="go('create-video')">+ Create another</button>
+    <button class="btn-gold" onclick="goTab('grow')">📈 Watch it in Grow →</button>
+    <button style="background:none;border:none;font-size:13px;color:var(--choco3);font-weight:600;cursor:pointer" onclick="goTab('create-video')">+ Create another</button>
   </div>
 </div>
 
@@ -1157,19 +1157,19 @@ body{background:transparent!important;padding:0!important;display:block!importan
   </div>
   <!-- Tab bar -->
   <div class="tab-bar">
-    <div class="tab-item" onclick="go('discover')">
+    <div class="tab-item" onclick="goTab('discover')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Discover</div>
     </div>
-    <div class="tab-item on" onclick="go('grow')">
+    <div class="tab-item on" onclick="goTab('grow')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Videos</div>
     </div>
-    <div class="tab-item" onclick="go('avatar-profile')">
+    <div class="tab-item" onclick="goTab('avatar-profile')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2"/><path d="M22 21v-1a3 3 0 0 0-3-3"/></svg></div>
       <div class="tab-lbl">Avatars</div>
     </div>
-    <div class="tab-create" onclick="go('create-video')">
+    <div class="tab-create" onclick="goTab('create-video')">
       <div class="tab-create-ring"><svg width="20" height="20" viewBox="0 0 24 24" fill="#1A0E05"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div>
       <div class="tab-create-lbl">Create</div>
     </div>
@@ -1226,6 +1226,14 @@ function showScreen(id,dir){
   if(dir==='back')el.classList.add('s-back');
   if(dir==='up')el.classList.add('s-up');
   setTimeout(()=>el.classList.remove('s-in','s-back','s-up'),350);
+}
+const TAB_SCREENS=new Set(['discover','grow','avatar-profile','create-video']);
+function goTab(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active','s-in','s-back','s-up'));
+  const el=document.getElementById(id);if(!el)return;
+  el.classList.add('active');
+  if(id==='grow') renderGrow();
+  if(id==='create-video') cvInit();
 }
 function go(id){
   if(id==='avatar-entry') resetAvatarFlow();
