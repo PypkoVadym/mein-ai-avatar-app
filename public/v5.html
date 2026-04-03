@@ -496,20 +496,16 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 /* Tab bar */
 /* ── TAB BAR — floating pill ── */
 .tab-bar{position:absolute;bottom:14px;left:14px;right:14px;height:66px;background:rgba(18,9,2,.93);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-radius:999px;display:flex;align-items:center;z-index:30;border:1px solid rgba(255,248,242,.07);box-shadow:0 8px 32px rgba(0,0,0,.35)}
-.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:3px;cursor:pointer;color:rgba(255,248,242,.35);transition:color .18s;position:relative;user-select:none}
-.tab-item.on{color:rgba(255,248,242,.95)}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:3px;cursor:pointer;color:rgba(255,248,242,.55);transition:color .18s;position:relative;user-select:none}
+.tab-item.on{color:rgba(255,248,242,.98)}
 .tab-item:active{opacity:.65}
-.tab-bubble{position:absolute;inset:7px 3px;border-radius:18px;background:rgba(255,248,242,.09);opacity:0;transition:opacity .2s;pointer-events:none}
-.tab-item.on .tab-bubble{opacity:1}
-.tab-ico{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:22px;height:22px}
-.tab-lbl{position:relative;z-index:1;font-family:'Sora',sans-serif;font-size:10px;font-weight:600;letter-spacing:-.01em}
+.tab-ico{display:flex;align-items:center;justify-content:center;width:24px;height:24px}
+.tab-lbl{font-family:'Sora',sans-serif;font-size:10px;font-weight:600;letter-spacing:-.01em}
 /* Create tab — gold circle */
 .tab-create{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:4px;cursor:pointer;user-select:none}
 .tab-create:active .tab-create-ring{transform:scale(.9)}
 .tab-create-ring{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--gold));display:flex;align-items:center;justify-content:center;box-shadow:0 3px 14px rgba(196,98,44,.45);transition:transform .12s;margin-top:-4px}
 .tab-create-lbl{font-family:'Sora',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:-.01em}
-.tab-ico{font-size:22px;line-height:1}
-.tab-lbl{font-family:'Sora',sans-serif;font-size:10px;font-weight:700;color:var(--choco)}
 /* QUEUED */
 #queued{background:var(--bg)}
 .qi{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:30px}
@@ -878,17 +874,14 @@ body{background:transparent!important;padding:0!important;display:block!importan
   </div>
   <div class="tab-bar">
     <div class="tab-item on" onclick="go('discover')">
-      <div class="tab-bubble"></div>
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Discover</div>
     </div>
     <div class="tab-item" onclick="go('grow')">
-      <div class="tab-bubble"></div>
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Videos</div>
     </div>
     <div class="tab-item" onclick="go('avatar-profile')">
-      <div class="tab-bubble"></div>
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2"/><path d="M22 21v-1a3 3 0 0 0-3-3"/></svg></div>
       <div class="tab-lbl">Avatars</div>
     </div>
@@ -965,17 +958,14 @@ body{background:transparent!important;padding:0!important;display:block!importan
   <!-- Tab bar -->
   <div class="tab-bar">
     <div class="tab-item" onclick="go('discover')">
-      <div class="tab-bubble"></div>
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Discover</div>
     </div>
     <div class="tab-item" onclick="go('grow')">
-      <div class="tab-bubble"></div>
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Videos</div>
     </div>
     <div class="tab-item on" onclick="go('avatar-profile')">
-      <div class="tab-bubble"></div>
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2"/><path d="M22 21v-1a3 3 0 0 0-3-3"/></svg></div>
       <div class="tab-lbl">Avatars</div>
     </div>
@@ -1168,17 +1158,14 @@ body{background:transparent!important;padding:0!important;display:block!importan
   <!-- Tab bar -->
   <div class="tab-bar">
     <div class="tab-item" onclick="go('discover')">
-      <div class="tab-bubble"></div>
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Discover</div>
     </div>
     <div class="tab-item on" onclick="go('grow')">
-      <div class="tab-bubble"></div>
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
       <div class="tab-lbl">Videos</div>
     </div>
     <div class="tab-item" onclick="go('avatar-profile')">
-      <div class="tab-bubble"></div>
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2"/><path d="M22 21v-1a3 3 0 0 0-3-3"/></svg></div>
       <div class="tab-lbl">Avatars</div>
     </div>
