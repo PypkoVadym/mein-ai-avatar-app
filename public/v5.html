@@ -185,6 +185,47 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .cam-footer-link span{font-size:11px;color:var(--choco3)}
 .cam-footer-link button{font-size:12px;color:var(--gold);font-weight:600;background:none;border:none;cursor:pointer}
 
+/* VOICE PICK */
+#voice-pick{background:var(--bg)}
+.vp-hdr{padding:56px 18px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.vp-hdr-title{font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--choco)}
+.vp-body{flex:1;overflow-y:auto;padding:18px 20px 0;display:flex;flex-direction:column;gap:14px;-ms-overflow-style:none;scrollbar-width:none}
+.vp-body::-webkit-scrollbar{display:none}
+.vp-headline{font-family:'Sora',sans-serif;font-size:24px;font-weight:900;color:var(--choco);line-height:1.1;letter-spacing:-.03em}
+.vp-sub{font-size:13px;color:var(--choco3);margin-top:4px}
+.vp-toggle{display:flex;background:rgba(26,14,5,.07);border-radius:12px;padding:3px;gap:2px}
+.vp-topt{flex:1;padding:8px;border-radius:9px;text-align:center;font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:var(--choco3);cursor:pointer;transition:all .15s}
+.vp-topt.on{background:#fff;color:var(--choco);box-shadow:0 1px 4px rgba(26,14,5,.12)}
+.vp-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.vpc{background:#fff;border-radius:16px;border:1.5px solid rgba(26,14,5,.1);padding:12px 12px 10px;cursor:pointer;position:relative;transition:border-color .14s,box-shadow .14s;user-select:none}
+.vpc:active{transform:scale(.97)}
+.vpc.on{border-color:var(--choco);box-shadow:0 0 0 3px rgba(26,14,5,.07)}
+.vpc.foryou::before{content:'For you';position:absolute;top:-1px;right:10px;background:var(--gold);color:#FFF8F2;font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:0 0 6px 6px;font-family:'Sora',sans-serif}
+.vpc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px}
+.vpc-nm{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--choco)}
+.vpc-ds{font-size:11px;color:var(--choco3);margin-bottom:8px;line-height:1.4}
+.vpc-play{width:24px;height:24px;border-radius:50%;border:1.5px solid rgba(26,14,5,.15);background:rgba(26,14,5,.04);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:background .12s}
+.vpc-play.on{background:var(--choco);border-color:var(--choco)}
+.vptri{width:0;height:0;border-style:solid;border-width:3.5px 0 3.5px 6px;border-color:transparent transparent transparent rgba(26,14,5,.4);margin-left:1px}
+.vpc-play.on .vptri{border-left-color:#fff}
+.vpc-wave{display:flex;align-items:center;gap:2px;height:14px}
+.vpwb{width:3px;border-radius:2px;background:rgba(26,14,5,.12);transition:background .14s}
+.vpc.on .vpwb{background:var(--choco)}
+.vpc.playing .vpwb{background:var(--gold);animation:vpwa .55s ease-in-out infinite alternate}
+.vpwb:nth-child(2n){animation-delay:.1s!important}.vpwb:nth-child(3n){animation-delay:.22s!important}
+@keyframes vpwa{from{transform:scaleY(1)}to{transform:scaleY(2.1)}}
+.vp-divider{display:flex;align-items:center;gap:8px}
+.vp-divline{flex:1;height:1px;background:rgba(26,14,5,.1)}
+.vp-divtxt{font-size:11px;color:var(--choco3);white-space:nowrap}
+.vp-rec-box{background:#fff;border-radius:16px;border:1.5px solid rgba(26,14,5,.1);padding:13px 14px}
+.vp-rec-prompt{background:rgba(26,14,5,.04);border-radius:10px;padding:9px 12px;font-size:12px;color:var(--choco2);font-style:italic;line-height:1.55;margin-bottom:12px}
+.vp-rec-row{display:flex;align-items:center;gap:10px}
+.vp-rec-btn{width:44px;height:44px;border-radius:50%;background:var(--choco);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
+.vp-rec-wave{flex:1;height:28px;display:flex;align-items:center;gap:2px}
+.vprwb{width:3px;border-radius:2px;background:rgba(26,14,5,.12);transition:height .1s,background .15s}
+.vp-rec-lbl{font-size:11px;color:var(--choco3);flex-shrink:0;min-width:64px;text-align:right}
+.vp-footer{padding:14px 20px 32px;flex-shrink:0}
+
 /* SEED PICKER */
 #seed-picker{background:var(--bg)}
 .seed-hdr{padding:58px 22px 0;display:flex;align-items:center;gap:12px;flex-shrink:0}
@@ -668,7 +709,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
       <span class="qp" id="qpt">0%</span>
     </div>
     <div id="dct" style="text-align:center;font-size:12px;color:var(--choco3);opacity:0;transition:opacity .3s">0 photos</div>
-    <button class="btn-gold" id="drop-go" disabled onclick="go('processing')">Build my avatar →</button>
+    <button class="btn-gold" id="drop-go" disabled onclick="_vpFrom='photo-drop';go('voice-pick')">Build my avatar →</button>
     <div style="text-align:center;font-size:12px;color:var(--choco3)">3 is the start. More = sharper.</div>
   </div>
 </div>
@@ -735,6 +776,49 @@ body{background:transparent!important;padding:0!important;display:block!importan
   <div class="cam-footer-link">
     <span>Have photos already?</span>
     <button onclick="back('avatar-entry')">Use my library</button>
+  </div>
+</div>
+
+<!-- VOICE PICK -->
+<div class="screen" id="voice-pick">
+  <div class="vp-hdr">
+    <button class="sback lt" onclick="vpBack()">←</button>
+    <span class="vp-hdr-title">Choose a voice</span>
+    <div style="width:36px"></div>
+  </div>
+  <div class="vp-body">
+    <div>
+      <div class="vp-headline">Choose<br>your voice</div>
+      <div class="vp-sub">It'll narrate all your videos</div>
+    </div>
+    <div class="vp-toggle">
+      <div class="vp-topt on" id="vpt-f" onclick="vpGender('f')">Female</div>
+      <div class="vp-topt" id="vpt-m" onclick="vpGender('m')">Male</div>
+    </div>
+    <div class="vp-grid" id="vpgF"></div>
+    <div class="vp-grid" id="vpgM" style="display:none"></div>
+    <div class="vp-divider">
+      <div class="vp-divline"></div>
+      <div class="vp-divtxt">or record your own</div>
+      <div class="vp-divline"></div>
+    </div>
+    <div class="vp-rec-box" style="margin-bottom:6px">
+      <div class="vp-rec-prompt">"Let me share three things that changed how I think about my work every day."</div>
+      <div class="vp-rec-row">
+        <div class="vp-rec-btn" id="vpRecBtn" onclick="vpToggleRec()">
+          <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
+            <rect x="4" y="0" width="6" height="12" rx="3" fill="#FFF8F2"/>
+            <path d="M1 9c0 3.31 2.69 6 6 6s6-2.69 6-6" stroke="#FFF8F2" stroke-width="1.6" stroke-linecap="round"/>
+            <line x1="7" y1="15" x2="7" y2="18" stroke="#FFF8F2" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="vp-rec-wave" id="vpRecWave"></div>
+        <div class="vp-rec-lbl" id="vpRecLbl">Tap to record</div>
+      </div>
+    </div>
+  </div>
+  <div class="vp-footer">
+    <button class="btn-gold" id="vp-continue" onclick="vpContinue()">Use Soft voice →</button>
   </div>
 </div>
 
@@ -1085,7 +1169,9 @@ function go(id){
   if(id==='create-video') cvInit();
   if(id==='queued') queueVideo();
   if(id==='grow') renderGrow();
+  if(id==='voice-pick') vpInit(_vpFrom);
 }
+let _vpFrom='cam-photos';
 function back(id){
   // Reset if going back to start of creation funnel
   if(id==='avatar-entry') resetAvatarFlow();
@@ -1150,8 +1236,8 @@ function addPhoto(){
 // Cam
 function toggleRec(){
   const ro=document.getElementById('rec-outer'),timer=document.getElementById('rec-timer'),hint=document.getElementById('camhint');
-  if(!recActive){recActive=true;recSec=0;ro.classList.add('recording');recInt=setInterval(()=>{recSec++;const s=recSec%60,m=Math.floor(recSec/60);timer.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} recording…`;if(recSec===2)hint.textContent='Keep looking at the camera…';if(recSec>=5){clearInterval(recInt);recActive=false;ro.classList.remove('recording');timer.textContent='✓ Done!';avatarQuality=67;setTimeout(()=>go('processing'),500);}},1000);}
-  else{clearInterval(recInt);recActive=false;ro.classList.remove('recording');if(recSec>=3){avatarQuality=Math.max(40,Math.round(recSec/5*67));setTimeout(()=>go('processing'),300);}}
+  if(!recActive){recActive=true;recSec=0;ro.classList.add('recording');recInt=setInterval(()=>{recSec++;const s=recSec%60,m=Math.floor(recSec/60);timer.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} recording…`;if(recSec===2)hint.textContent='Keep looking at the camera…';if(recSec>=5){clearInterval(recInt);recActive=false;ro.classList.remove('recording');timer.textContent='✓ Done!';avatarQuality=67;_vpFrom='cam-shoot';setTimeout(()=>go('voice-pick'),500);}},1000);}
+  else{clearInterval(recInt);recActive=false;ro.classList.remove('recording');if(recSec>=3){avatarQuality=Math.max(40,Math.round(recSec/5*67));_vpFrom='cam-shoot';setTimeout(()=>go('voice-pick'),300);}}
 }
 
 // Seed picker
@@ -1189,7 +1275,8 @@ function goFromSeed(){
   if(!selectedSeed)return;
   isSeedAvatar=true;
   avatarQuality=40;
-  go('processing');
+  _vpFrom='seed-picker';
+  go('voice-pick');
 }
 
 // Single-shot photo
@@ -1202,7 +1289,8 @@ function takeShot(){
   avatarQuality=59;
   const sb=document.getElementById('cp-shutter');if(sb)sb.style.opacity='0.4';
   const hint=document.getElementById('cp-hint');if(hint)hint.textContent='✓ Got it!';
-  setTimeout(()=>go('processing'),500);
+  _vpFrom='cam-photos';
+  setTimeout(()=>go('voice-pick'),500);
 }
 
 // Processing
@@ -1483,6 +1571,110 @@ function runEnh(){
     if(badge){badge.style.display='';badge.classList.add('show');}
   },1600);
 }
+
+// ── Voice Pick Screen ────────────────────────────────────────
+const vpVoices = {
+  f:[
+    {nm:'Soft',    ds:'Warm, trustworthy',    foryou:true,  wh:[5,8,6,10,7,9,5,8,6,10,7,9]},
+    {nm:'Clear',   ds:'Articulate, pro',      foryou:false, wh:[8,12,9,13,10,12,8,11,9,13,10,12]},
+    {nm:'Vibrant', ds:'Energetic, engaging',  foryou:false, wh:[10,16,8,15,18,10,14,11,16,9,15,18]},
+    {nm:'Firm',    ds:'Confident, business',  foryou:false, wh:[9,13,11,14,12,13,10,12,11,14,12,13]},
+  ],
+  m:[
+    {nm:'Neutral', ds:'Clear, universal',     foryou:true,  wh:[6,10,14,9,12,7,11,8,13,6,10,14]},
+    {nm:'Energetic',ds:'Lively, dynamic',     foryou:false, wh:[10,16,8,14,18,10,15,12,16,9,14,18]},
+    {nm:'Calm',    ds:'Gentle, thoughtful',   foryou:false, wh:[5,8,6,9,7,6,8,5,9,7,6,8]},
+    {nm:'Expert',  ds:'Authoritative',        foryou:false, wh:[8,12,10,14,11,13,9,12,10,14,11,13]},
+  ]
+};
+let vpGenderSel='f', vpVoiceSel='Soft', vpPlayT=null, vpRecOn=false, vpRecT2=null, vpFromScreen='cam-photos';
+
+function vpBuildGrid(g){
+  const grid=document.getElementById(g==='f'?'vpgF':'vpgM');
+  if(!grid||grid.children.length)return;
+  vpVoices[g].forEach((v,i)=>{
+    const c=document.createElement('div');
+    c.className='vpc'+(i===0?' on':'')+(v.foryou?' foryou':'');
+    c.onclick=()=>vpPick(c,v.nm);
+    c.innerHTML=`<div class="vpc-top"><div class="vpc-nm">${v.nm}</div><div class="vpc-play" onclick="vpPlay(event,this)"><div class="vptri"></div></div></div><div class="vpc-ds">${v.ds}</div><div class="vpc-wave">${v.wh.map(h=>`<div class="vpwb" style="height:${h}px"></div>`).join('')}</div>`;
+    grid.appendChild(c);
+  });
+}
+
+function vpGender(g){
+  vpGenderSel=g;
+  document.getElementById('vpt-f').classList.toggle('on',g==='f');
+  document.getElementById('vpt-m').classList.toggle('on',g==='m');
+  document.getElementById('vpgF').style.display=g==='f'?'grid':'none';
+  document.getElementById('vpgM').style.display=g==='m'?'grid':'none';
+  vpBuildGrid(g);
+  const grid=document.getElementById(g==='f'?'vpgF':'vpgM');
+  grid.querySelectorAll('.vpc').forEach((c,i)=>c.classList.toggle('on',i===0));
+  const first=grid.querySelector('.vpc-nm');
+  if(first){vpVoiceSel=first.textContent;vpUpdateBtn();}
+}
+
+function vpPick(el,name){
+  const grid=el.closest('.vp-grid');if(!grid)return;
+  grid.querySelectorAll('.vpc').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  vpVoiceSel=name;vpRecOn=false;vpUpdateBtn();
+}
+
+function vpPlay(e,btn){
+  e.stopPropagation();
+  const card=btn.closest('.vpc'),wasOn=btn.classList.contains('on');
+  document.querySelectorAll('.vpc-play').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.vpc').forEach(c=>c.classList.remove('playing'));
+  clearTimeout(vpPlayT);
+  if(!wasOn){btn.classList.add('on');card&&card.classList.add('playing');vpPlayT=setTimeout(()=>{btn.classList.remove('on');card&&card.classList.remove('playing');},2800);}
+}
+
+function vpUpdateBtn(){
+  const btn=document.getElementById('vp-continue');if(btn)btn.textContent='Use '+vpVoiceSel+' voice →';
+}
+
+function vpToggleRec(){
+  const btn=document.getElementById('vpRecBtn'),lbl=document.getElementById('vpRecLbl');
+  if(vpRecOn){
+    vpRecOn=false;clearTimeout(vpRecT2);
+    btn.style.background='var(--choco)';lbl.textContent='Tap to record';
+    document.querySelectorAll('#vpRecWave .vprwb').forEach(b=>{b.style.background='rgba(26,14,5,.12)';b.style.height=b._baseH+'px';});
+  } else {
+    vpRecOn=true;btn.style.background='var(--red)';lbl.textContent='Recording…';
+    const bars=document.querySelectorAll('#vpRecWave .vprwb');
+    bars.forEach(b=>b.style.background='var(--gold)');
+    vpRecT2=setTimeout(()=>{
+      vpRecOn=false;btn.style.background='var(--choco)';lbl.textContent='✓ Recorded';
+      bars.forEach(b=>{b.style.background='var(--gold2)';});
+      document.querySelectorAll('.vpc').forEach(c=>c.classList.remove('on'));
+      vpVoiceSel='My voice';vpUpdateBtn();
+    },4000);
+  }
+}
+
+function vpInit(fromScreen){
+  vpFromScreen=fromScreen||'cam-photos';
+  vpBuildGrid('f');vpBuildGrid('m');
+  // build record wave
+  const w=document.getElementById('vpRecWave');
+  if(w&&!w.children.length){
+    [5,8,4,11,6,9,4,7,10,5,8,12,6,9,4,7,11,5].forEach(h=>{
+      const b=document.createElement('div');b.className='vprwb';b._baseH=h;b.style.height=h+'px';w.appendChild(b);
+    });
+  }
+  // reset state
+  vpRecOn=false;clearTimeout(vpRecT2);
+  const btn=document.getElementById('vpRecBtn'),lbl=document.getElementById('vpRecLbl');
+  if(btn)btn.style.background='var(--choco)';if(lbl)lbl.textContent='Tap to record';
+  document.querySelectorAll('#vpRecWave .vprwb').forEach(b=>{b.style.background='rgba(26,14,5,.12)';if(b._baseH)b.style.height=b._baseH+'px';});
+  vpGender('f');
+  vpVoiceSel='Soft';vpUpdateBtn();
+}
+
+function vpBack(){back(vpFromScreen);}
+
+function vpContinue(){go('processing');}
 
 // ── Voice Sheet ──────────────────────────────────────────────
 const voiceData = {
