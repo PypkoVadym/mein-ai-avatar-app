@@ -1099,7 +1099,29 @@ function cvRemoveLink(){
   const inp=document.getElementById('linp');if(inp)inp.value='';
 }
 function selVar(el){document.querySelectorAll('.cv-var').forEach(v=>v.classList.remove('on'));el.classList.add('on');}
-function selTrend(el,tag){document.querySelectorAll('.ti3').forEach(t=>{t.classList.remove('on');const d=t.querySelector('.tidot');if(d)d.textContent='';});el.classList.add('on');const d=el.querySelector('.tidot');if(d)d.textContent='✓';document.getElementById('qtopic').textContent=tag;}
+function selTrend(el,tag){
+  document.querySelectorAll('.ti3').forEach(t=>{t.classList.remove('on');const d=t.querySelector('.tidot');if(d)d.textContent='';});
+  el.classList.add('on');const d=el.querySelector('.tidot');if(d)d.textContent='✓';
+  document.getElementById('qtopic').textContent=tag;
+  cvTrendChip(tag);
+}
+function cvTrendChip(tag){
+  const att=document.getElementById('cv-attachments');if(!att)return;
+  // Remove existing trend chip if any
+  const old=att.querySelector('[data-trend]');if(old)old.remove();
+  const chip=document.createElement('div');
+  chip.className='cv-link-chip';chip.dataset.trend='1';
+  chip.innerHTML=`📈 ${tag}<button onclick="cvRemoveTrend()">×</button>`;
+  att.appendChild(chip);
+  att.style.display='flex';
+}
+function cvRemoveTrend(){
+  const att=document.getElementById('cv-attachments');if(!att)return;
+  const old=att.querySelector('[data-trend]');if(old)old.remove();
+  if(!att.children.length)att.style.display='none';
+  // Deselect trend in list
+  document.querySelectorAll('.ti3').forEach(t=>{t.classList.remove('on');const d=t.querySelector('.tidot');if(d)d.textContent='';});
+}
 function startVoice(e){if(e)e.preventDefault();vaActive=true;const b=document.getElementById('vbtn');if(b)b.style.background='var(--gold2)';const h=document.getElementById('vhint');if(h)h.textContent='Listening…';const t=document.getElementById('vtr');if(t){t.style.display='block';}const lines=['Talking about…','Instagram growth, fitness niche…','Instagram growth, 3 clear steps, no fluff, 60s'];let i=0;vaTimer=setInterval(()=>{if(i<lines.length&&t){t.textContent=lines[i];i++;}},900);}
 function stopVoice(){vaActive=false;clearInterval(vaTimer);const b=document.getElementById('vbtn');if(b)b.style.background='var(--choco)';const h=document.getElementById('vhint');if(h)h.textContent='Hold to describe your video';}
 function runEnh(){
