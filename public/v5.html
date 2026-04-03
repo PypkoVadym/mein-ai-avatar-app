@@ -344,6 +344,39 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .cveta{text-align:center;font-size:11px;color:var(--m)}
 .cveta strong{color:var(--choco)}
 
+/* GROW */
+#grow{background:var(--bg)}
+.grow-hdr{padding:56px 18px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-bottom:1px solid rgba(26,14,5,.06)}
+.grow-ttl{font-family:'Sora',sans-serif;font-size:17px;font-weight:900;color:var(--choco);letter-spacing:-.02em;flex:1}
+.grow-count{font-family:'Sora',sans-serif;font-size:12px;font-weight:600;color:var(--choco3)}
+.grow-list{flex:1;overflow-y:auto;padding:12px 18px 32px;display:flex;flex-direction:column;gap:10px}
+.grow-list::-webkit-scrollbar{display:none}
+.grow-section-lbl{font-family:'Sora',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--choco3);margin-bottom:2px}
+.gv-card{background:#fff;border:1px solid rgba(26,14,5,.08);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:12px}
+.gv-thumb{width:42px;height:42px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px}
+.gv-info{flex:1;min-width:0}
+.gv-topic{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--choco);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gv-meta{font-size:11px;color:var(--choco3);margin-top:2px}
+.gv-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.gv-badge{font-family:'Sora',sans-serif;font-size:10px;font-weight:700;border-radius:20px;padding:3px 9px;white-space:nowrap}
+.gv-badge.gen{background:rgba(160,76,28,.08);color:var(--gold2)}
+.gv-badge.ready{background:rgba(34,197,94,.1);color:#16A34A}
+.gv-badge.posted{background:rgba(26,14,5,.05);color:var(--choco3)}
+.gv-post-btn{font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:#FFF8F2;background:var(--choco);border:none;border-radius:8px;padding:5px 11px;cursor:pointer;transition:opacity .15s}
+.gv-post-btn:active{opacity:.7}
+@keyframes gvSpin{to{transform:rotate(360deg)}}
+.gv-spin{width:10px;height:10px;border-radius:50%;border:2px solid rgba(160,76,28,.18);border-top-color:var(--gold2);animation:gvSpin .75s linear infinite;display:inline-block;vertical-align:middle;margin-right:3px}
+.grow-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:40px;opacity:.5}
+.grow-empty-ico{font-size:44px}
+.grow-empty-txt{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--choco)}
+.grow-empty-sub{font-size:13px;color:var(--choco3);line-height:1.5}
+/* Tab bar */
+.tab-bar{position:absolute;bottom:0;left:0;right:0;height:64px;background:rgba(250,246,239,.95);backdrop-filter:blur(16px);border-top:1px solid rgba(26,14,5,.07);display:flex;align-items:center;z-index:30}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding-bottom:8px;opacity:.4;transition:opacity .15s}
+.tab-item.on{opacity:1}
+.tab-item:active{opacity:.6}
+.tab-ico{font-size:22px;line-height:1}
+.tab-lbl{font-family:'Sora',sans-serif;font-size:10px;font-weight:700;color:var(--choco)}
 /* QUEUED */
 #queued{background:var(--bg)}
 .qi{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:30px}
@@ -700,8 +733,13 @@ body{background:transparent!important;padding:0!important;display:block!importan
         <div class="apmo" onclick="openMoves()">🎭<span class="apmo-lbl">Styles</span></div>
       </div>
       <!-- Add another avatar -->
-      <div onclick="go('avatar-entry')" style="text-align:center;padding:10px 0 16px;font-family:'Sora',sans-serif;font-size:12px;font-weight:600;color:var(--choco3);cursor:pointer;opacity:.7" onmousedown="this.style.opacity='1'" onmouseup="this.style.opacity='.7'">+ Add another avatar</div>
+      <div onclick="go('avatar-entry')" style="text-align:center;padding:10px 0 20px;font-family:'Sora',sans-serif;font-size:12px;font-weight:600;color:var(--choco3);cursor:pointer;opacity:.7" onmousedown="this.style.opacity='1'" onmouseup="this.style.opacity='.7'">+ Add another avatar</div>
     </div>
+  </div>
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <div class="tab-item on" onclick="go('avatar-profile')"><div class="tab-ico">👤</div><div class="tab-lbl">Avatar</div></div>
+    <div class="tab-item" onclick="go('grow')"><div class="tab-ico">📈</div><div class="tab-lbl">Grow</div></div>
   </div>
   <div class="ms" id="movesSheet" onclick="closeMoves(event)">
     <div class="msi" onclick="event.stopPropagation()">
@@ -780,8 +818,28 @@ body{background:transparent!important;padding:0!important;display:block!importan
       <div class="qro"><div class="ql">Est. ready</div><div class="qv g">~10 min</div></div>
       <div class="qro"><div class="ql">Quality boost</div><div class="qv g">+3% after render</div></div>
     </div>
-    <button class="btn-gold" onclick="alert('→ Grow tab')">📈 Watch it in Grow →</button>
-    <button style="background:none;border:none;font-size:12px;color:var(--purL);font-weight:600;cursor:pointer;text-decoration:underline" onclick="go('create-video')">+ Create another</button>
+    <button class="btn-gold" onclick="go('grow')">📈 Watch it in Grow →</button>
+    <button style="background:none;border:none;font-size:13px;color:var(--choco3);font-weight:600;cursor:pointer" onclick="go('create-video')">+ Create another</button>
+  </div>
+</div>
+
+<!-- GROW -->
+<div class="screen" id="grow">
+  <div class="grow-hdr">
+    <div class="grow-ttl">Grow</div>
+    <div class="grow-count" id="grow-count"></div>
+  </div>
+  <div class="grow-list" id="grow-list">
+    <div class="grow-empty" id="grow-empty">
+      <div class="grow-empty-ico">🎬</div>
+      <div class="grow-empty-txt">No videos yet</div>
+      <div class="grow-empty-sub">Generate your first video —<br>it'll appear here</div>
+    </div>
+  </div>
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <div class="tab-item" onclick="go('avatar-profile')"><div class="tab-ico">👤</div><div class="tab-lbl">Avatar</div></div>
+    <div class="tab-item on" onclick="go('grow')"><div class="tab-ico">📈</div><div class="tab-lbl">Grow</div></div>
   </div>
 </div>
 
@@ -844,6 +902,8 @@ function go(id){
   showScreen(id,'in');
   if(id==='processing'){ procDone=false; startProc(); }
   if(id==='create-video') cvInit();
+  if(id==='queued') queueVideo();
+  if(id==='grow') renderGrow();
 }
 function back(id){
   // Reset if going back to start of creation funnel
@@ -1099,6 +1159,69 @@ function cvRemoveLink(){
   const inp=document.getElementById('linp');if(inp)inp.value='';
 }
 function selVar(el){document.querySelectorAll('.cv-var').forEach(v=>v.classList.remove('on'));el.classList.add('on');}
+
+// Grow tab
+const growVideos=[];
+function queueVideo(){
+  const topicEl=document.getElementById('cvta');
+  const topic=(topicEl&&topicEl.value.trim())||document.getElementById('qtopic').textContent||'New video';
+  const short=topic.length>48?topic.slice(0,48)+'…':topic;
+  const id=Date.now();
+  growVideos.unshift({id,topic:short,status:'gen',ts:Date.now()});
+  // Auto-ready after 12s
+  setTimeout(()=>{
+    const v=growVideos.find(x=>x.id===id);if(v){v.status='ready';renderGrow();}
+  },12000);
+}
+function renderGrow(){
+  const list=document.getElementById('grow-list');
+  const countEl=document.getElementById('grow-count');
+  if(!list)return;
+  if(!growVideos.length){
+    list.innerHTML='<div class="grow-empty"><div class="grow-empty-ico">🎬</div><div class="grow-empty-txt">No videos yet</div><div class="grow-empty-sub">Generate your first video —<br>it\'ll appear here</div></div>';
+    if(countEl)countEl.textContent='';
+    return;
+  }
+  const gen=growVideos.filter(v=>v.status==='gen');
+  const ready=growVideos.filter(v=>v.status==='ready');
+  const posted=growVideos.filter(v=>v.status==='posted');
+  if(countEl)countEl.textContent=growVideos.length+' video'+(growVideos.length>1?'s':'');
+  let html='';
+  if(gen.length){
+    html+=`<div class="grow-section-lbl">Generating</div>`;
+    gen.forEach(v=>{html+=gvCard(v);});
+  }
+  if(ready.length){
+    html+=`<div class="grow-section-lbl" style="margin-top:${gen.length?8:0}px">Ready to post</div>`;
+    ready.forEach(v=>{html+=gvCard(v);});
+  }
+  if(posted.length){
+    html+=`<div class="grow-section-lbl" style="margin-top:8px">Posted</div>`;
+    posted.forEach(v=>{html+=gvCard(v);});
+  }
+  list.innerHTML=html;
+}
+function gvCard(v){
+  const bg=v.status==='gen'?'linear-gradient(135deg,#F5E8DC,#EDD4C0)':'linear-gradient(135deg,#D4EDD8,#B8DFC0)';
+  const badge=v.status==='gen'
+    ?`<div class="gv-badge gen"><span class="gv-spin"></span>Generating</div>`
+    :v.status==='ready'
+    ?`<div class="gv-badge ready">● Ready</div>`
+    :`<div class="gv-badge posted">Posted</div>`;
+  const action=v.status==='ready'
+    ?`<button class="gv-post-btn" onclick="gvPost(${v.id})">Post now</button>`:'';
+  return `<div class="gv-card">
+    <div class="gv-thumb" style="background:${bg}">🎬</div>
+    <div class="gv-info">
+      <div class="gv-topic">${v.topic}</div>
+      <div class="gv-meta">${v.status==='gen'?'Ready in ~10 min':v.status==='ready'?'Ready to post':'Posted'}</div>
+    </div>
+    <div class="gv-right">${badge}${action}</div>
+  </div>`;
+}
+function gvPost(id){
+  const v=growVideos.find(x=>x.id===id);if(v){v.status='posted';renderGrow();}
+}
 function selTrend(el,tag){
   document.querySelectorAll('.ti3').forEach(t=>{t.classList.remove('on');const d=t.querySelector('.tidot');if(d)d.textContent='';});
   el.classList.add('on');const d=el.querySelector('.tidot');if(d)d.textContent='✓';
