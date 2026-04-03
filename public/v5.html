@@ -297,8 +297,18 @@ body{background:#EDE0CC;min-height:100vh;display:flex;align-items:center;justify
 .cv-q-row{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 0;gap:8px}
 .cv-q{font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:var(--choco)}
 .cv-enhanced-badge{display:none;align-items:center;gap:4px;background:#EEE8FF;border-radius:20px;padding:3px 10px;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:#5B21B6;white-space:nowrap;flex-shrink:0}
-.cvta{width:100%;min-height:88px;background:transparent;border:none;padding:8px 14px 10px;color:var(--choco);font-size:14px;font-family:'DM Sans',sans-serif;resize:none;outline:none;line-height:1.6;display:block}
+.cv-ta-wrap{position:relative}
+.cvta{width:100%;min-height:88px;background:transparent;border:none;padding:8px 14px 10px;color:var(--choco);font-size:14px;font-family:'DM Sans',sans-serif;resize:none;outline:none;line-height:1.6;display:block;transition:opacity .15s}
+.cv-ta-wrap.enhancing .cvta{opacity:0;pointer-events:none}
 .cvta::placeholder{color:rgba(26,14,5,.28)}
+/* Shimmer skeleton */
+.cv-shimmer{display:none;flex-direction:column;gap:9px;padding:8px 14px 12px}
+.cv-ta-wrap.enhancing .cv-shimmer{display:flex}
+.cv-shimmer-line{height:13px;border-radius:6px;background:linear-gradient(90deg,#f0ecf8 25%,#ddd4f5 50%,#f0ecf8 75%);background-size:200% 100%;animation:cvShimmer 1.2s ease-in-out infinite}
+@keyframes cvShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* Fade-in for badge */
+@keyframes cvFadeIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.cv-enhanced-badge.show{display:flex;animation:cvFadeIn .22s cubic-bezier(.34,1.56,.64,1) forwards}
 .cv-enhance{display:none;align-items:center;justify-content:center;gap:6px;margin:0 14px 12px;padding:11px;border-radius:12px;background:#EEE8FF;border:none;cursor:pointer;font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#5B21B6;transition:background .15s;width:calc(100% - 28px)}
 .cv-enhance:active{background:#E0D4FF}
 .cv-enhance.done{background:#EEE8FF}
@@ -721,7 +731,15 @@ body{background:transparent!important;padding:0!important;display:block!importan
       <div class="cv-q">What's your video about?</div>
       <div class="cv-enhanced-badge" id="cv-enhanced-badge">✦ Enhanced</div>
     </div>
-    <textarea class="cvta" id="cvta" placeholder="How to grow on Instagram in 2025 — break it down into 3 steps, no fluff." oninput="cvTextChange(this)"></textarea>
+    <div class="cv-ta-wrap" id="cv-ta-wrap">
+      <textarea class="cvta" id="cvta" placeholder="How to grow on Instagram in 2025 — break it down into 3 steps, no fluff." oninput="cvTextChange(this)"></textarea>
+      <div class="cv-shimmer" id="cv-shimmer">
+        <div class="cv-shimmer-line" style="width:88%"></div>
+        <div class="cv-shimmer-line" style="width:72%;animation-delay:.15s"></div>
+        <div class="cv-shimmer-line" style="width:80%;animation-delay:.3s"></div>
+        <div class="cv-shimmer-line" style="width:55%;animation-delay:.1s"></div>
+      </div>
+    </div>
     <button class="cv-enhance" id="cv-enhance" onclick="runEnh()">✦ Enhance with AI</button>
     <div class="cv-card-sep"></div>
     <div class="cv-alt-chips">
@@ -1025,8 +1043,9 @@ function closeMoves(e){if(!e||e.target===document.getElementById('movesSheet'))d
 // Create Video
 function cvInit(){
   const ta=document.getElementById('cvta');if(ta)ta.value='';
-  const enh=document.getElementById('cv-enhance');if(enh){enh.style.display='none';enh.classList.remove('done');enh.innerHTML='✦ Enhance with AI';}
-  const badge=document.getElementById('cv-enhanced-badge');if(badge)badge.style.display='none';
+  const wrap=document.getElementById('cv-ta-wrap');if(wrap)wrap.classList.remove('enhancing');
+  const enh=document.getElementById('cv-enhance');if(enh){enh.style.display='none';enh.classList.remove('done');enh.style.pointerEvents='auto';enh.style.opacity='1';enh.innerHTML='✦ Enhance with AI';}
+  const badge=document.getElementById('cv-enhanced-badge');if(badge){badge.classList.remove('show');badge.style.display='none';}
   const alt=document.getElementById('cv-alt-area');if(alt){alt.style.display='none';alt.innerHTML='';}
   document.querySelectorAll('.cv-alt-chip').forEach(c=>c.classList.remove('on'));
   document.querySelectorAll('.cv-var').forEach((v,i)=>v.classList.toggle('on',i===0));
@@ -1034,12 +1053,11 @@ function cvInit(){
 function cvTextChange(ta){
   const enh=document.getElementById('cv-enhance');
   if(!enh)return;
-  // If text was changed after enhancing — reset enhanced state
   if(enh.classList.contains('done')){
     enh.classList.remove('done');
     enh.innerHTML='✦ Enhance with AI';
     const badge=document.getElementById('cv-enhanced-badge');
-    if(badge)badge.style.display='none';
+    if(badge){badge.classList.remove('show');badge.style.display='none';}
   }
   enh.style.display=ta.value.trim()?'flex':'none';
 }
@@ -1068,10 +1086,22 @@ function startVoice(e){if(e)e.preventDefault();vaActive=true;const b=document.ge
 function stopVoice(){vaActive=false;clearInterval(vaTimer);const b=document.getElementById('vbtn');if(b)b.style.background='var(--choco)';const h=document.getElementById('vhint');if(h)h.textContent='Hold to describe your video';}
 function runEnh(){
   const b=document.getElementById('cv-enhance');
-  b.innerHTML='✦ Enhancing…';b.style.opacity='.6';b.style.pointerEvents='none';
+  const ta=document.getElementById('cvta');
+  const wrap=document.getElementById('cv-ta-wrap');
+  if(!b||!ta||!ta.value.trim())return;
+  const original=ta.value.trim();
+  // Start shimmer
+  b.innerHTML='✦ Enhancing…';b.style.opacity='.55';b.style.pointerEvents='none';
+  wrap.classList.add('enhancing');
   setTimeout(()=>{
+    // Apply enhanced text
+    const enhanced=original.replace(/[.!?]+$/,'')+`.\n\nIn this video I'll break it down into 3 clear steps — no fluff, just what actually works. By the end you'll know exactly what to do and where most people go wrong.`;
+    wrap.classList.remove('enhancing');
+    ta.value=enhanced;
+    // Update button + badge
     b.innerHTML='✦ Enhanced';b.style.opacity='1';b.style.pointerEvents='auto';b.classList.add('done');
-    const badge=document.getElementById('cv-enhanced-badge');if(badge)badge.style.display='flex';
+    const badge=document.getElementById('cv-enhanced-badge');
+    if(badge){badge.style.display='';badge.classList.add('show');}
   },1600);
 }
 </script>
