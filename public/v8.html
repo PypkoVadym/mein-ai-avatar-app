@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>TWIN v8 — New Video</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+  --bg:#faf8f4;--bg2:#eae3dc;--warm:#dbd3c8;--warm2:#d0c7bc;
+  --choco:#331e1b;--choco2:#4a3028;--choco3:#9d745a;
+  --gold:#9d745a;--gold2:#7a5540;
+  --green:#22C55E;--red:#EF4444;
+  --m:rgba(51,30,27,.4);--m2:rgba(51,30,27,.65);
+  --gl:rgba(51,30,27,.06);--glb:rgba(51,30,27,.12)
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+body{background:#e8e0d8;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;padding:20px}
+.phone{width:375px;height:812px;border-radius:52px;position:relative;overflow:hidden;background:var(--bg);box-shadow:0 0 0 1px rgba(51,30,27,.1),0 56px 130px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08)}
+.island{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:20px;z-index:200}
+
+/* ── Screen ── */
+.screen{position:absolute;inset:0;display:none!important;flex-direction:column;overflow:hidden;background:var(--bg)}
+.screen.active{display:flex!important}
+
+/* ── Back button ── */
+.sback{width:34px;height:34px;border-radius:8px;border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity .15s;flex-shrink:0;background:rgba(51,30,27,.08);color:var(--choco)}
+.sback:active{opacity:.55}
+
+/* ══════════════════════════════
+   CREATE VIDEO v8
+══════════════════════════════ */
+#create-video{background:var(--bg)}
+
+.cv8-hdr{padding:54px 18px 0;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.cv8-ttl{font-family:'Inter',sans-serif;font-size:17px;font-weight:900;color:var(--choco);letter-spacing:-.02em;flex:1}
+.cv8-tokens{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--choco3);background:rgba(51,30,27,.06);border:1px solid rgba(51,30,27,.1);border-radius:20px;padding:5px 11px}
+
+/* ── Tile list ── */
+.cv8-list{display:flex;flex-direction:column;gap:9px;padding:14px 16px;flex:1;overflow-y:auto;-ms-overflow-style:none;scrollbar-width:none}
+.cv8-list::-webkit-scrollbar{display:none}
+
+/* ── Individual tile ── */
+.cv8-tile{border-radius:18px;background:#fff;border:1.5px solid rgba(51,30,27,.08);padding:16px;cursor:pointer;position:relative;overflow:hidden;transition:border-color .2s,transform .1s,opacity .2s}
+.cv8-tile:active:not(.locked){transform:scale(.985)}
+
+/* locked = not yet reachable */
+.cv8-tile.locked{opacity:.45;pointer-events:none}
+
+/* done = completed step */
+.cv8-tile.done{border-color:rgba(51,30,27,.18);background:#fff}
+
+/* error shake */
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.cv8-tile.shake{animation:shake .3s ease}
+
+/* step number badge */
+.cv8-step-num{width:24px;height:24px;border-radius:50%;background:rgba(51,30,27,.08);display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:11px;font-weight:800;color:var(--choco3);flex-shrink:0;transition:all .35s}
+.cv8-tile.done .cv8-step-num{background:var(--green);color:#fff}
+
+/* done checkmark pop */
+@keyframes checkPop{0%{transform:scale(0) rotate(-20deg);opacity:0}60%{transform:scale(1.25) rotate(4deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+.cv8-tile.done .cv8-step-num::after{content:'✓';font-size:12px}
+.cv8-tile.done .cv8-check-anim{animation:checkPop .38s cubic-bezier(.34,1.56,.64,1) forwards}
+
+/* tile header row */
+.cv8-tile-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cv8-tile-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:var(--choco3);flex:1;letter-spacing:.01em;text-transform:uppercase;font-size:10px}
+.cv8-tile-arr{font-size:14px;color:var(--choco3);opacity:.5;transition:opacity .15s}
+.cv8-tile.done .cv8-tile-arr{opacity:.3}
+
+/* ── Tile: Avatar (always done) ── */
+.cv8-av-row{display:flex;align-items:center;gap:12px}
+.cv8-av-circle{width:54px;height:54px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid rgba(51,30,27,.08);background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:26px}
+.cv8-av-circle img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.cv8-av-info{flex:1;min-width:0}
+.cv8-av-name{font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:var(--choco);letter-spacing:-.02em}
+.cv8-av-status{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--green);margin-top:3px}
+.cv8-av-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.cv8-av-quality{font-size:11px;color:var(--choco3);margin-top:2px}
+
+/* ── Tile: Trend empty ── */
+.cv8-empty-body{display:flex;align-items:center;gap:14px}
+.cv8-empty-ico{font-size:30px;flex-shrink:0;width:44px;text-align:center}
+.cv8-empty-text{}
+.cv8-empty-title{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:var(--choco);margin-bottom:3px}
+.cv8-empty-sub{font-size:12px;color:var(--choco3);line-height:1.45}
+.cv8-cta-pill{display:inline-block;margin-top:10px;background:rgba(51,30,27,.06);border:1px solid rgba(51,30,27,.1);border-radius:20px;padding:5px 14px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--choco2)}
+
+/* ── Tile: Trend filled ── */
+.cv8-trend-filled{display:none;align-items:center;gap:14px}
+.cv8-trend-thumb{width:62px;height:80px;border-radius:10px;flex-shrink:0;position:relative;overflow:hidden}
+.cv8-trend-thumb-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.cv8-trend-thumb-ov{position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.7))}
+.cv8-trend-thumb-tag{position:absolute;bottom:6px;left:6px;font-family:'Inter',sans-serif;font-size:9px;font-weight:800;color:#fff}
+.cv8-trend-info{flex:1;min-width:0}
+.cv8-trend-tag{font-family:'Inter',sans-serif;font-size:15px;font-weight:800;color:var(--choco);letter-spacing:-.02em;margin-bottom:4px}
+.cv8-trend-stat-row{display:flex;gap:8px;flex-wrap:wrap}
+.cv8-trend-stat{font-size:11px;color:var(--choco3);display:flex;align-items:center;gap:3px}
+
+/* ── Tile: Prompt filled ── */
+.cv8-prompt-filled{display:none;flex-direction:column;gap:6px}
+.cv8-prompt-preview{font-size:13px;color:var(--choco2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.cv8-prompt-mode{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--gold);font-weight:600;margin-top:2px}
+
+/* ── Tile: Final filled ── */
+.cv8-final-filled{display:none;flex-wrap:wrap;gap:6px}
+.cv8-chip{font-size:11px;font-weight:600;color:var(--choco3);background:rgba(51,30,27,.06);border-radius:8px;padding:4px 10px;border:1px solid rgba(51,30,27,.08)}
+.cv8-chip.on{color:var(--choco);background:rgba(51,30,27,.1)}
+
+/* ── Fill-in animation ── */
+@keyframes fillSlide{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.fill-animate{animation:fillSlide .3s cubic-bezier(.22,1,.36,1) forwards}
+
+/* ── Bottom CTA ── */
+.cv8-bot{padding:10px 16px 38px;flex-shrink:0}
+.cv8-btn{width:100%;height:56px;border-radius:16px;border:none;background:var(--choco);color:#fff;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:-.01em;transition:opacity .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px}
+.cv8-btn:active{transform:scale(.98);opacity:.88}
+.cv8-btn:disabled{opacity:.3;pointer-events:none}
+.cv8-btn-arrow{font-size:18px;transition:transform .2s}
+.cv8-btn:hover .cv8-btn-arrow{transform:translateX(3px)}
+
+/* ══════════════════════════════
+   BOTTOM SHEETS
+══════════════════════════════ */
+.cv8-sheet{position:absolute;inset:0;z-index:60;background:rgba(0,0,0,.48);backdrop-filter:blur(8px);display:none;flex-direction:column;justify-content:flex-end}
+.cv8-sheet.open{display:flex}
+.cv8-sheet-inner{background:var(--bg);border-radius:24px 24px 0 0;border-top:1px solid rgba(51,30,27,.07);display:flex;flex-direction:column;max-height:80%;overflow:hidden}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.cv8-sheet.open .cv8-sheet-inner{animation:sheetUp .32s cubic-bezier(.32,.72,0,1)}
+.cv8-handle{width:36px;height:4px;background:rgba(51,30,27,.12);border-radius:2px;margin:14px auto 0;flex-shrink:0}
+.cv8-sh-hdr{padding:12px 20px 8px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.cv8-sh-ttl{font-family:'Inter',sans-serif;font-size:17px;font-weight:900;color:var(--choco);letter-spacing:-.02em}
+.cv8-sh-close{width:30px;height:30px;border-radius:50%;background:rgba(51,30,27,.07);border:none;font-size:14px;cursor:pointer;color:var(--choco3);display:flex;align-items:center;justify-content:center}
+.cv8-sh-body{flex:1;overflow-y:auto;padding:0 20px 0;-ms-overflow-style:none;scrollbar-width:none}
+.cv8-sh-body::-webkit-scrollbar{display:none}
+.cv8-sh-foot{padding:14px 20px 40px;flex-shrink:0}
+.cv8-sh-btn{width:100%;height:52px;border-radius:14px;border:none;background:var(--choco);color:#fff;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:-.01em;transition:opacity .15s,transform .1s}
+.cv8-sh-btn:active{transform:scale(.98);opacity:.88}
+
+/* ── Sheet: Avatar list ── */
+.cv8-av-list{display:flex;flex-direction:column;gap:9px;padding-bottom:4px}
+.cv8-av-list-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:#fff;border:1.5px solid rgba(51,30,27,.08);cursor:pointer;transition:all .15s}
+.cv8-av-list-row:active{transform:scale(.98)}
+.cv8-av-list-row.sel{border-color:var(--choco)}
+.cv8-av-list-thumb{width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1.5px solid rgba(51,30,27,.1);background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:22px}
+.cv8-av-list-thumb img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.cv8-av-list-info{flex:1;min-width:0}
+.cv8-av-list-name{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:var(--choco)}
+.cv8-av-list-sub{font-size:11px;margin-top:2px}
+.cv8-av-list-ck{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(51,30,27,.2);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;transition:all .2s;flex-shrink:0}
+.cv8-av-list-row.sel .cv8-av-list-ck{background:var(--choco);border-color:var(--choco);color:#fff}
+
+/* ── Sheet: Trend ── */
+.cv8-trend-cards{display:flex;flex-direction:column;gap:10px;padding-bottom:6px}
+.cv8-tc{border-radius:14px;border:1.5px solid rgba(51,30,27,.1);background:#fff;overflow:hidden;cursor:pointer;transition:border-color .15s,transform .1s}
+.cv8-tc:active{transform:scale(.98)}
+.cv8-tc.sel{border-color:var(--choco)}
+.cv8-tc-visual{height:130px;position:relative;overflow:hidden}
+.cv8-tc-vis-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.cv8-tc-vis-ov{position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(0,0,0,.75))}
+.cv8-tc-vis-info{position:absolute;bottom:10px;left:12px;right:12px}
+.cv8-tc-vis-tag{font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.cv8-tc-vis-stats{font-size:10px;color:rgba(255,255,255,.75);margin-top:3px}
+.cv8-tc-sel-badge{position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;transition:all .2s}
+.cv8-tc.sel .cv8-tc-sel-badge{background:var(--choco);border-color:var(--choco)}
+.cv8-tc-foot{padding:11px 12px;display:flex;align-items:center;gap:8px}
+.cv8-tc-desc{flex:1;font-size:12px;color:var(--choco3);line-height:1.4}
+.cv8-tc-badge{font-family:'Inter',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:6px;flex-shrink:0}
+.cv8-tc-badge.hot{background:rgba(239,68,68,.1);color:#ef4444}
+.cv8-tc-badge.grow{background:rgba(157,116,90,.1);color:var(--gold)}
+
+/* ── Sheet: Prompt ── */
+.cv8-ta{width:100%;min-height:130px;background:#fff;border:1.5px solid rgba(51,30,27,.1);border-radius:14px;padding:13px 15px;color:var(--choco);font-size:14px;font-family:'Inter',sans-serif;resize:none;outline:none;line-height:1.65;transition:border-color .15s}
+.cv8-ta:focus{border-color:var(--choco)}
+.cv8-ta::placeholder{color:rgba(51,30,27,.28)}
+.cv8-or{display:flex;align-items:center;gap:10px;margin:14px 0;font-size:11px;color:var(--choco3);font-weight:600}
+.cv8-or::before,.cv8-or::after{content:'';flex:1;height:1px;background:rgba(51,30,27,.1)}
+.cv8-voice-box{background:#fff;border:1.5px solid rgba(51,30,27,.1);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.cv8-voice-btn{width:50px;height:50px;border-radius:50%;background:var(--choco);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:transform .1s}
+.cv8-voice-btn:active{transform:scale(.9)}
+.cv8-voice-info{}
+.cv8-voice-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--choco)}
+.cv8-voice-sub{font-size:11px;color:var(--choco3);margin-top:3px}
+
+/* ── Sheet: Final ── */
+.cv8-section-lbl{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--choco3);margin-bottom:8px}
+.cv8-link-inp{display:flex;align-items:center;background:#fff;border:1.5px solid rgba(51,30,27,.1);border-radius:12px;padding:12px 14px;gap:9px;margin-bottom:14px;transition:border-color .15s}
+.cv8-link-inp:focus-within{border-color:var(--choco)}
+.cv8-link-inp input{flex:1;border:none;background:transparent;color:var(--choco);font-size:13px;font-family:'Inter',sans-serif;outline:none}
+.cv8-link-ico{font-size:15px;flex-shrink:0;opacity:.45}
+.cv8-sub-row{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid rgba(51,30,27,.1);border-radius:12px;padding:13px 14px;cursor:pointer;transition:border-color .15s;margin-bottom:10px}
+.cv8-sub-row-ico{font-size:17px;flex-shrink:0}
+.cv8-sub-row-lbl{flex:1;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--choco)}
+.cv8-toggle{width:40px;height:23px;border-radius:12px;background:rgba(51,30,27,.12);position:relative;transition:background .2s;flex-shrink:0}
+.cv8-toggle.on{background:var(--choco)}
+.cv8-toggle-knob{position:absolute;top:3.5px;left:3.5px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.18);transition:transform .2s}
+.cv8-toggle.on .cv8-toggle-knob{transform:translateX(17px)}
+.cv8-vars-row{display:flex;gap:8px;margin-bottom:4px}
+.cv8-var{flex:1;padding:11px 8px;border-radius:10px;border:1.5px solid rgba(51,30,27,.1);background:transparent;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--choco3);cursor:pointer;text-align:center;transition:all .18s}
+.cv8-var.on{background:var(--choco);color:#fff;border-color:var(--choco)}
+.cv8-var:active{opacity:.75}
+
+/* ── Processing / generating ── */
+#generating{background:var(--bg)}
+.gen-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:0 32px}
+.gen-ring-wrap{position:relative;width:110px;height:110px;display:flex;align-items:center;justify-content:center}
+.gen-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(51,30,27,.08);animation:genRing 2s ease-out infinite}
+.gen-ring:nth-child(2){animation-delay:.7s}.gen-ring:nth-child(3){animation-delay:1.4s}
+@keyframes genRing{0%{transform:scale(.7);opacity:.7}100%{transform:scale(1.6);opacity:0}}
+.gen-emoji{font-size:54px;position:relative;z-index:1;animation:genFloat 4s ease-in-out infinite}
+@keyframes genFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.gen-title{font-family:'Inter',sans-serif;font-size:22px;font-weight:900;color:var(--choco);text-align:center;letter-spacing:-.03em;line-height:1.15}
+.gen-steps{display:flex;flex-direction:column;gap:7px;width:100%}
+.gen-step{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;background:#fff;border:1px solid rgba(51,30,27,.07);opacity:0;transition:opacity .4s}
+.gen-step.vis{opacity:1}
+.gen-step-ico{font-size:19px;flex-shrink:0}
+.gen-step-ico.spin{animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gen-step-ico.dim{opacity:.2}
+.gen-step-text{flex:1;font-size:13px;font-weight:600;color:var(--choco)}
+.gen-step-status{font-size:11px;font-weight:700}
+.gen-step-status.done{color:var(--green)}.gen-step-status.run{color:var(--gold)}.gen-step-status.wait{color:rgba(51,30,27,.22)}
+
+/* ── Tab bar (to navigate back to list) ── */
+.tabbar{position:absolute;bottom:0;left:0;right:0;height:82px;background:rgba(250,248,244,.96);backdrop-filter:blur(18px);border-top:1px solid rgba(51,30,27,.07);display:flex;align-items:flex-start;justify-content:space-around;padding-top:12px;z-index:50}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;flex:1;transition:opacity .15s}
+.tab:active{opacity:.6}
+.tab-ico{font-size:22px;line-height:1}
+.tab-lbl{font-family:'Inter',sans-serif;font-size:10px;font-weight:600;color:var(--choco3);letter-spacing:.01em}
+.tab.active .tab-lbl{color:var(--choco)}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="island"></div>
+
+  <!-- ══════════════ CREATE VIDEO v8 ══════════════ -->
+  <div class="screen active" id="create-video">
+    <!-- Header -->
+    <div class="cv8-hdr">
+      <button class="sback" onclick="history.back()">←</button>
+      <span class="cv8-ttl">New video</span>
+      <span class="cv8-tokens">847 tokens</span>
+    </div>
+
+    <!-- Vertical step tiles -->
+    <div class="cv8-list">
+
+      <!-- ① Avatar tile — always done/active -->
+      <div class="cv8-tile done" id="tile-avatar" onclick="openSheet('avatar')">
+        <div class="cv8-tile-hdr">
+          <div class="cv8-step-num cv8-check-anim">✓</div>
+          <div class="cv8-tile-label">Your avatar</div>
+          <div class="cv8-tile-arr">›</div>
+        </div>
+        <div class="cv8-av-row">
+          <div class="cv8-av-circle">🧑‍💼</div>
+          <div class="cv8-av-info">
+            <div class="cv8-av-name">My Avatar</div>
+            <div class="cv8-av-status"><div class="cv8-av-dot"></div>Ready to use</div>
+            <div class="cv8-av-quality">HD · Trained on 47 photos</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② Trend tile — step 1 to complete -->
+      <div class="cv8-tile" id="tile-trend" onclick="openSheet('trend')">
+        <div class="cv8-tile-hdr">
+          <div class="cv8-step-num" id="step-num-trend">2</div>
+          <div class="cv8-tile-label">Trend</div>
+          <div class="cv8-tile-arr">›</div>
+        </div>
+        <!-- empty state -->
+        <div id="trend-empty" class="cv8-empty-body">
+          <div class="cv8-empty-ico">📈</div>
+          <div class="cv8-empty-text">
+            <div class="cv8-empty-title">Pick a trend</div>
+            <div class="cv8-empty-sub">Ride a viral wave to 10× your reach</div>
+            <span class="cv8-cta-pill">Browse trends →</span>
+          </div>
+        </div>
+        <!-- filled state -->
+        <div id="trend-filled" class="cv8-trend-filled">
+          <div class="cv8-trend-thumb" id="trend-thumb">
+            <div class="cv8-trend-thumb-bg" id="trend-thumb-bg"></div>
+            <div class="cv8-trend-thumb-ov"></div>
+            <div class="cv8-trend-thumb-tag" id="trend-thumb-tag"></div>
+          </div>
+          <div class="cv8-trend-info">
+            <div class="cv8-trend-tag" id="trend-tag-text"></div>
+            <div class="cv8-trend-stat-row">
+              <span class="cv8-trend-stat" id="trend-stat-views"></span>
+              <span class="cv8-trend-stat" id="trend-stat-hook"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ Prompt tile — locked until trend done -->
+      <div class="cv8-tile locked" id="tile-prompt" onclick="openSheet('prompt')">
+        <div class="cv8-tile-hdr">
+          <div class="cv8-step-num" id="step-num-prompt">3</div>
+          <div class="cv8-tile-label">Your prompt</div>
+          <div class="cv8-tile-arr">›</div>
+        </div>
+        <div id="prompt-empty" class="cv8-empty-body">
+          <div class="cv8-empty-ico">✍️</div>
+          <div class="cv8-empty-text">
+            <div class="cv8-empty-title">Write or speak</div>
+            <div class="cv8-empty-sub">Tell the AI what your video is about</div>
+            <span class="cv8-cta-pill">Add prompt →</span>
+          </div>
+        </div>
+        <div id="prompt-filled" class="cv8-prompt-filled">
+          <div class="cv8-prompt-preview" id="prompt-preview-text"></div>
+          <div class="cv8-prompt-mode" id="prompt-mode-badge"></div>
+        </div>
+      </div>
+
+      <!-- ④ Final touches — locked until prompt done -->
+      <div class="cv8-tile locked" id="tile-final" onclick="openSheet('final')">
+        <div class="cv8-tile-hdr">
+          <div class="cv8-step-num" id="step-num-final">4</div>
+          <div class="cv8-tile-label">Link · Sub. · Variants</div>
+          <div class="cv8-tile-arr">›</div>
+        </div>
+        <div id="final-empty" class="cv8-empty-body">
+          <div class="cv8-empty-ico">⚙️</div>
+          <div class="cv8-empty-text">
+            <div class="cv8-empty-title">Final touches</div>
+            <div class="cv8-empty-sub">Reference link, subtitles & video variants</div>
+            <span class="cv8-cta-pill">Configure →</span>
+          </div>
+        </div>
+        <div id="final-filled" class="cv8-final-filled"></div>
+      </div>
+
+    </div><!-- /cv8-list -->
+
+    <!-- Create button -->
+    <div class="cv8-bot">
+      <button class="cv8-btn" id="cv8-create-btn" disabled onclick="startGenerate()">
+        Create video <span class="cv8-btn-arrow">→</span>
+      </button>
+    </div>
+
+    <!-- ══ SHEET: Avatar ══ -->
+    <div class="cv8-sheet" id="sheet-avatar" onclick="closeSheet('avatar',event)">
+      <div class="cv8-sheet-inner" onclick="event.stopPropagation()">
+        <div class="cv8-handle"></div>
+        <div class="cv8-sh-hdr">
+          <div class="cv8-sh-ttl">Your avatar</div>
+          <button class="cv8-sh-close" onclick="closeSheet('avatar')">✕</button>
+        </div>
+        <div class="cv8-sh-body" style="padding-bottom:10px">
+          <div class="cv8-av-list">
+            <div class="cv8-av-list-row sel" id="av-row-main">
+              <div class="cv8-av-list-thumb">🧑‍💼</div>
+              <div class="cv8-av-list-info">
+                <div class="cv8-av-list-name">My Avatar</div>
+                <div class="cv8-av-list-sub" style="color:var(--green)">● Ready · HD quality</div>
+              </div>
+              <div class="cv8-av-list-ck">✓</div>
+            </div>
+            <div class="cv8-av-list-row" style="cursor:pointer;opacity:.7">
+              <div class="cv8-av-list-thumb" style="font-size:18px;color:var(--choco3)">＋</div>
+              <div class="cv8-av-list-info">
+                <div class="cv8-av-list-name">New avatar</div>
+                <div class="cv8-av-list-sub" style="color:var(--choco3)">Create another one</div>
+              </div>
+              <div style="font-size:16px;color:var(--choco3)">›</div>
+            </div>
+          </div>
+        </div>
+        <div class="cv8-sh-foot">
+          <button class="cv8-sh-btn" onclick="closeSheet('avatar')">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SHEET: Trend ══ -->
+    <div class="cv8-sheet" id="sheet-trend" onclick="closeSheet('trend',event)">
+      <div class="cv8-sheet-inner" onclick="event.stopPropagation()">
+        <div class="cv8-handle"></div>
+        <div class="cv8-sh-hdr">
+          <div class="cv8-sh-ttl">Trending now 🔥</div>
+          <button class="cv8-sh-close" onclick="closeSheet('trend')">✕</button>
+        </div>
+        <div class="cv8-sh-body" style="padding-bottom:10px">
+          <div class="cv8-trend-cards" id="trend-card-list">
+
+            <div class="cv8-tc" data-idx="0" onclick="selTrend(this)">
+              <div class="cv8-tc-visual">
+                <div class="cv8-tc-vis-bg" style="background:linear-gradient(145deg,#3d1a5e,#9b2d85)"></div>
+                <div class="cv8-tc-vis-ov"></div>
+                <div class="cv8-tc-vis-info">
+                  <div class="cv8-tc-vis-tag">#GlowUp</div>
+                  <div class="cv8-tc-vis-stats">👁 99M views · 🪝 100K hook rate</div>
+                </div>
+                <div class="cv8-tc-sel-badge">✓</div>
+              </div>
+              <div class="cv8-tc-foot">
+                <div class="cv8-tc-desc">Transform your routine — before/after stories crushing it right now</div>
+                <div class="cv8-tc-badge hot">🔥 Viral</div>
+              </div>
+            </div>
+
+            <div class="cv8-tc" data-idx="1" onclick="selTrend(this)">
+              <div class="cv8-tc-visual">
+                <div class="cv8-tc-vis-bg" style="background:linear-gradient(145deg,#0f2c47,#1a6b8a)"></div>
+                <div class="cv8-tc-vis-ov"></div>
+                <div class="cv8-tc-vis-info">
+                  <div class="cv8-tc-vis-tag">#MoneyTips</div>
+                  <div class="cv8-tc-vis-stats">👁 54M views · 🪝 78K hook rate</div>
+                </div>
+                <div class="cv8-tc-sel-badge">✓</div>
+              </div>
+              <div class="cv8-tc-foot">
+                <div class="cv8-tc-desc">Finance hacks in under 60 sec — high save rates across all platforms</div>
+                <div class="cv8-tc-badge grow">📈 Growing</div>
+              </div>
+            </div>
+
+            <div class="cv8-tc" data-idx="2" onclick="selTrend(this)">
+              <div class="cv8-tc-visual">
+                <div class="cv8-tc-vis-bg" style="background:linear-gradient(145deg,#1a3a1a,#2d7a2d)"></div>
+                <div class="cv8-tc-vis-ov"></div>
+                <div class="cv8-tc-vis-info">
+                  <div class="cv8-tc-vis-tag">#ProductivityHack</div>
+                  <div class="cv8-tc-vis-stats">👁 38M views · 🪝 61K hook rate</div>
+                </div>
+                <div class="cv8-tc-sel-badge">✓</div>
+              </div>
+              <div class="cv8-tc-foot">
+                <div class="cv8-tc-desc">Morning routines & deep work tips — evergreen but surging this week</div>
+                <div class="cv8-tc-badge grow">📈 Growing</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="cv8-sh-foot">
+          <button class="cv8-sh-btn" id="trend-confirm-btn" onclick="confirmTrend()" disabled style="opacity:.35">Use this trend →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SHEET: Prompt ══ -->
+    <div class="cv8-sheet" id="sheet-prompt" onclick="closeSheet('prompt',event)">
+      <div class="cv8-sheet-inner" onclick="event.stopPropagation()">
+        <div class="cv8-handle"></div>
+        <div class="cv8-sh-hdr">
+          <div class="cv8-sh-ttl">What's in your video</div>
+          <button class="cv8-sh-close" onclick="closeSheet('prompt')">✕</button>
+        </div>
+        <div class="cv8-sh-body" style="padding-bottom:6px">
+          <textarea class="cv8-ta" id="cv8-prompt-ta" rows="5" placeholder="How to grow on Instagram in 2025 — break it down into 3 steps, no fluff."></textarea>
+          <div class="cv8-or">or speak it</div>
+          <div class="cv8-voice-box">
+            <button class="cv8-voice-btn" id="cv8-vbtn" onmousedown="startVoice()" onmouseup="stopVoice()" ontouchstart="startVoice(event)" ontouchend="stopVoice()">🎙</button>
+            <div class="cv8-voice-info">
+              <div class="cv8-voice-title" id="cv8-vhint">Hold to record</div>
+              <div class="cv8-voice-sub" id="cv8-vtrans"></div>
+            </div>
+          </div>
+        </div>
+        <div class="cv8-sh-foot">
+          <button class="cv8-sh-btn" onclick="confirmPrompt()">Save prompt →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SHEET: Final touches ══ -->
+    <div class="cv8-sheet" id="sheet-final" onclick="closeSheet('final',event)">
+      <div class="cv8-sheet-inner" onclick="event.stopPropagation()">
+        <div class="cv8-handle"></div>
+        <div class="cv8-sh-hdr">
+          <div class="cv8-sh-ttl">Final touches</div>
+          <button class="cv8-sh-close" onclick="closeSheet('final')">✕</button>
+        </div>
+        <div class="cv8-sh-body" style="padding-bottom:6px">
+          <div style="margin-bottom:6px">
+            <div class="cv8-section-lbl">Reference link</div>
+            <div class="cv8-link-inp">
+              <div class="cv8-link-ico">🔗</div>
+              <input type="url" id="cv8-link-inp" placeholder="https://...">
+            </div>
+          </div>
+          <div style="margin-bottom:6px">
+            <div class="cv8-section-lbl">Subtitles</div>
+            <div class="cv8-sub-row" onclick="toggleSub()">
+              <div class="cv8-sub-row-ico">📝</div>
+              <div class="cv8-sub-row-lbl">Add subtitles</div>
+              <div class="cv8-toggle" id="sub-toggle"><div class="cv8-toggle-knob"></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="cv8-section-lbl">Variations</div>
+            <div class="cv8-vars-row">
+              <button class="cv8-var on" id="var-1" onclick="selVar(1)">1 video</button>
+              <button class="cv8-var" id="var-3" onclick="selVar(3)">3 videos <span style="font-size:9px;background:rgba(255,255,255,.2);border-radius:4px;padding:1px 5px">A/B</span></button>
+              <button class="cv8-var" id="var-5" onclick="selVar(5)">5 videos <span style="font-size:9px;background:rgba(255,255,255,.2);border-radius:4px;padding:1px 5px">A/B</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="cv8-sh-foot">
+          <button class="cv8-sh-btn" onclick="confirmFinal()">Save & generate →</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /create-video -->
+
+  <!-- ══════════════ GENERATING ══════════════ -->
+  <div class="screen" id="generating">
+    <div class="gen-inner">
+      <div class="gen-ring-wrap">
+        <div class="gen-ring"></div>
+        <div class="gen-ring"></div>
+        <div class="gen-ring"></div>
+        <div class="gen-emoji">🎬</div>
+      </div>
+      <div class="gen-title">Creating your<br>video…</div>
+      <div class="gen-steps">
+        <div class="gen-step" id="gs1">
+          <div class="gen-step-ico spin">⚙️</div>
+          <div class="gen-step-text">Applying trend template</div>
+          <div class="gen-step-status run">Running</div>
+        </div>
+        <div class="gen-step" id="gs2">
+          <div class="gen-step-ico dim">🧑‍💼</div>
+          <div class="gen-step-text">Rendering your avatar</div>
+          <div class="gen-step-status wait">Waiting</div>
+        </div>
+        <div class="gen-step" id="gs3">
+          <div class="gen-step-ico dim">🎙</div>
+          <div class="gen-step-text">Syncing voice & lip-sync</div>
+          <div class="gen-step-status wait">Waiting</div>
+        </div>
+        <div class="gen-step" id="gs4">
+          <div class="gen-step-ico dim">✨</div>
+          <div class="gen-step-text">Adding captions & export</div>
+          <div class="gen-step-status wait">Waiting</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+<script>
+/* ── State ── */
+const state = {
+  trendIdx: null,
+  promptText: '',
+  promptMode: null, // 'text' | 'voice'
+  link: '',
+  subs: false,
+  vars: 1
+};
+
+const TRENDS = [
+  { tag:'#GlowUp', views:'99M views', hook:'100K hook rate', grad:'linear-gradient(145deg,#3d1a5e,#9b2d85)' },
+  { tag:'#MoneyTips', views:'54M views', hook:'78K hook rate', grad:'linear-gradient(145deg,#0f2c47,#1a6b8a)' },
+  { tag:'#ProductivityHack', views:'38M views', hook:'61K hook rate', grad:'linear-gradient(145deg,#1a3a1a,#2d7a2d)' }
+];
+
+/* ── Screens ── */
+function go(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ── Sheets ── */
+function openSheet(name) {
+  document.getElementById('sheet-'+name).classList.add('open');
+}
+function closeSheet(name, e) {
+  if (e && e.target !== document.getElementById('sheet-'+name)) return;
+  document.getElementById('sheet-'+name).classList.remove('open');
+}
+
+/* ── Tile helpers ── */
+function markDone(tileId, stepNumId) {
+  const tile = document.getElementById(tileId);
+  const num = document.getElementById(stepNumId);
+
+  // animate check
+  num.textContent = '✓';
+  num.classList.add('cv8-check-anim');
+  num.style.background = 'var(--green)';
+  num.style.color = '#fff';
+
+  tile.classList.remove('locked');
+  tile.classList.add('done');
+
+  // animate fill-in content
+  const filled = tile.querySelector('[id$="-filled"]');
+  if (filled) filled.classList.add('fill-animate');
+}
+
+function unlockTile(tileId) {
+  const t = document.getElementById(tileId);
+  t.classList.remove('locked');
+}
+
+/* ── Avatar sheet: just done button ── */
+
+/* ── Trend selection ── */
+function selTrend(el) {
+  document.querySelectorAll('.cv8-tc').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  state.trendIdx = parseInt(el.dataset.idx);
+  const btn = document.getElementById('trend-confirm-btn');
+  btn.disabled = false;
+  btn.style.opacity = '1';
+}
+
+function confirmTrend() {
+  if (state.trendIdx === null) return;
+  const t = TRENDS[state.trendIdx];
+
+  // fill tile
+  document.getElementById('trend-empty').style.display = 'none';
+  const filled = document.getElementById('trend-filled');
+  filled.style.display = 'flex';
+  document.getElementById('trend-thumb-bg').style.background = t.grad;
+  document.getElementById('trend-thumb-tag').textContent = t.tag;
+  document.getElementById('trend-tag-text').textContent = t.tag;
+  document.getElementById('trend-stat-views').textContent = '👁 ' + t.views;
+  document.getElementById('trend-stat-hook').textContent = '🪝 ' + t.hook;
+
+  markDone('tile-trend','step-num-trend');
+  unlockTile('tile-prompt');
+  closeSheet('trend');
+
+  // auto-open next sheet after short delay
+  setTimeout(() => openSheet('prompt'), 320);
+}
+
+/* ── Prompt ── */
+let voiceTimer = null;
+const transcripts = [
+  'How to grow on TikTok in 30 days with zero budget — 3 steps you haven\'t tried yet.',
+  'Why your content isn\'t converting and exactly how to fix it in a week.',
+  'The morning routine that tripled my productivity — no fluff.'
+];
+
+function startVoice() {
+  document.getElementById('cv8-vhint').textContent = '🔴 Recording…';
+  document.getElementById('cv8-vbtn').style.background = '#ef4444';
+  let dots = 0;
+  voiceTimer = setInterval(() => {
+    dots = (dots+1)%4;
+    document.getElementById('cv8-vtrans').textContent = '●'.repeat(dots+1) + '○'.repeat(3-dots);
+  }, 300);
+}
+function stopVoice() {
+  clearInterval(voiceTimer);
+  const txt = transcripts[Math.floor(Math.random()*transcripts.length)];
+  document.getElementById('cv8-prompt-ta').value = txt;
+  document.getElementById('cv8-vbtn').style.background = 'var(--choco)';
+  document.getElementById('cv8-vhint').textContent = 'Hold to record';
+  document.getElementById('cv8-vtrans').textContent = 'Transcribed ✓';
+  state.promptMode = 'voice';
+}
+
+function confirmPrompt() {
+  const ta = document.getElementById('cv8-prompt-ta');
+  const text = ta.value.trim();
+  if (!text) { ta.style.borderColor='#ef4444'; setTimeout(()=>ta.style.borderColor='',1200); return; }
+  state.promptText = text;
+  if (!state.promptMode) state.promptMode = 'text';
+
+  // fill tile
+  document.getElementById('prompt-empty').style.display = 'none';
+  const filled = document.getElementById('prompt-filled');
+  filled.style.display = 'flex';
+  document.getElementById('prompt-preview-text').textContent = text;
+  document.getElementById('prompt-mode-badge').innerHTML =
+    state.promptMode === 'voice' ? '🎙 Voice recorded' : '✍️ Written prompt';
+
+  markDone('tile-prompt','step-num-prompt');
+  unlockTile('tile-final');
+  closeSheet('prompt');
+
+  setTimeout(() => openSheet('final'), 320);
+}
+
+/* ── Final touches ── */
+function toggleSub() {
+  state.subs = !state.subs;
+  document.getElementById('sub-toggle').classList.toggle('on', state.subs);
+}
+function selVar(n) {
+  state.vars = n;
+  [1,3,5].forEach(v => document.getElementById('var-'+v).classList.toggle('on', v===n));
+}
+
+function confirmFinal() {
+  state.link = document.getElementById('cv8-link-inp').value.trim();
+
+  // build chips
+  const chips = [];
+  if (state.link) chips.push('🔗 Link added');
+  if (state.subs) chips.push('📝 Subtitles on');
+  chips.push(state.vars === 1 ? '1 video' : state.vars + ' variants');
+
+  const filledDiv = document.getElementById('final-filled');
+  filledDiv.innerHTML = chips.map(c => `<span class="cv8-chip on">${c}</span>`).join('');
+  document.getElementById('final-empty').style.display = 'none';
+  filledDiv.style.display = 'flex';
+
+  markDone('tile-final','step-num-final');
+  closeSheet('final');
+
+  // unlock create button
+  setTimeout(() => {
+    const btn = document.getElementById('cv8-create-btn');
+    btn.disabled = false;
+    btn.style.animation = 'none';
+  }, 200);
+}
+
+/* ── Generate ── */
+function startGenerate() {
+  go('generating');
+
+  const steps = ['gs1','gs2','gs3','gs4'];
+  const labels = ['Running','Running','Running','Finalising'];
+
+  // show steps one by one
+  steps.forEach((id, i) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      el.classList.add('vis');
+      const ico = el.querySelector('.gen-step-ico');
+      const status = el.querySelector('.gen-step-status');
+      ico.classList.remove('dim');
+      ico.classList.add('spin');
+      status.textContent = labels[i];
+      status.className = 'gen-step-status run';
+
+      // complete previous
+      if (i > 0) {
+        const prev = document.getElementById(steps[i-1]);
+        prev.querySelector('.gen-step-ico').classList.remove('spin');
+        const ps = prev.querySelector('.gen-step-status');
+        ps.textContent = 'Done ✓';
+        ps.className = 'gen-step-status done';
+      }
+    }, i * 1600);
+  });
+
+  // finish last step
+  setTimeout(() => {
+    const last = document.getElementById(steps[steps.length-1]);
+    last.querySelector('.gen-step-ico').classList.remove('spin');
+    const ls = last.querySelector('.gen-step-status');
+    ls.textContent = 'Done ✓';
+    ls.className = 'gen-step-status done';
+  }, steps.length * 1600 + 800);
+}
+</script>
+</body>
+</html>
