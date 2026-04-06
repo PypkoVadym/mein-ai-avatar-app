@@ -1,7 +1,21 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx vite:*)"
+      "Bash(npx vite:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "Bash(ls /Users/claude/mein-ai-avatar-app/*.jpg /Users/claude/mein-ai-avatar-app/*.jpeg /Users/claude/mein-ai-avatar-app/*.png)",
+      "Bash(ls:*)",
+      "Bash(sed -n '949,953p' /Users/claude/mein-ai-avatar-app/public/v5.html)",
+      "Bash(sed -n '1138,1143p' /Users/claude/mein-ai-avatar-app/public/v5.html)",
+      "WebFetch(domain:www.mobileeditingclub.com)",
+      "Bash(curl -s \"https://www.mobileeditingclub.com/branded-ai-editing-course\")",
+      "Bash(curl -s \"https://cdn.prod.website-files.com/6928a53c3aab1767b087b868/css/mobile-editing-club.shared.f7ae3bf13.min.css\")",
+      "Bash(grep -oE '#[0-9a-fA-F]{3,8}|rgba?\\\\\\([^\\)]+\\\\\\)|font-family:[^;]*|--[a-z-]+:')",
+      "Bash(grep -oE '--[a-z-]+:#[0-9a-fA-F]{3,8}')",
+      "Bash(grep -o '---ui-styles---radius[^;]*')",
+      "Bash(python3:*)"
     ]
   }
 }
