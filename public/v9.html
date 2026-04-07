@@ -138,15 +138,16 @@ body{background:#e8e0d8;min-height:100vh;display:flex;align-items:center;justify
 /* PHOTO DROP */
 #photo-drop{background:var(--bg)}
 .dz{flex:1;margin:14px 20px 0;border:1.5px dashed rgba(51,30,27,.18);border-radius:12px;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:all .2s;padding:20px;position:relative;overflow:hidden}
-.dz.has{border-color:var(--choco);border-style:solid;background:rgba(51,30,27,.03)}
+.dz.has{border:none}
 .dz:active{transform:scale(.99)}
 .dz-em{font-size:44px;line-height:1}
 .dz-t{font-family:'Inter',sans-serif;font-size:18px;font-weight:800;color:var(--choco)}
 .dz-s{font-size:13px;color:var(--choco3);text-align:center;line-height:1.5;max-width:240px}
-.dz-th{position:absolute;inset:0;padding:12px;display:none;flex-wrap:wrap;gap:5px;align-content:flex-start}
-.dz.has .dz-th{display:flex}
 .dz.has .dz-em,.dz.has .dz-t,.dz.has .dz-s{display:none}
-.dth{width:52px;height:52px;border-radius:6px;border:1.5px solid rgba(51,30,27,.12);display:flex;align-items:center;justify-content:center;font-size:20px}
+.dz-preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;border-radius:12px}
+.dz.has .dz-preview{display:block}
+.dz-change{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.45);color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;backdrop-filter:blur(4px);display:none}
+.dz.has .dz-change{display:block}
 .df{padding:10px 20px 36px;display:flex;flex-direction:column;gap:10px}
 .qw{display:flex;align-items:center;gap:9px;opacity:0;transition:opacity .3s}
 .qt{flex:1;height:5px;background:rgba(51,30,27,.1);border-radius:3px;overflow:hidden}
@@ -638,8 +639,9 @@ body{background:#e8e0d8;min-height:100vh;display:flex;align-items:center;justify
 .imake-sim:active{background:var(--choco);color:#fff;border-color:var(--choco)}
 /* GROW */
 #grow{background:var(--bg)}
-.grow-hdr{padding:56px 18px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-bottom:1px solid rgba(51,30,27,.06)}
-.grow-ttl{font-family:'Inter',sans-serif;font-size:17px;font-weight:900;color:var(--choco);letter-spacing:-.02em;flex:1}
+.grow-hdr{padding:56px 18px 0;flex-shrink:0}
+.grow-ttl{font-family:'Inter',sans-serif;font-size:24px;font-weight:900;color:var(--choco);letter-spacing:-.03em}
+.grow-sub{font-size:13px;color:var(--choco3);margin-top:3px}
 .grow-count{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--choco3)}
 .grow-list{flex:1;overflow-y:auto;padding:12px 18px 20px;display:flex;flex-direction:column;gap:10px}
 .grow-list::-webkit-scrollbar{display:none}
@@ -1026,9 +1028,11 @@ body{background:transparent!important;padding:0!important;display:block!importan
 .av-step-lbl.done,.av-step-lbl.active{color:var(--choco)}
 .av-step-line{flex:1;height:2px;background:rgba(51,30,27,.12);margin-top:13px;min-width:32px;transition:background .4s}
 .av-step-line.done{background:var(--choco)}
-/* Background gen strip */
-.av-gen-strip{height:2px;background:rgba(51,30,27,.08);border-radius:1px;margin:8px 20px 0;flex-shrink:0;overflow:hidden}
-.av-gen-bar{height:100%;border-radius:1px;background:var(--gold);width:0%;transition:width .6s ease-out}
+/* Hourglass overlay on photo step */
+.av-step-photo-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
+.av-hg-overlay{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:20px;pointer-events:none;transition:opacity .3s}
+@keyframes hg-pulse{0%,100%{transform:translateX(-50%) scale(1);opacity:1}50%{transform:translateX(-50%) scale(0.85);opacity:0.65}}
+.av-hg-overlay.spinning{animation:hg-pulse 1.2s ease-in-out infinite}
 
 /* ── AVATAR STYLE SCREEN ── */
 #avatar-style{background:var(--bg)}
@@ -1176,7 +1180,6 @@ body{background:transparent!important;padding:0!important;display:block!importan
   <div style="padding:56px 20px 0;display:flex;align-items:center;gap:10px;flex-shrink:0">
     <button class="sback lt" onclick="back('avatar-entry')">←</button>
     <span style="font-family:'Inter',sans-serif;font-size:17px;font-weight:900;color:var(--choco);letter-spacing:-.02em;flex:1">Choose a photo</span>
-    <span style="font-size:12px;font-weight:600;color:var(--choco3)">3+ recommended</span>
   </div>
   <div class="av-stepper">
     <div class="av-step"><div class="av-step-circle active">1</div><div class="av-step-lbl active">Photo</div></div>
@@ -1185,19 +1188,15 @@ body{background:transparent!important;padding:0!important;display:block!importan
     <div class="av-step-line"></div>
     <div class="av-step"><div class="av-step-circle">3</div><div class="av-step-lbl">Style</div></div>
   </div>
-  <div class="dz" id="dzz" onclick="addPhoto()">
+  <input type="file" accept="image/*" id="photo-input" style="display:none" onchange="onPhotoSelected(this)">
+  <div class="dz" id="dzz" onclick="document.getElementById('photo-input').click()">
     <div class="dz-em">🖼️</div>
-    <div class="dz-t">Tap to select photos</div>
-    <div class="dz-s">Any photos work — AI does the rest.</div>
-    <div class="dz-th" id="dzth"></div>
+    <div class="dz-t">Tap to select a photo</div>
+    <div class="dz-s">Selfie, portrait, or any clear photo of your face</div>
+    <img class="dz-preview" id="dz-preview" src="" alt="">
+    <div class="dz-change">Change photo</div>
   </div>
   <div class="df">
-    <div class="qw2" id="qwr" style="display:flex;align-items:center;gap:9px;opacity:0;transition:opacity .3s">
-      <span style="font-size:11.5px;color:var(--choco3);font-weight:500;white-space:nowrap">Avatar quality</span>
-      <div class="qt"><div class="qf" id="qfl"></div></div>
-      <span class="qp" id="qpt">0%</span>
-    </div>
-    <div id="dct" style="text-align:center;font-size:12px;color:var(--choco3);opacity:0;transition:opacity .3s">0 photos</div>
     <button class="btn-gold" id="drop-go" disabled onclick="_vpFrom='photo-drop';go('voice-pick')">Build my avatar →</button>
     <div style="display:flex;align-items:center;justify-content:center;gap:5px"><span style="font-size:11px">🔒</span><span style="font-size:11px;color:var(--choco3)">Photos are processed privately</span></div>
   </div>
@@ -1290,13 +1289,16 @@ body{background:transparent!important;padding:0!important;display:block!importan
     <div style="width:36px"></div>
   </div>
   <div class="av-stepper">
-    <div class="av-step"><div class="av-step-circle done">✓</div><div class="av-step-lbl done">Photo</div></div>
+    <div class="av-step-photo-wrap">
+      <div class="av-hg-overlay spinning" id="vpHourglass">⏳</div>
+      <div class="av-step-circle" id="vpPhotoCircle"></div>
+      <div class="av-step-lbl done">Photo</div>
+    </div>
     <div class="av-step-line done"></div>
     <div class="av-step"><div class="av-step-circle active">2</div><div class="av-step-lbl active">Voice</div></div>
     <div class="av-step-line"></div>
     <div class="av-step"><div class="av-step-circle">3</div><div class="av-step-lbl">Style</div></div>
   </div>
-  <div class="av-gen-strip"><div class="av-gen-bar" id="avGenBar"></div></div>
   <div class="vp-body">
     <div>
       <div class="vp-headline">Choose<br>your voice</div>
@@ -1508,7 +1510,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
     </div>
     <div class="tab-item" onclick="goTab('grow')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
-      <div class="tab-lbl">Videos</div>
+      <div class="tab-lbl">Grow</div>
     </div>
   </div>
 </div>
@@ -1535,7 +1537,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
     </div>
     <div class="tab-item" onclick="goTab('grow')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
-      <div class="tab-lbl">Videos</div>
+      <div class="tab-lbl">Grow</div>
     </div>
   </div>
 </div>
@@ -1596,7 +1598,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
     </div>
     <div class="tab-item" onclick="goTab('grow')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
-      <div class="tab-lbl">Videos</div>
+      <div class="tab-lbl">Grow</div>
     </div>
   </div>
   <!-- Voice sheet -->
@@ -1864,7 +1866,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
           <button class="cv8-sh-close" onclick="closeSheet('prompt')">✕</button>
         </div>
         <div class="cv8-sh-body" style="padding-bottom:6px">
-          <textarea class="cv8-ta" id="cv8-prompt-ta" rows="5" placeholder="How to grow on Instagram in 2025 — break it down into 3 steps, no fluff."></textarea>
+          <textarea class="cv8-ta" id="cv8-prompt-ta" rows="5" placeholder="Anything specific to add? (optional)"></textarea>
           <div class="cv8-or">or speak it</div>
           <div class="cv8-voice-box">
             <button class="cv8-voice-btn" id="cv8-vbtn" onmousedown="startVoice8()" onmouseup="stopVoice8()" ontouchstart="startVoice8(event)" ontouchend="stopVoice8()">🎙</button>
@@ -2184,7 +2186,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
 <div class="screen" id="grow">
   <div class="grow-hdr">
     <div class="grow-ttl">Grow</div>
-    <div class="grow-count" id="grow-count"></div>
+    <div class="grow-sub">Your AI-generated videos</div>
   </div>
   <div class="grow-list" id="grow-list">
     <div class="grow-empty" id="grow-empty">
@@ -2205,7 +2207,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
     </div>
     <div class="tab-item on" onclick="goTab('grow')">
       <div class="tab-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polygon points="10 8.5 10 15.5 17 12" fill="currentColor" stroke="none"/></svg></div>
-      <div class="tab-lbl">Videos</div>
+      <div class="tab-lbl">Grow</div>
     </div>
   </div>
 </div>
@@ -2312,11 +2314,8 @@ function resetAvatarFlow(){
   recActive=false; recSec=0; if(recInt){clearInterval(recInt);recInt=null;}
   // Reset photo drop UI
   const dz=document.getElementById('dzz'); if(dz)dz.classList.remove('has');
-  const dt=document.getElementById('dzth'); if(dt)dt.innerHTML='';
-  const qr=document.getElementById('qwr'); if(qr)qr.style.opacity='0';
-  const dc=document.getElementById('dct'); if(dc)dc.style.opacity='0';
-  const qf=document.getElementById('qfl'); if(qf)qf.style.width='0%';
-  const qp=document.getElementById('qpt'); if(qp)qp.textContent='0%';
+  const prev=document.getElementById('dz-preview'); if(prev)prev.src='';
+  const pi=document.getElementById('photo-input'); if(pi)pi.value='';
   const dg=document.getElementById('drop-go'); if(dg)dg.disabled=true;
   // Reset cam UI
   const rt=document.getElementById('rec-timer'); if(rt)rt.textContent='Tap to start · 5 seconds';
@@ -2338,9 +2337,10 @@ function resetAvatarFlow(){
   // Reset seed picker
   document.querySelectorAll('.seed-tile').forEach(t=>t.classList.remove('sel'));
   const sb=document.getElementById('seed-btn'); if(sb)sb.disabled=true;
-  // Reset gen strip + style screen
-  if(avGenTimer){clearInterval(avGenTimer);avGenTimer=null;} avGenPct=0;
-  const gb=document.getElementById('avGenBar'); if(gb)gb.style.width='0%';
+  // Reset hourglass + style screen
+  if(avGenTimer){clearTimeout(avGenTimer);avGenTimer=null;}
+  const hgr=document.getElementById('vpHourglass'); if(hgr){hgr.classList.remove('spinning');hgr.style.opacity='1';}
+  const pcr=document.getElementById('vpPhotoCircle'); if(pcr){pcr.classList.remove('done');pcr.textContent='';}
   selStyleVal=null;
   document.querySelectorAll('.astyle-card').forEach(c=>{c.classList.remove('sel');const ck=c.querySelector('.astyle-card-ck');if(ck){ck.textContent='';ck.style.color='transparent';}});
   const aBtn=document.getElementById('astyle-btn'); if(aBtn)aBtn.disabled=true;
@@ -2364,6 +2364,7 @@ function goTab(id){
   el.classList.add('active');
   if(id==='grow') renderGrow();
   if(id==='discover') discoverInit();
+  if(id!=='grow'){const t=document.getElementById('toast');if(t)t.classList.remove('show');}
 }
 
 // ── DISCOVER / INSPO ─────────────────────────────────────────────────────────
@@ -2475,6 +2476,7 @@ function lnSubmit(){
 }
 function go(id){
   if(id==='avatar-entry') resetAvatarFlow();
+  if(id!=='grow'){const t=document.getElementById('toast');if(t)t.classList.remove('show');}
   showScreen(id,'in');
   if(id==='processing'){ procDone=false; startProc(); }
   if(id==='create-video') cv8Reset();
@@ -2531,18 +2533,19 @@ function checkPlatBtn(){document.getElementById('plat-btn').disabled=!(selGoalId
 // Platform handled by selPlat2 / selGoal above
 
 // Photos
-const te=['🤳','😊','🏋️','🌅','📸','😎','🧘','🌸','💪','✌️'];
-function addPhoto(){
-  if(photoCount>=9)return;photoCount++;
-  const th=document.getElementById('dzth');const d=document.createElement('div');d.className='dth';d.textContent=te[(photoCount-1)%te.length];th.appendChild(d);
-  document.getElementById('dzz').classList.add('has');
-  const qr=document.getElementById('qwr');qr.style.opacity='1';
-  const dc=document.getElementById('dct');dc.style.opacity='1';dc.textContent=photoCount+' photo'+(photoCount>1?'s':'');
-  const q=Math.min(100,Math.round((photoCount/7)*100));
-  avatarQuality=q;
-  document.getElementById('qfl').style.width=q+'%';document.getElementById('qpt').textContent=q+'%';
-  if(photoCount>=3)document.getElementById('drop-go').disabled=false;
+function onPhotoSelected(input){
+  if(!input.files||!input.files[0])return;
+  photoCount=1;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const preview=document.getElementById('dz-preview');
+    preview.src=e.target.result;
+    document.getElementById('dzz').classList.add('has');
+    document.getElementById('drop-go').disabled=false;
+  };
+  reader.readAsDataURL(input.files[0]);
 }
+function addPhoto(){document.getElementById('photo-input').click();}
 
 // Cam
 function toggleRec(){
@@ -3161,12 +3164,12 @@ function vpContinue(){
   const inp = document.getElementById('avatar-name-input');
   if(inp && inp.value.trim()) avatarName = inp.value.trim();
   applyAvatarName();
-  // Wait for gen to finish if needed (max ~2s)
+  // Wait for gen to finish if needed
   const btn = document.getElementById('vp-continue');
-  if(avGenPct < 100){
+  if(avGenTimer){
     if(btn) btn.disabled = true;
     const waitCheck = setInterval(()=>{
-      if(avGenPct >= 100){ clearInterval(waitCheck); if(btn) btn.disabled=false; showScreen('avatar-style','in'); }
+      if(!avGenTimer){ clearInterval(waitCheck); if(btn) btn.disabled=false; showScreen('avatar-style','in'); }
     }, 100);
     setTimeout(()=>{ clearInterval(waitCheck); if(btn) btn.disabled=false; showScreen('avatar-style','in'); }, 2000);
   } else {
@@ -3553,92 +3556,36 @@ function confirmFinal8() {
 
 /* ── Generate ── */
 function startGenerate() {
-  showScreen('generating', 'in');
-
-  // Reset step visuals
-  ['gs1','gs2','gs3','gs4'].forEach(id => {
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.classList.remove('vis');
-    const ico = el.querySelector('.gen-step-ico');
-    const st = el.querySelector('.gen-step-status');
-    if(ico) { ico.className='gen-step-ico dim'; }
-    if(st) { st.className='gen-step-status wait'; st.textContent='Waiting'; }
-  });
-  const gs1 = document.getElementById('gs1');
-  if(gs1) {
-    gs1.classList.add('vis');
-    gs1.querySelector('.gen-step-ico').className = 'gen-step-ico spin';
-    gs1.querySelector('.gen-step-status').textContent = 'Running';
-    gs1.querySelector('.gen-step-status').className = 'gen-step-status run';
-  }
-
-  const steps = ['gs1','gs2','gs3','gs4'];
-  const labels = ['Running','Running','Running','Finalising'];
-
-  steps.forEach((id, i) => {
-    if(i === 0) return; // already shown
-    setTimeout(() => {
-      const el = document.getElementById(id);
-      el.classList.add('vis');
-      const ico = el.querySelector('.gen-step-ico');
-      const status = el.querySelector('.gen-step-status');
-      ico.classList.remove('dim');
-      ico.classList.add('spin');
-      status.textContent = labels[i];
-      status.className = 'gen-step-status run';
-
-      // complete previous
-      const prev = document.getElementById(steps[i-1]);
-      prev.querySelector('.gen-step-ico').classList.remove('spin');
-      const ps = prev.querySelector('.gen-step-status');
-      ps.textContent = 'Done ✓';
-      ps.className = 'gen-step-status done';
-    }, i * 1600);
-  });
-
-  // finish last step + queue video + navigate
+  // Queue into grow tab
+  const topic = cv8State.promptText || cv8State.trendTag || 'New video';
+  const short = topic.length > 48 ? topic.slice(0,48)+'…' : topic;
+  const id = Date.now();
+  growVideos.unshift({id, topic:short, status:'gen', ts:Date.now()});
   setTimeout(() => {
-    const last = document.getElementById(steps[steps.length-1]);
-    last.querySelector('.gen-step-ico').classList.remove('spin');
-    const ls = last.querySelector('.gen-step-status');
-    ls.textContent = 'Done ✓';
-    ls.className = 'gen-step-status done';
+    const v = growVideos.find(x => x.id === id);
+    if(v) { v.status = 'ready'; renderGrow(); }
+  }, 12000);
 
-    // Queue into grow tab
-    const topic = cv8State.promptText || cv8State.trendTag || 'New video';
-    const short = topic.length > 48 ? topic.slice(0,48)+'…' : topic;
-    const id = Date.now();
-    growVideos.unshift({id, topic:short, status:'gen', ts:Date.now()});
-    setTimeout(() => {
-      const v = growVideos.find(x => x.id === id);
-      if(v) { v.status = 'ready'; renderGrow(); }
-    }, 12000);
-
-    // Navigate to grow + toast
-    setTimeout(() => {
-      goTab('grow');
-      const t = document.getElementById('toast');
-      if(t) { t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 4000); }
-    }, 500);
-  }, steps.length * 1600 + 800);
+  // Navigate directly to grow + toast
+  goTab('grow');
+  const t = document.getElementById('toast');
+  if(t) { t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 4000); }
 }
 
 // ── AVATAR CREATION: BACKGROUND GEN ────────────────────────────────────────
-let avGenPct = 0, avGenTimer = null;
+let avGenTimer = null;
 function startAvGen(){
-  avGenPct = 0;
-  if(avGenTimer){ clearInterval(avGenTimer); avGenTimer=null; }
-  const bar = document.getElementById('avGenBar');
-  if(bar) bar.style.width = '0%';
-  // Simulate 8-second background generation
-  const totalMs = 8000, tickMs = 120;
-  avGenTimer = setInterval(()=>{
-    avGenPct = Math.min(100, avGenPct + (100 / (totalMs / tickMs)));
-    const b = document.getElementById('avGenBar');
-    if(b) b.style.width = avGenPct.toFixed(1) + '%';
-    if(avGenPct >= 100){ clearInterval(avGenTimer); avGenTimer=null; }
-  }, tickMs);
+  if(avGenTimer){ clearTimeout(avGenTimer); avGenTimer=null; }
+  const hg = document.getElementById('vpHourglass');
+  const circle = document.getElementById('vpPhotoCircle');
+  if(hg){ hg.classList.add('spinning'); hg.style.opacity='1'; }
+  if(circle){ circle.classList.remove('done'); circle.textContent=''; }
+  // After 8 seconds, hide hourglass and show checkmark
+  avGenTimer = setTimeout(()=>{
+    if(hg){ hg.classList.remove('spinning'); hg.style.opacity='0'; }
+    if(circle){ circle.classList.add('done'); circle.textContent='✓'; }
+    avGenTimer=null;
+  }, 8000);
 }
 
 // ── AVATAR STYLE SCREEN ────────────────────────────────────────────────────
