@@ -8,6 +8,7 @@ import V6App from './versions/V6App.jsx'
 import V7App from './versions/V7App.jsx'
 import V8App from './versions/V8App.jsx'
 import V9App from './versions/V9App.jsx'
+import V10App from './versions/V10App.jsx'
 
 const VERSIONS = [
   { id: 1, label: 'V1', App: V1App },
@@ -19,6 +20,7 @@ const VERSIONS = [
   { id: 7, label: 'V7', App: V7App },
   { id: 8, label: 'V8', App: V8App },
   { id: 9, label: 'V9', App: V9App },
+  { id: 10, label: 'V10', App: V10App },
 ]
 
 function StatusBar() {
@@ -48,7 +50,7 @@ function StatusBar() {
 }
 
 export default function App() {
-  const [activeVersion, setActiveVersion] = useState(9)
+  const [activeVersion, setActiveVersion] = useState(10)
   const { App: ActiveApp } = VERSIONS.find(v => v.id === activeVersion)
 
   return (
