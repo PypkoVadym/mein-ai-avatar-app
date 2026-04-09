@@ -1107,12 +1107,18 @@ body{background:transparent!important;padding:0!important;display:block!importan
 .astyle-card-vibe{font-size:11px;color:var(--ivory3);line-height:1.35}
 .astyle-card-ck{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(51,30,27,.2);display:flex;align-items:center;justify-content:center;font-size:10px;color:transparent;transition:all .2s}
 .astyle-card.sel .astyle-card-ck{background:var(--choco);border-color:var(--choco);color:#fff}
-.astyle-prompt-row{display:flex;align-items:center;gap:8px;margin-top:2px}
-.astyle-prompt-line{flex:1;height:1px;background:rgba(51,30,27,.1)}
-.astyle-prompt-lbl{font-size:11px;color:var(--choco3);white-space:nowrap}
-.astyle-prompt-box{background:#fff;border:1.5px solid rgba(51,30,27,.1);border-radius:10px;overflow:hidden}
-.astyle-ta{width:100%;min-height:64px;background:transparent;border:none;padding:11px 13px;color:var(--choco);font-size:13px;font-family:'Inter',sans-serif;resize:none;outline:none;line-height:1.6}
-.astyle-ta::placeholder{color:rgba(51,30,27,.28)}
+.astyle-refresh-row{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+.astyle-section-lbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--choco3);text-transform:uppercase;letter-spacing:.07em}
+.astyle-refresh-btn{background:none;border:1.5px solid rgba(51,30,27,.18);border-radius:20px;padding:5px 13px;font-size:12px;font-weight:700;color:var(--choco3);cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:5px;transition:all .18s}
+.astyle-refresh-btn:active{transform:scale(.93);opacity:.7}
+.refresh-ico{display:inline-block;font-style:normal;transition:transform .4s}
+.astyle-refresh-btn.spinning .refresh-ico{transform:rotate(360deg)}
+.astyle-card.natural-subtle{grid-column:span 2;flex-direction:row;align-items:center;gap:10px;border-color:rgba(51,30,27,.07);background:rgba(255,255,255,.45);padding:11px 14px;margin-top:2px}
+.astyle-card.natural-subtle .astyle-card-ico{font-size:18px;opacity:.45}
+.astyle-card.natural-subtle .astyle-card-name{font-size:11px;font-weight:600;color:rgba(51,30,27,.38)}
+.astyle-card.natural-subtle .astyle-card-vibe{font-size:10px;color:rgba(51,30,27,.28)}
+.astyle-card.natural-subtle.sel{border-color:rgba(51,30,27,.28)}
+.astyle-card.natural-subtle.sel .astyle-card-name{color:rgba(51,30,27,.55)}
 .astyle-foot{padding:12px 18px 36px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
 
 /* ── AVATAR REVEAL SCREEN ── */
@@ -1453,50 +1459,25 @@ body{background:transparent!important;padding:0!important;display:block!importan
   </div>
   <div class="astyle-body">
     <div>
-      <div class="astyle-headline">Pick your<br>avatar style</div>
-      <div class="astyle-sub">Choose how your AI avatar looks on screen</div>
+      <div class="astyle-headline">Glow Up ✨</div>
+      <div class="astyle-sub">Pick how to level up your photo &amp; look</div>
+    </div>
+    <div class="astyle-refresh-row">
+      <span class="astyle-section-lbl">Suggestions</span>
+      <button class="astyle-refresh-btn" id="glowRefreshBtn" onclick="glowUpRefresh()">
+        <span class="refresh-ico">↻</span> Refresh
+      </button>
     </div>
     <div class="astyle-cards" id="astyle-cards">
-      <div class="astyle-card sel" onclick="selStyle(this,'natural')" style="border-color:var(--choco);grid-column:span 2;flex-direction:row;align-items:center;gap:10px">
-        <div class="astyle-card-ico" style="font-size:32px">🪞</div>
-        <div style="flex:1">
-          <div class="astyle-card-name">Keep it natural</div>
-          <div class="astyle-card-vibe">Use your photo as-is — authentic, no filters</div>
-        </div>
-        <div class="astyle-card-ck" style="background:var(--choco);border-color:var(--choco);color:#fff">✓</div>
-      </div>
-      <div class="astyle-card" onclick="selStyle(this,'realistic')">
-        <div class="astyle-card-ico">🧑‍💼</div>
-        <div class="astyle-card-name">Realistic</div>
-        <div class="astyle-card-vibe">Photorealistic look, trusted and professional</div>
-        <div class="astyle-card-ck"></div>
-      </div>
-      <div class="astyle-card" onclick="selStyle(this,'cinematic')">
-        <div class="astyle-card-ico">🎬</div>
-        <div class="astyle-card-name">Cinematic</div>
-        <div class="astyle-card-vibe">Film-quality lighting, premium feel</div>
-        <div class="astyle-card-ck"></div>
-      </div>
-      <div class="astyle-card" onclick="selStyle(this,'bold')">
-        <div class="astyle-card-ico">⚡</div>
-        <div class="astyle-card-name">Bold</div>
-        <div class="astyle-card-vibe">High contrast, vivid — stops the scroll</div>
-        <div class="astyle-card-ck"></div>
-      </div>
-      <div class="astyle-card" onclick="selStyle(this,'minimal')">
-        <div class="astyle-card-ico">🌿</div>
-        <div class="astyle-card-name">Minimal</div>
-        <div class="astyle-card-vibe">Clean and calm — focus on your message</div>
-        <div class="astyle-card-ck"></div>
-      </div>
+      <!-- populated by glowUpRender() -->
     </div>
-    <div class="astyle-prompt-row">
-      <div class="astyle-prompt-line"></div>
-      <div class="astyle-prompt-lbl">or describe your own</div>
-      <div class="astyle-prompt-line"></div>
-    </div>
-    <div class="astyle-prompt-box">
-      <textarea class="astyle-ta" placeholder="e.g. confident entrepreneur, warm lighting, dark blazer…" id="astylePrompt"></textarea>
+    <div class="astyle-card natural-subtle" id="naturalCard" onclick="selStyle(this,'natural')">
+      <div class="astyle-card-ico">🪞</div>
+      <div style="flex:1">
+        <div class="astyle-card-name">Keep it natural</div>
+        <div class="astyle-card-vibe">Use your photo as-is</div>
+      </div>
+      <div class="astyle-card-ck"></div>
     </div>
   </div>
   <div class="astyle-foot">
@@ -1564,26 +1545,32 @@ body{background:transparent!important;padding:0!important;display:block!importan
     <div class="reveal-carousel" id="revealCarousel">
       <div class="reveal-video-card">
         <div class="reveal-video-thumb">
-          <div class="reveal-video-bg" style="background:linear-gradient(160deg,#1a0a2a,#0d0518)">💸</div>
+          <img src="/vid_ref_1.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <div class="reveal-video-overlay"><div class="reveal-video-tag">Sales pitch</div></div>
         </div>
       </div>
       <div class="reveal-video-card">
         <div class="reveal-video-thumb">
-          <div class="reveal-video-bg" style="background:linear-gradient(160deg,#0a1a2a,#050e18)">📚</div>
+          <img src="/vid_ref_2.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <div class="reveal-video-overlay"><div class="reveal-video-tag">Tutorial</div></div>
         </div>
       </div>
       <div class="reveal-video-card">
         <div class="reveal-video-thumb">
-          <div class="reveal-video-bg" style="background:linear-gradient(160deg,#1a0a0a,#0d0505)">📣</div>
+          <img src="/vid_ref_3.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <div class="reveal-video-overlay"><div class="reveal-video-tag">Announcement</div></div>
         </div>
       </div>
       <div class="reveal-video-card">
         <div class="reveal-video-thumb">
-          <div class="reveal-video-bg" style="background:linear-gradient(160deg,#0a1a0a,#050d05)">🤝</div>
+          <img src="/vid_ref_4.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           <div class="reveal-video-overlay"><div class="reveal-video-tag">Brand deal</div></div>
+        </div>
+      </div>
+      <div class="reveal-video-card">
+        <div class="reveal-video-thumb">
+          <img src="/vid_ref_5.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          <div class="reveal-video-overlay"><div class="reveal-video-tag">Trending</div></div>
         </div>
       </div>
     </div>
@@ -1954,7 +1941,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
           <div class="cv8-trend-cards" id="trend-card-list">
             <div class="cv8-tc" data-idx="0" onclick="selTrend8(this)">
               <div class="cv8-tc-visual">
-                <div class="cv8-tc-vis-bg" style="background:linear-gradient(145deg,#3d1a5e,#9b2d85)"></div>
+                <div class="cv8-tc-vis-bg" style="background-image:url('/vid_ref_1.png');background-size:cover;background-position:center"></div>
                 <div class="cv8-tc-vis-ov"></div>
                 <div class="cv8-tc-vis-info">
                   <div class="cv8-tc-vis-tag">#GlowUp</div>
@@ -1969,7 +1956,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
             </div>
             <div class="cv8-tc" data-idx="1" onclick="selTrend8(this)">
               <div class="cv8-tc-visual">
-                <div class="cv8-tc-vis-bg" style="background:linear-gradient(145deg,#0f2c47,#1a6b8a)"></div>
+                <div class="cv8-tc-vis-bg" style="background-image:url('/vid_ref_2.png');background-size:cover;background-position:center"></div>
                 <div class="cv8-tc-vis-ov"></div>
                 <div class="cv8-tc-vis-info">
                   <div class="cv8-tc-vis-tag">#MoneyTips</div>
@@ -1984,7 +1971,7 @@ body{background:transparent!important;padding:0!important;display:block!importan
             </div>
             <div class="cv8-tc" data-idx="2" onclick="selTrend8(this)">
               <div class="cv8-tc-visual">
-                <div class="cv8-tc-vis-bg" style="background:linear-gradient(145deg,#1a3a1a,#2d7a2d)"></div>
+                <div class="cv8-tc-vis-bg" style="background-image:url('/vid_ref_3.png');background-size:cover;background-position:center"></div>
                 <div class="cv8-tc-vis-ov"></div>
                 <div class="cv8-tc-vis-info">
                   <div class="cv8-tc-vis-tag">#ProductivityHack</div>
@@ -2489,13 +2476,9 @@ function resetAvatarFlow(){
   if(avGenTimer){clearTimeout(avGenTimer);avGenTimer=null;}
   const hgr=document.getElementById('vpHourglass'); if(hgr){hgr.classList.remove('spinning');hgr.style.opacity='1';}
   const pcr=document.getElementById('vpPhotoCircle'); if(pcr){pcr.classList.remove('done');pcr.textContent='';}
-  selStyleVal='natural';
-  document.querySelectorAll('.astyle-card').forEach((c,idx)=>{c.classList.remove('sel');const ck=c.querySelector('.astyle-card-ck');if(ck){ck.textContent='';ck.style.color='transparent';}});
-  // Re-select "Keep it natural" as default
-  const naturalCard=document.querySelector('.astyle-card[onclick*="natural"]');
-  if(naturalCard){naturalCard.classList.add('sel');const ck=naturalCard.querySelector('.astyle-card-ck');if(ck){ck.textContent='✓';ck.style.color='#fff';ck.style.background='var(--choco)';ck.style.borderColor='var(--choco)';}}
+  // Re-render glow-up cards and select first by default
+  glowUpRender(true);
   const aBtn=document.getElementById('astyle-btn'); if(aBtn)aBtn.disabled=false;
-  const aTA=document.getElementById('astylePrompt'); if(aTA)aTA.value='';
   // Reset avatar name input
   const anInp=document.getElementById('avatar-name-input'); if(anInp)anInp.value='';
   const rc=document.getElementById('revealCard'); if(rc)rc.classList.remove('up');
@@ -2523,11 +2506,11 @@ function goTab(id){
 // ── DISCOVER / INSPO ─────────────────────────────────────────────────────────
 const INSPO_FILTERS=['All','🔥 Trending','⚡ Hot','💼 Business','📚 Education','🌿 Lifestyle','💻 Tech'];
 const INSPO_ITEMS=[
-  {id:1,author:'TWIN Team',handle:'@twin',title:'3 habits that doubled my productivity',category:'Business',format:'TikTok',gradient:'linear-gradient(160deg,#1a1a2e,#0f3460)',textColor:'#e0e0ff',height:220,verified:true,likes:4821,saved:true,avatar:'⚡'},
-  {id:2,author:'Sofia R.',handle:'@sofiar',title:'How I learned Spanish in 90 days',category:'Education',format:'YouTube Short',gradient:'linear-gradient(160deg,#f8b500,#e06c00)',textColor:'#fff',height:300,verified:false,likes:2340,saved:false,avatar:'🎓'},
-  {id:3,author:'TWIN Team',handle:'@twin',title:'Morning routine that actually works',category:'Lifestyle',format:'Instagram Reel',gradient:'linear-gradient(160deg,#e8f5e9,#388e3c)',textColor:'#1b5e20',height:260,verified:true,likes:7103,saved:true,avatar:'🌿'},
-  {id:4,author:'Marcus K.',handle:'@marcusk',title:'Neural networks explained simply',category:'Tech',format:'TED Talk',gradient:'linear-gradient(160deg,#0d0d0d,#2d2d2d)',textColor:'#00e5ff',height:190,verified:false,likes:9430,saved:false,avatar:'🤖'},
-  {id:5,author:'Elena V.',handle:'@elenav',title:'Stop doing this in job interviews',category:'Business',format:'TikTok',gradient:'linear-gradient(160deg,#fce4ec,#c2185b)',textColor:'#4a0019',height:240,verified:false,likes:5677,saved:true,avatar:'💼'},
+  {id:1,author:'TWIN Team',handle:'@twin',title:'3 habits that doubled my productivity',category:'Business',format:'TikTok',gradient:'linear-gradient(160deg,#1a1a2e,#0f3460)',textColor:'#e0e0ff',height:220,verified:true,likes:4821,saved:true,avatar:'⚡',img:'/vid_ref_1.png'},
+  {id:2,author:'Sofia R.',handle:'@sofiar',title:'How I learned Spanish in 90 days',category:'Education',format:'YouTube Short',gradient:'linear-gradient(160deg,#f8b500,#e06c00)',textColor:'#fff',height:300,verified:false,likes:2340,saved:false,avatar:'🎓',img:'/vid_ref_2.png'},
+  {id:3,author:'TWIN Team',handle:'@twin',title:'Morning routine that actually works',category:'Lifestyle',format:'Instagram Reel',gradient:'linear-gradient(160deg,#e8f5e9,#388e3c)',textColor:'#1b5e20',height:260,verified:true,likes:7103,saved:true,avatar:'🌿',img:'/vid_ref_3.png'},
+  {id:4,author:'Marcus K.',handle:'@marcusk',title:'Neural networks explained simply',category:'Tech',format:'TED Talk',gradient:'linear-gradient(160deg,#0d0d0d,#2d2d2d)',textColor:'#00e5ff',height:190,verified:false,likes:9430,saved:false,avatar:'🤖',img:'/vid_ref_4.png'},
+  {id:5,author:'Elena V.',handle:'@elenav',title:'Stop doing this in job interviews',category:'Business',format:'TikTok',gradient:'linear-gradient(160deg,#fce4ec,#c2185b)',textColor:'#4a0019',height:240,verified:false,likes:5677,saved:true,avatar:'💼',img:'/vid_ref_5.png'},
   {id:6,author:'TWIN Team',handle:'@twin',title:'Why your content gets 0 views',category:'Education',format:'Instagram Reel',gradient:'linear-gradient(160deg,#1c1c3a,#3949ab)',textColor:'#c5cae9',height:280,verified:true,likes:12041,saved:false,avatar:'⚡'},
   {id:7,author:'Jordan M.',handle:'@jordanm',title:'5 apps I use every single day',category:'Tech',format:'TikTok',gradient:'linear-gradient(160deg,#fff8e1,#ff8f00)',textColor:'#3e2000',height:200,verified:false,likes:3210,saved:false,avatar:'📱'},
   {id:8,author:'Zoe P.',handle:'@zoep',title:'Meal prep Sunday — under $40',category:'Lifestyle',format:'YouTube Short',gradient:'linear-gradient(160deg,#e8eaf6,#3f51b5)',textColor:'#1a237e',height:310,verified:false,likes:6550,saved:true,avatar:'🥗'},
@@ -2584,7 +2567,7 @@ function renderDiscover(){
   const L=[],R=[];let lh=0,rh=0;
   items.forEach(item=>{if(lh<=rh){L.push(item);lh+=item.height;}else{R.push(item);rh+=item.height;}});
   const card=i=>`<div class="icard">
-    <div class="ithumb" style="background:${i.gradient};height:${i.height}px">
+    <div class="ithumb" style="${i.img?`background-image:url('${i.img}');background-size:cover;background-position:center`:`background:${i.gradient}`};height:${i.height}px">
       <div class="iai-badge">AI</div>
       <div class="ifmt-pill">${i.format}</div>
       <div class="isave-btn${inspoSaved[i.id]?' saved':''}" data-sid="${i.id}" onclick="inspoToggleSave(${i.id})">${inspoSaved[i.id]?'♥':'♡'}</div>
@@ -2635,7 +2618,7 @@ function go(id){
   if(id==='create-video') cv8Reset();
   if(id==='grow') renderGrow();
   if(id==='voice-pick'){ vpInit(_vpFrom); vpSetBlurBg(); }
-  if(id==='avatar-style'){ startAvGen(); }
+  if(id==='avatar-style'){ startAvGen(); glowUpRender(true); }
   if(id==='avatar-reveal') initReveal();
 }
 let _vpFrom='cam-photos';
@@ -3858,8 +3841,61 @@ function startAvGen(){
   }, 8000);
 }
 
-// ── AVATAR STYLE SCREEN ────────────────────────────────────────────────────
-let selStyleVal = 'natural';
+// ── AVATAR STYLE / GLOW UP SCREEN ──────────────────────────────────────────
+const glowUpPool = [
+  {id:'podcaster', ico:'🎙️', name:'Podcaster',       vibe:'Warm studio light, clean backdrop'},
+  {id:'tedtalk',   ico:'🎤', name:'TED Talk',         vibe:'Stage-ready, sharp & confident'},
+  {id:'vlogger',   ico:'📱', name:'Vlogger',          vibe:'Natural glow, casual creator energy'},
+  {id:'linkedin',  ico:'💼', name:'LinkedIn Pro',     vibe:'Polished executive headshot'},
+  {id:'speaker',   ico:'🏆', name:'Keynote Speaker',  vibe:'Front-lit, commanding presence'},
+  {id:'creator',   ico:'🌟', name:'Content Creator',  vibe:'Bold colors, social-first vibe'},
+  {id:'brand',     ico:'📸', name:'Brand Shoot',      vibe:'Editorial, magazine-worthy look'},
+  {id:'educator',  ico:'🎓', name:'Course Creator',   vibe:'Authoritative, trusted educator look'},
+];
+let selStyleVal = glowUpPool[0].id;
+let _glowShown = [];
+
+function glowUpRender(autoSelect){
+  const container = document.getElementById('astyle-cards');
+  if(!container) return;
+  const shuffled = [...glowUpPool].sort(()=>Math.random()-.5);
+  _glowShown = shuffled.slice(0,4);
+  container.innerHTML = _glowShown.map((s,i)=>{
+    const isSel = autoSelect && i===0;
+    return `<div class="astyle-card${isSel?' sel':''}" onclick="selStyle(this,'${s.id}')" data-style="${s.id}">
+      <div class="astyle-card-ico">${s.ico}</div>
+      <div class="astyle-card-name">${s.name}</div>
+      <div class="astyle-card-vibe">${s.vibe}</div>
+      <div class="astyle-card-ck"${isSel?' style="background:var(--choco);border-color:var(--choco);color:#fff"':''}>${isSel?'✓':''}</div>
+    </div>`;
+  }).join('');
+  if(autoSelect && _glowShown.length){
+    selStyleVal = _glowShown[0].id;
+    const btn = document.getElementById('astyle-btn');
+    if(btn) btn.disabled = false;
+  }
+  // deselect natural if it was selected
+  if(autoSelect){
+    const nat = document.getElementById('naturalCard');
+    if(nat){ nat.classList.remove('sel'); const ck=nat.querySelector('.astyle-card-ck'); if(ck){ck.textContent='';ck.style.color='transparent';ck.style.background='';ck.style.borderColor='';}}
+  }
+}
+
+function glowUpRefresh(){
+  const btn = document.getElementById('glowRefreshBtn');
+  if(btn){ btn.classList.add('spinning'); setTimeout(()=>btn.classList.remove('spinning'),420); }
+  const prevId = selStyleVal;
+  glowUpRender(false);
+  // if previous selection is still in new set, re-highlight it; otherwise select first
+  const card = document.querySelector(`#astyle-cards .astyle-card[data-style="${prevId}"]`);
+  if(card){
+    selStyle(card, prevId);
+  } else if(_glowShown.length){
+    const first = document.querySelector('#astyle-cards .astyle-card');
+    if(first) selStyle(first, _glowShown[0].id);
+  }
+}
+
 function selStyle(card, id){
   document.querySelectorAll('.astyle-card').forEach(c=>{
     c.classList.remove('sel');
@@ -3868,17 +3904,10 @@ function selStyle(card, id){
   });
   card.classList.add('sel');
   const ck = card.querySelector('.astyle-card-ck');
-  if(ck){ck.textContent = '✓'; ck.style.color = '#fff'; ck.style.background='var(--choco)'; ck.style.borderColor='var(--choco)';}
+  if(ck){ck.textContent='✓';ck.style.color='#fff';ck.style.background='var(--choco)';ck.style.borderColor='var(--choco)';}
   selStyleVal = id;
   document.getElementById('astyle-btn').disabled = false;
 }
-// Also enable continue if prompt has text
-(()=>{
-  const ta = document.getElementById('astylePrompt');
-  if(ta) ta.addEventListener('input', ()=>{
-    if(ta.value.trim().length > 3) document.getElementById('astyle-btn').disabled = false;
-  });
-})();
 
 function goToReveal(){
   buildAvatar();
